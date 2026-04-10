@@ -34,7 +34,7 @@ workpath/
 - **GitHub repo:** `https://github.com/randysparkman/workpath`
 - **Vercel project:** `workpath` (auto-deploys on push to `main`)
 - **Live brochure URL:** `https://workpath-one.vercel.app/brochure`
-- **Future custom domain:** `airp.rsparkman.net` (GoDaddy DNS, not yet configured)
+- **Future custom domain:** TBD — not yet configured (not using "airp" subdomain)
 - **Git remote:** `git@github.com:randysparkman/workpath.git` (SSH)
 
 ### Deploy workflow
