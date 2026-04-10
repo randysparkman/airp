@@ -1,0 +1,423 @@
+{
+  "meta": {
+    "respondent_name": "Jane Maples",
+    "profile": "/Users/randysparkman/Desktop/AI-assessment-tool/job-role-profile-medical-billing.md",
+    "model": "claude-sonnet-4-20250514",
+    "mode": "replay",
+    "run_at": "2026-04-03T00:23:30.303Z"
+  },
+  "tier1_scored": [
+    {
+      "question_id": "t1_q1",
+      "question_angle": "ai_code_suggestion_evaluation",
+      "tier": 1,
+      "dol_content_area": "#4 Evaluate AI Outputs",
+      "human_function_activated": "Understand",
+      "scenario": "Your EHR system uses AI to suggest billing codes based on the provider's clinical notes. For a routine office visit, the AI suggests a higher-complexity E/M code than what this type of visit typically receives. The AI-generated suggestion includes a confidence indicator showing it's a strong match to the language in the notes.",
+      "prompt": "What do you make of the AI's suggestion?",
+      "user_response": "I would review the case carefully. But probably default to our standard practice. And review this anomaly with my manager for further review.",
+      "orientation_level": "developing",
+      "integration_level": "developing",
+      "judgment_level": "developing",
+      "evidence_notes": "The response shows developing understanding across all constructs. For Orientation: recognizes the AI suggestion gives them pause and needs verification, but doesn't articulate why AI confidence doesn't settle the question. For Integration: mentions checking and escalating to manager, but treats verification as undifferentiated rather than specifying what to compare against coding guidelines. For Judgment: shows awareness that accuracy matters by defaulting to standard practice and escalating, but doesn't explicitly connect unsupported higher codes to upcoding/compliance risks."
+    },
+    {
+      "question_id": "t1_q2",
+      "question_angle": "input_output_relationship",
+      "tier": 1,
+      "dol_content_area": "#3 Direct AI Effectively",
+      "human_function_activated": "Express",
+      "scenario": "A claim for a cardiology procedure was denied for 'lack of medical necessity.' The practice wants to appeal. You decide to use the AI assistant to help draft the appeal letter. You have the denial letter, the patient's chart notes from three recent visits, and the payer's coverage policy document.",
+      "prompt": "How would you go about working with the AI assistant on this?",
+      "user_response": "I'd proceed. But I'd be sure I follow my office rule about presenting patient information to our tools. If there's a restriction, I'd anonymize and mask the input. I'd review the output carefully.",
+      "orientation_level": "emerging",
+      "integration_level": "developing",
+      "judgment_level": "demonstrating",
+      "evidence_notes": "The response shows emerging orientation as it doesn't demonstrate understanding of what specific inputs the AI needs (denial letter, chart notes, coverage policy) to produce an effective appeal. Integration is developing because while the response mentions reviewing output carefully, it doesn't specify what to verify against source materials. Judgment is demonstrating because the response recognizes patient privacy restrictions and the need for careful review, showing awareness that AI output requires verification before use in formal submissions."
+    },
+    {
+      "question_id": "t1_q3",
+      "question_angle": "task_ai_fit_phi_awareness",
+      "tier": 1,
+      "dol_content_area": "#1 Understand AI Principles",
+      "human_function_activated": "Understand",
+      "scenario": "Two tasks land on your desk the same morning. First, you need to draft a standard letter to a patient explaining that their claim was processed and they have a remaining balance. Second, you need to research whether a specific payer covers a newer orthopedic procedure and what their prior authorization requirements are. A coworker mentions that the AI assistant could help with both.",
+      "prompt": "How do you think about using the AI assistant for each of these?",
+      "user_response": "For the first, again, I'd be careful with patient information. But I'd be open to use the tool to draft the letter. I'd review it regardless. On the second, I'd be comfortable to use the tool to review the PA requirements.",
+      "orientation_level": "developing",
+      "integration_level": "demonstrating",
+      "judgment_level": "developing",
+      "evidence_notes": "The response shows developing orientation by sensing the tasks are different and expressing 'careful with patient information' but not articulating the specific PHI concern. Integration is demonstrating because they describe differentiated approaches - being 'open to use the tool to draft the letter' (with review) versus being 'comfortable to use the tool to review the PA requirements' - showing data sensitivity shapes their workflow. Judgment is developing as they recognize patient information requires caution but don't connect this to specific HIPAA accountability or regulatory framework."
+    },
+    {
+      "question_id": "t1_q4",
+      "question_angle": "confidence_calibration_fabrication",
+      "tier": 1,
+      "dol_content_area": "#1 Understand AI Principles",
+      "human_function_activated": "Understand",
+      "scenario": "You're working an unusual claim and ask the AI assistant to look up whether a specific payer covers a particular procedure under their current policy. The AI assistant gives you a detailed answer — it names the policy, cites what appears to be a specific coverage criterion, and states that prior authorization is required. The answer is well-organized and sounds authoritative.",
+      "prompt": "How much do you trust this, and why?",
+      "user_response": "That's fine. I would welcome the help. But I'd be careful taking the answer as absolute, even if its formatted in a good way.",
+      "orientation_level": "developing",
+      "integration_level": "developing",
+      "judgment_level": "developing",
+      "evidence_notes": "The response shows developing orientation by recognizing that good formatting doesn't guarantee accuracy ('even if its formatted in a good way'), indicating awareness that AI presentation can be misleading. For integration, they show appropriate skepticism by saying they wouldn't take the answer as 'absolute,' but don't specify how they would verify the information. For judgment, they demonstrate caution about trusting the output but don't connect this to specific consequences of acting on potentially incorrect payer policy information in billing contexts."
+    },
+    {
+      "question_id": "t1_q5",
+      "question_angle": "denial_management_opportunity",
+      "tier": 1,
+      "dol_content_area": "#2 Explore AI Uses",
+      "human_function_activated": "Ideate",
+      "scenario": "A coworker on the billing team spends a lot of time on denial management — reading through denied claims, figuring out why each one was denied, and deciding which ones are worth appealing. They mention that it's the most tedious part of their week. You know the practice has access to the AI assistant that staff have been using for other tasks.",
+      "prompt": "Do you see a way the AI assistant could help with any part of this, and what would you want to be careful about?",
+      "user_response": "This seems to be an opportunity for an automation. First question is what is the rule for allowing the AI to use patient data. The other is to be sure there's a human in the loop to be sure we aren't leaving out important claims.",
+      "orientation_level": "developing",
+      "integration_level": "developing",
+      "judgment_level": "demonstrating",
+      "evidence_notes": "The response shows developing orientation by recognizing AI as 'automation' that could help with denials but doesn't distinguish which workflow components are AI-suitable versus requiring human judgment. Integration is developing because while they identify the general opportunity, they don't specify where AI fits in the workflow or how the human-AI collaboration would work. However, judgment is demonstrating through two strong signals: immediately questioning patient data rules (recognizing compliance boundaries) and insisting on 'human in the loop' to avoid missing important claims (recognizing consequences of over-reliance on AI output)."
+    }
+  ],
+  "tier2_scored": [
+    {
+      "question_id": "t2_q1",
+      "question_angle": "eob_summary_verification_for_patient_call",
+      "tier": 2,
+      "dol_content_area": "#4 Evaluate AI Outputs",
+      "human_function_activated": "Understand",
+      "scenario": "A patient calls confused about a complicated EOB they received after a cardiology visit. The visit involved coordination of benefits between two insurers, and the EOB shows a partial denial, an adjusted allowed amount, and a remaining patient responsibility. Before calling the patient back, you ask the AI assistant to summarize the EOB in plain language so you have a clear script for the conversation. The AI assistant produces a clean, readable summary that explains what was covered, what was denied, and what the patient owes.",
+      "prompt": "How would you prepare for this call using the AI assistant's summary?",
+      "user_response": "I'd certainly use the summary. But I would hand review the core elements of the case just to be sure its correct and that I can answer deeper questions.",
+      "orientation_level": "developing",
+      "integration_level": "developing",
+      "judgment_level": "developing",
+      "evidence_notes": "The response shows developing understanding across all constructs. For Orientation, the user recognizes they should verify the AI summary but doesn't articulate the specific risk that AI can produce clear-sounding summaries with incorrect financial details. For Integration, they mention hand-reviewing 'core elements' but don't specify which EOB components (dollar amounts, denial reasons, coordination of benefits details) are most at risk in this context. For Judgment, they show awareness that verification is needed but don't connect this to the patient-specific consequences of providing clear but inaccurate billing information to someone already confused about their EOB."
+    },
+    {
+      "question_id": "t2_q2",
+      "question_angle": "complex_prior_auth_direction",
+      "tier": 2,
+      "dol_content_area": "#3 Direct AI Effectively",
+      "human_function_activated": "Express",
+      "scenario": "An orthopedic patient needs a knee MRI, but their insurer requires prior authorization with a detailed clinical justification. The provider's notes mention knee pain, limited range of motion, and failure of conservative treatment, but the relevant information is scattered across three recent visit notes. You need to compile a prior authorization request that presents the clinical case clearly and meets the payer's documentation requirements. You decide to use the AI assistant to help draft the request.",
+      "prompt": "Walk us through how you'd work with the AI assistant to put this together.",
+      "user_response": "I'd first verify I can use the data based on our rules. I'd anonymize it if necessary. I'd upload the data if allowed. And work with the tool to create the PA request. I'd also look at this closely to see if its an opportunity for an automation.",
+      "orientation_level": "developing",
+      "integration_level": "developing",
+      "judgment_level": "developing",
+      "evidence_notes": "The response shows developing orientation by recognizing the need to provide data to the AI ('upload the data') but doesn't address the challenge of directing the AI to extract key clinical findings from scattered information across three visits. For integration, the response shows a multi-step process (verify rules, anonymize, upload, create request, review closely) and identifies automation opportunity, demonstrating organized workflow thinking. The judgment level is developing because while 'look at this closely' suggests output verification, it doesn't specifically address the high-stakes nature of prior authorization accuracy or consequences of AI generating unsupported clinical statements to payers."
+    },
+    {
+      "question_id": "t2_q3",
+      "question_angle": "phi_workflow_design",
+      "tier": 2,
+      "dol_content_area": "#1 Understand AI Principles",
+      "human_function_activated": "Act",
+      "scenario": "You're working on a batch of coordination-of-benefits claims — patients with two insurance plans where you need to determine the correct billing order and calculate patient responsibility. To work through these efficiently, you're considering using the AI assistant to help figure out the primary/secondary payer order and estimate what each patient owes. To do this accurately, the AI assistant would need details from both insurance plans for each patient — member IDs, group numbers, coverage dates, plan types, and the specific EOBs from the primary payer.",
+      "prompt": "How do you think about using the AI assistant for this kind of work?",
+      "user_response": "I think it is certainly a candidate for use. Again, I'd have to follow the rules with patient information. This use case might be difficult to anonymize if the restrictions were in place.",
+      "orientation_level": "developing",
+      "integration_level": "developing",
+      "judgment_level": "developing",
+      "evidence_notes": "The response shows developing understanding across all constructs. For Orientation, the respondent recognizes patient information restrictions apply and notes anonymization difficulties, indicating awareness of the PHI concern but without articulating the specific structural tension that coordination of benefits requires the very data that's protected. For Integration, they acknowledge PHI restrictions would shape AI use but don't describe a workable partial-value workflow. For Judgment, they reference 'rules with patient information' showing HIPAA awareness, but reason about it generally rather than weighing the specific risks of entering detailed insurance data for multiple patients."
+    },
+    {
+      "question_id": "t2_q4",
+      "question_angle": "eligibility_verification_workflow_proposal",
+      "tier": 2,
+      "dol_content_area": "#2 Explore AI Uses",
+      "human_function_activated": "Ideate",
+      "scenario": "Every morning, the front desk spends about 45 minutes verifying insurance eligibility for the day's scheduled patients — logging into each payer's portal individually, checking coverage status, noting changes, and flagging patients whose insurance has lapsed or changed. The practice manager asks the billing team if anyone has ideas for how the AI assistant could make this process more efficient. You know the AI assistant can't log into payer portals or access real-time insurance databases, but you've seen it handle other organizational and research tasks well.",
+      "prompt": "What would you propose, and what would you want the practice manager to understand about the limits?",
+      "user_response": "I'd pause to consider how I \"know\" the assistant can't log in to the portals. Once assured of that, then I'd look at intermediate ways to assist. but I'd be realistic that there are limits and you work within them.",
+      "orientation_level": "developing",
+      "integration_level": "emerging",
+      "judgment_level": "developing",
+      "evidence_notes": "The response shows developing orientation by questioning how they 'know' the constraint and acknowledging working within limits, but doesn't articulate what the AI could realistically do. Integration is emerging because while they mention 'intermediate ways to assist,' no concrete proposal is offered for how AI would fit into the workflow. Judgment is developing as they emphasize being 'realistic' about limits, showing awareness that constraints matter, but don't explore the specific stakes or consequences of eligibility verification errors."
+    },
+    {
+      "question_id": "t2_q5",
+      "question_angle": "coding_pattern_escalation_preparation",
+      "tier": 2,
+      "dol_content_area": "#2 Explore AI Uses",
+      "human_function_activated": "Act",
+      "scenario": "Over the past few weeks, you've noticed that the EHR's AI-suggested billing codes for one of the cardiologists seem to consistently trend toward higher-complexity E/M codes than what you'd expect for the visit types. The AI suggestions aren't obviously wrong — they're in the right code family — but the pattern feels off. You've been overriding some to lower codes based on your reading of the documentation, but you're not sure if you're right or if the AI's pattern-matching is picking up something in this provider's documentation style that you're missing. You want to bring this to the practice manager.",
+      "prompt": "How would you use the AI assistant to prepare for that conversation, and what would you want to communicate?",
+      "user_response": "I'd do some dummy testing. Then I'd ask the assistant to help me tell the story. I might make spreadsheet of past transactions that I ask the assistant to help me design, populate and present.",
+      "orientation_level": "demonstrating",
+      "integration_level": "demonstrating",
+      "judgment_level": "developing",
+      "evidence_notes": "The response shows strong understanding that AI can be both the subject of concern and a tool for investigation ('dummy testing' and using the assistant to 'help me tell the story'). The integration is clear with concrete plans to use AI for data organization (spreadsheet design, population, presentation) and structured evidence preparation. However, the judgment level is developing because while the response shows awareness of needing to escalate with evidence, it doesn't explicitly recognize the dual compliance risks (upcoding vs undercoding) or frame the uncertainty itself as the core reason for escalation."
+    }
+  ],
+  "tier3_summary": {
+    "overall_placement": {
+      "orientation_band": "developing",
+      "orientation_confidence": "medium",
+      "orientation_consistency": "moderate_variance",
+      "orientation_notes": "Consistently recognizes AI limitations and need for verification, but often lacks specificity about what AI can/cannot do or why certain constraints matter."
+    },
+    "integration_profile": {
+      "modal_level": "developing",
+      "level_quality": "moderate",
+      "tier_pattern": "consistent",
+      "integration_notes": "Shows organized workflow thinking with multi-step processes, but often stays at high level rather than specifying concrete verification steps or AI-human handoffs."
+    },
+    "judgment_profile": {
+      "modal_level": "developing",
+      "level_quality": "moderate",
+      "judgment_notes": "Consistently identifies need for caution and human oversight, but tends to reference general 'rules' rather than connecting to specific consequences or regulatory frameworks."
+    },
+    "dol_coverage": {
+      "understand_principles": "moderate_signal",
+      "explore_uses": "moderate_signal",
+      "direct_effectively": "weak_signal",
+      "evaluate_outputs": "moderate_signal",
+      "use_responsibly": "strong_signal",
+      "coverage_notes": "Strong awareness of data privacy and human oversight needs, but limited signal on specific AI direction techniques or detailed output evaluation methods."
+    },
+    "function_activation": {
+      "understand": "demonstrated",
+      "express": "partially_demonstrated",
+      "ideate": "partially_demonstrated",
+      "act": "demonstrated",
+      "activation_notes": "Clear demonstration of understanding AI constraints and workflow-level thinking, but limited concrete examples of using AI for communication or creative problem-solving."
+    },
+    "patterns": {
+      "response_style": "Consistently cautious and compliance-focused, tends to reference 'rules' and 'careful review' without specifying what to look for or how to verify.",
+      "construct_inconsistencies": "Orientation and integration levels generally align, but judgment sometimes stronger due to consistent risk awareness",
+      "ambiguous_scores": [
+        "t2_q5"
+      ]
+    },
+    "evidence_gaps": {
+      "least_confident_construct": "integration",
+      "weak_dol_areas": [
+        "#3 Direct AI Effectively"
+      ],
+      "undemonstrated_functions": [
+        "Express"
+      ],
+      "untested_conditions": [
+        "time pressure",
+        "conflicting information",
+        "self-correction behavior"
+      ]
+    },
+    "tier3_priorities": {
+      "primary_goal": "Test specific AI direction techniques and verify whether developing-level understanding translates to demonstrating-level integration under realistic conditions.",
+      "probe_targets": [
+        "concrete AI prompting strategies",
+        "specific output verification methods",
+        "regulatory consequence awareness"
+      ],
+      "dol_areas_to_target": [
+        "#3 Direct AI Effectively"
+      ],
+      "functions_to_activate": [
+        "Express"
+      ],
+      "confirmation_needed": "Whether consistent caution translates to effective AI collaboration when tested with specific scenarios requiring iteration and refinement."
+    }
+  },
+  "tier3_rubrics_generated": [
+    {
+      "orientation": {
+        "emerging": "Shows basic understanding that AI can help with letter drafting but provides vague instructions like 'write an appeal letter' without specifying what information to include or how to structure the request.",
+        "developing": "Demonstrates understanding of appeal letter components and instructs AI to include specific elements like patient information, procedure details, and denial reasons, but may miss key medical billing requirements or compliance considerations.",
+        "demonstrating": "Provides detailed, structured instructions that specify exact information to include (patient demographics, procedure codes, clinical documentation excerpts, denial reason), requests specific format following payer guidelines, and includes instructions for AI to highlight medical necessity based on documentation."
+      },
+      "integration": {
+        "emerging": "Treats AI as a standalone tool without connecting it to existing billing workflow, such as not referencing chart notes, payer-specific appeal requirements, or practice protocols.",
+        "developing": "Integrates some existing resources like chart notes and denial letters into AI instructions, but workflow shows gaps in connecting to payer portals, coding guidelines, or practice appeal templates.",
+        "demonstrating": "Seamlessly integrates AI into comprehensive appeal workflow by combining chart documentation, payer-specific requirements, practice templates, and regulatory compliance needs into coherent AI instructions that leverage multiple data sources."
+      },
+      "judgment": {
+        "emerging": "Shows limited awareness of compliance risks in appeal letters, such as not mentioning the need to verify AI output for accuracy or potential misrepresentation of clinical facts.",
+        "developing": "Recognizes some compliance considerations like accuracy of clinical information but may not fully address risks of AI hallucination or the consequences of incorrect appeal representations to payers.",
+        "demonstrating": "Demonstrates clear understanding that appeal letters represent the practice's official position to payers, emphasizes thorough verification of all AI-generated content against source documentation, and recognizes that inaccurate appeals can damage payer relationships and trigger audits."
+      }
+    },
+    {
+      "orientation": {
+        "emerging": "Understands that AI can analyze patterns but describes basic approaches like asking AI to 'look at the denials' without specifying data organization or analysis structure.",
+        "developing": "Shows knowledge of denial analysis components and describes organizing data for AI review, but may not specify the types of pattern analysis needed or how to structure data for effective AI processing.",
+        "demonstrating": "Articulates comprehensive approach including specific data organization (by payer, denial reason, procedure details, timing), clear AI analysis objectives (identifying common factors, payer-specific patterns, documentation gaps), and structured output requirements for actionable insights."
+      },
+      "integration": {
+        "emerging": "Proposes using AI in isolation without connecting analysis to existing billing systems, coding resources, or workflow improvement processes.",
+        "developing": "Integrates some existing resources like denial reports or coding guidelines into the AI analysis workflow, but may not fully connect insights to systematic workflow changes or prevention strategies.",
+        "demonstrating": "Creates comprehensive workflow that integrates AI analysis with existing billing systems, incorporates coding team expertise, connects insights to specific process improvements, and establishes ongoing monitoring to prevent future denial patterns."
+      },
+      "judgment": {
+        "emerging": "Shows basic awareness that denial patterns need addressing but limited understanding of how analysis insights should drive specific changes or the business impact of unresolved patterns.",
+        "developing": "Recognizes that pattern analysis should lead to process improvements and understands some financial implications, but may not fully grasp the comprehensive approach needed for sustainable denial reduction.",
+        "demonstrating": "Demonstrates understanding that systematic denial analysis directly impacts practice revenue and compliance, emphasizes the need for actionable insights that lead to specific workflow changes, and recognizes the importance of tracking improvement metrics to validate solutions."
+      }
+    },
+    {
+      "orientation": {
+        "emerging": "Recognizes there's a coding disagreement but shows unclear understanding of proper code selection criteria or how to resolve conflicting AI suggestions.",
+        "developing": "Shows knowledge of coding guidelines and understands that AI suggestions must be validated, but may not clearly articulate the specific criteria for the correct code level or comprehensive verification process.",
+        "demonstrating": "Demonstrates thorough understanding of CPT coding requirements for office visits, clearly explains the specific documentation elements needed for 99214 vs 99213, and articulates systematic approach for validating AI suggestions against official coding guidelines."
+      },
+      "integration": {
+        "emerging": "Addresses the coding conflict in isolation without connecting to broader workflow considerations, compliance protocols, or available coding resources.",
+        "developing": "Integrates some relevant resources like coding guidelines or team expertise into the decision process, but workflow may not fully leverage all available verification tools or consider long-term pattern implications.",
+        "demonstrating": "Integrates comprehensive approach using official coding guidelines, internal coding team expertise, audit trail considerations, and systematic verification process that connects individual coding decisions to practice-wide compliance and accuracy standards."
+      },
+      "judgment": {
+        "emerging": "Shows limited understanding of the compliance risks associated with incorrect coding decisions or the potential consequences of systematic AI over-coding.",
+        "developing": "Recognizes that incorrect coding has compliance implications and understands the need for accuracy, but may not fully grasp the audit risks or long-term consequences of following incorrect AI suggestions.",
+        "demonstrating": "Demonstrates clear understanding that coding accuracy is critical for compliance and audit defense, recognizes that systematic over-coding can trigger payer scrutiny, and emphasizes the importance of conservative, well-documented coding decisions that can withstand regulatory review."
+      }
+    },
+    {
+      "orientation": {
+        "emerging": "Shows basic awareness of HIPAA considerations and time pressure but provides unclear approach for balancing efficiency with privacy protection requirements.",
+        "developing": "Demonstrates understanding of HIPAA requirements and efficiency needs, describing some protective measures for using AI with PHI, but approach may lack comprehensive privacy safeguards or clear prioritization strategy.",
+        "demonstrating": "Articulates comprehensive approach that clearly prioritizes HIPAA compliance while maintaining efficiency, specifies exact steps for protecting PHI when using AI tools, and provides clear framework for handling time-sensitive patient issues without compromising privacy."
+      },
+      "integration": {
+        "emerging": "Treats HIPAA compliance and AI use as separate considerations without effectively integrating privacy protection into the urgent workflow scenario.",
+        "developing": "Integrates some HIPAA-compliant practices into the AI-assisted workflow, but may not fully connect privacy protection to all aspects of the time-pressured patient research and response process.",
+        "demonstrating": "Seamlessly integrates comprehensive HIPAA compliance into efficient AI-assisted workflow, demonstrating how to protect PHI while leveraging AI capabilities, and connects patient research to appropriate response protocols that maintain privacy and accuracy under time pressure."
+      },
+      "judgment": {
+        "emerging": "Shows limited understanding of the serious compliance risks of using AI with PHI or the potential consequences of privacy violations in urgent situations.",
+        "developing": "Recognizes HIPAA compliance importance and some risks of AI use with patient information, but may not fully appreciate the regulatory consequences or the need for absolute privacy protection regardless of time pressure.",
+        "demonstrating": "Demonstrates clear understanding that HIPAA violations have serious regulatory consequences that outweigh efficiency benefits, emphasizes that time pressure never justifies compromising patient privacy, and shows judgment in balancing urgent patient needs with absolute compliance requirements."
+      }
+    },
+    {
+      "orientation": {
+        "emerging": "Provides basic advice about being careful with AI but offers vague guidance without specific criteria for evaluating AI reliability in medical billing contexts.",
+        "developing": "Shows understanding of AI reliability issues and provides some specific guidance for verification, but advice may lack comprehensive framework or miss key billing-specific reliability indicators.",
+        "demonstrating": "Offers comprehensive, systematic guidance that includes specific criteria for evaluating AI suggestions in billing contexts, clear verification protocols, and practical examples of when to trust versus double-check AI recommendations in medical billing workflows."
+      },
+      "integration": {
+        "emerging": "Provides advice about AI evaluation without connecting guidance to existing billing processes, compliance requirements, or available verification resources.",
+        "developing": "Integrates some existing billing knowledge and verification tools into AI evaluation guidance, but may not fully connect reliability assessment to comprehensive workflow or regulatory requirements.",
+        "demonstrating": "Provides guidance that fully integrates AI reliability assessment into existing billing workflows, connects verification protocols to compliance requirements, and demonstrates how reliable AI use enhances rather than replaces professional billing expertise and systematic verification processes."
+      },
+      "judgment": {
+        "emerging": "Shows basic awareness that AI can make errors but limited understanding of the specific risks and consequences of AI mistakes in medical billing environments.",
+        "developing": "Recognizes some specific risks of AI errors in billing work and understands the need for verification, but may not fully convey the comprehensive approach needed for safe AI integration in regulated healthcare environments.",
+        "demonstrating": "Demonstrates thorough understanding of the high-stakes nature of medical billing accuracy, clearly explains how AI errors can trigger audits and compliance issues, and provides guidance that emphasizes conservative, verification-focused approaches that protect both practice and patients from AI-related risks."
+      }
+    }
+  ],
+  "tier3_scored": [
+    {
+      "question_id": "t3_q1",
+      "question_angle": "replay_q1",
+      "adaptive_strategy": "replay",
+      "tier": 3,
+      "dol_content_area": "from_response_file",
+      "human_function_activated": "from_response_file",
+      "scenario": "You're using your AI assistant to help draft an appeal letter for a denied cardiology procedure claim. The denial reason is 'medical necessity not established.' You have the patient's chart notes, the original claim, and the denial letter from the insurance company.",
+      "prompt": "Walk me through exactly how you would instruct the AI to help you write this appeal letter.",
+      "user_response": "I would first be sure I understood my office rules for uploading patient data to an AI. then I would gather up the data needed to be specific. i'd upload according to the rules. then I'd ask the system to write the letter. I'd look it closely and edit before I use it.",
+      "orientation_level": "emerging",
+      "integration_level": "developing",
+      "judgment_level": "developing",
+      "evidence_notes": "The response shows basic AI understanding (asking it to 'write the letter') but lacks specific instruction details. Integration is developing as the user references gathering data, office rules, and chart information, showing workflow awareness. Judgment is developing because they mention checking office rules for data upload and reviewing/editing output closely, indicating compliance awareness and verification habits, though without explicit recognition of appeal letter stakes."
+    },
+    {
+      "question_id": "t3_q2",
+      "question_angle": "replay_q2",
+      "adaptive_strategy": "replay",
+      "tier": 3,
+      "dol_content_area": "from_response_file",
+      "human_function_activated": "from_response_file",
+      "scenario": "Your practice is seeing a pattern of denied claims for a specific orthopedic procedure code. The denials come from multiple insurance companies with varying reasons. You want to use AI to help analyze this pattern and prevent future denials.",
+      "prompt": "Describe the specific workflow you would set up to use AI for analyzing and addressing this denial pattern.",
+      "user_response": "I'd gather up denails from the multiple insurance companies. I'd upload them to the AI and describe the issue. I'd specially ask the tool to identify a pattern. I'd include some successful ones as well in order to give the ai more info. I'd be sure to follow office rules on paitent data protection.",
+      "orientation_level": "emerging",
+      "integration_level": "emerging",
+      "judgment_level": "emerging",
+      "evidence_notes": "The response shows basic understanding that AI can identify patterns in denial data and includes a positive signal about including successful claims for comparison. However, it lacks specificity about data organization, analysis structure, or what types of patterns to look for. The workflow description is minimal without connecting to existing billing systems or describing how insights would drive process improvements. While patient data protection is mentioned, there's limited recognition of how the analysis should systematically address revenue impact or lead to actionable workflow changes."
+    },
+    {
+      "question_id": "t3_q3",
+      "question_angle": "replay_q3",
+      "adaptive_strategy": "replay",
+      "tier": 3,
+      "dol_content_area": "from_response_file",
+      "human_function_activated": "from_response_file",
+      "scenario": "The EHR's AI is suggesting a higher-level office visit code (99214 instead of 99213) for a routine follow-up appointment. Your experience tells you this visit doesn't meet the complexity requirements for the higher code. However, when you ask your general AI assistant to review the documentation, it agrees with the EHR's suggestion and provides seemingly valid reasoning.",
+      "prompt": "What would you do in this situation and why?",
+      "user_response": "I'd just take the AI agreement as another data point and and continue looking. I trust my experience more than the AI assessment.",
+      "orientation_level": "developing",
+      "integration_level": "emerging",
+      "judgment_level": "developing",
+      "evidence_notes": "The response shows developing orientation by recognizing that AI suggestions need validation and trusting professional experience over AI recommendations. However, it lacks specific understanding of coding criteria or systematic verification approaches. Integration is emerging as the response treats this as an isolated decision without connecting to broader resources, guidelines, or workflow considerations. Judgment is developing because the response shows appropriate skepticism of AI suggestions and prioritizes professional judgment, demonstrating awareness that AI can be wrong, though it doesn't articulate the specific compliance risks of incorrect coding."
+    },
+    {
+      "question_id": "t3_q4",
+      "question_angle": "replay_q4",
+      "adaptive_strategy": "replay",
+      "tier": 3,
+      "dol_content_area": "from_response_file",
+      "human_function_activated": "from_response_file",
+      "scenario": "It's end-of-month with a large batch of claims due by 5 PM to meet filing deadlines. You're behind schedule when a patient calls upset about receiving a bill they believe is wrong. You want to use AI to quickly help research their coverage and draft a response, but you're aware this involves reviewing their PHI and insurance details.",
+      "prompt": "How would you handle using AI in this time-pressured situation involving patient information?",
+      "user_response": "I'd use AI in this situation to actually help me with the time crunch. I'd be careful with accuracy and patient confidentiality.",
+      "orientation_level": "emerging",
+      "integration_level": "emerging",
+      "judgment_level": "developing",
+      "evidence_notes": "The response shows basic awareness that AI can help with efficiency and that accuracy/confidentiality matter, but lacks any specific understanding of HIPAA requirements or how AI tools handle PHI. The integration is minimal—stating they'd 'be careful' without describing any actual protective workflow steps. However, the judgment shows developing recognition that both accuracy and patient confidentiality are important constraints that must be balanced with the time pressure, even if the approach isn't detailed."
+    },
+    {
+      "question_id": "t3_q5",
+      "question_angle": "replay_q5",
+      "adaptive_strategy": "replay",
+      "tier": 3,
+      "dol_content_area": "from_response_file",
+      "human_function_activated": "from_response_file",
+      "scenario": "A new team member asks you for advice about when to trust AI suggestions in billing work versus when to double-check them. They've noticed that AI sometimes gives confident-sounding answers that aren't quite right for medical billing, but they're not sure how to tell the difference.",
+      "prompt": "What guidance would you give them about evaluating AI reliability in billing tasks?",
+      "user_response": "I'd use this as. a teaching moment with my colleague. to help them understand that ai answers are not perfect and we must review them.",
+      "orientation_level": "emerging",
+      "integration_level": "emerging",
+      "judgment_level": "emerging",
+      "evidence_notes": "The response shows basic awareness that AI answers aren't perfect and need review, demonstrating minimal understanding of AI reliability issues. However, it lacks any specific criteria for evaluation, verification protocols, or connection to billing workflows and compliance requirements. The guidance is too general without addressing the medical billing context or providing practical frameworks for distinguishing when AI suggestions can be trusted versus when they require verification."
+    }
+  ],
+  "profile": {
+    "band": "Developing",
+    "summary": "Jane Maples shows a consistent and thoughtful approach to AI in medical billing work. You recognize that patient data protection comes first, and you consistently check for compliance rules before using AI tools — that's exactly the right instinct in healthcare billing. Your strongest pattern is treating AI as a starting point rather than a final answer. Across nearly every response, you mentioned reviewing, verifying, or checking AI output before using it. Where you'll see the most growth is in getting more specific about how you direct AI and what you look for when you review its work. Several of your responses point to gaps that are really about organizational process — like needing clearer policies about patient data use with AI tools — not about your judgment.",
+    "dimensions": {
+      "orientation": {
+        "level": "Developing",
+        "detail": "You have a solid working understanding that AI needs oversight and verification — that came through clearly across your responses. You recognize that confident-sounding AI output doesn't mean it's correct, and you consistently mentioned the need to review what AI produces. Where you're still building is in understanding specifically why AI behaves the way it does in billing contexts. For example, when the EHR suggested a higher complexity code, you trusted your experience over the AI — that's good judgment — but you didn't articulate why AI might systematically trend toward higher codes based on how it processes clinical language."
+      },
+      "integration": {
+        "level": "Developing",
+        "detail": "You see real opportunities for AI in your daily work — from drafting letters to analyzing denial patterns to automating routine tasks. When you described using AI to help tell the story of coding patterns and design spreadsheets for the practice manager, that showed genuine workflow-level thinking. What you haven't yet developed is specificity in how you'd direct AI to get better results. You mention 'asking the system to write the letter' or 'uploading the data,' but you don't yet describe giving AI the specific context, constraints, and examples that would make its output more useful on the first try."
+      },
+      "judgment": {
+        "level": "Developing",
+        "detail": "Your judgment instincts are genuinely strong. You immediately think about patient data rules, you default to standard practice when AI suggests something unusual, and you insist on human oversight for important decisions like denial appeals. That pattern of compliance-first thinking will serve you well in medical billing. What you're still developing is translating those good instincts into specific verification steps. When you say 'I'd look at this closely,' you're showing the right impulse, but you don't yet describe what you'd actually check for — dollar amounts, medical necessity language, or specific billing requirements that AI commonly gets wrong."
+      }
+    },
+    "doing_well": [
+      "You consistently put patient data protection first — nearly every response where PHI came up, you immediately mentioned checking office rules and anonymizing when necessary. That's not a small thing in medical billing.",
+      "You treat AI output as a starting point, not a final answer — across scenario after scenario, you mentioned reviewing, verifying, or checking what AI produces before using it.",
+      "When something feels off, you trust your professional experience over AI suggestions. Your response about the coding dispute was clear: 'I trust my experience more than the AI assessment.'",
+      "You see automation opportunities where others might not — you spotted that denial management and eligibility verification could benefit from AI assistance, even while recognizing the constraints.",
+      "You escalate appropriately rather than guessing — when the coding pattern seemed wrong, you planned to bring evidence to the practice manager instead of just overriding everything yourself."
+    ],
+    "next_capabilities": [
+      "You verify AI output carefully — the next step is getting more specific about what you're checking for. Instead of 'reviewing closely,' develop a checklist: Are the dollar amounts right? Does the medical necessity language match the chart? Are the billing codes supported by documentation?",
+      "You see good opportunities for AI in your workflow — now start thinking about how to set AI up for success. When asking AI to draft an appeal letter, describe what the letter needs to accomplish, who will read it, and what tone to use. That context makes all the difference in what you get back.",
+      "You recognize when AI output needs human oversight — the next opportunity is building those one-off verification steps into repeatable processes. The tasks you handle every week are your best candidates for systematic AI assistance with built-in checkpoints."
+    ],
+    "primary_next_step": "Next time you use AI for any billing task, spend 30 seconds giving it specific context about what you need — tell it you're writing for a patient who's confused about their bill, or that you're appealing to a payer who denied for medical necessity, or that you need language that follows your office's usual tone. That one change will noticeably improve what you get back.",
+    "organizational_opportunities": [
+      "Jane's responses consistently point to the need for clearer policies about when and how staff can use AI tools with patient data — she's asking the right compliance questions, but the answers aren't always clear.",
+      "Several responses suggest the practice would benefit from standard verification checklists for AI-assisted billing tasks, so staff know exactly what to check before using AI output.",
+      "The pattern of AI-suggested codes trending higher deserves systematic analysis — Jane has the right instinct to escalate this, but the practice needs a process for monitoring and auditing AI suggestions across providers."
+    ]
+  }
+}

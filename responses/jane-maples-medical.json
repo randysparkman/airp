@@ -1,0 +1,81 @@
+{
+  "respondent_name": "Jane Maples",
+  "intake_answers": [
+    "Healthcare / Medical Office",
+    "Billing / Insurance Specialist",
+    "I've used AI tools a few times",
+    "Somewhat comfortable",
+    "I want to use it more, but carefully"
+  ],
+  "tier1_responses": [
+    {
+      "question_id": "t1_q1",
+      "response": "I would review the case carefully. But probably default to our standard practice. And review this anomaly with my manager for further review."
+    },
+    {
+      "question_id": "t1_q2",
+      "response": "I'd proceed. But I'd be sure I follow my office rule about presenting patient information to our tools. If there's a restriction, I'd anonymize and mask the input. I'd review the output carefully."
+    },
+    {
+      "question_id": "t1_q3",
+      "response": "For the first, again, I'd be careful with patient information. But I'd be open to use the tool to draft the letter. I'd review it regardless. On the second, I'd be comfortable to use the tool to review the PA requirements."
+    },
+    {
+      "question_id": "t1_q4",
+      "response": "That's fine. I would welcome the help. But I'd be careful taking the answer as absolute, even if its formatted in a good way."
+    },
+    {
+      "question_id": "t1_q5",
+      "response": "This seems to be an opportunity for an automation. First question is what is the rule for allowing the AI to use patient data. The other is to be sure there's a human in the loop to be sure we aren't leaving out important claims."
+    }
+  ],
+  "tier2_responses": [
+    {
+      "question_id": "t2_q1",
+      "response": "I'd certainly use the summary. But I would hand review the core elements of the case just to be sure its correct and that I can answer deeper questions."
+    },
+    {
+      "question_id": "t2_q2",
+      "response": "I'd first verify I can use the data based on our rules. I'd anonymize it if necessary. I'd upload the data if allowed. And work with the tool to create the PA request. I'd also look at this closely to see if its an opportunity for an automation."
+    },
+    {
+      "question_id": "t2_q3",
+      "response": "I think it is certainly a candidate for use. Again, I'd have to follow the rules with patient information. This use case might be difficult to anonymize if the restrictions were in place."
+    },
+    {
+      "question_id": "t2_q4",
+      "response": "I'd pause to consider how I \"know\" the assistant can't log in to the portals. Once assured of that, then I'd look at intermediate ways to assist. but I'd be realistic that there are limits and you work within them."
+    },
+    {
+      "question_id": "t2_q5",
+      "response": "I'd do some dummy testing. Then I'd ask the assistant to help me tell the story. I might make spreadsheet of past transactions that I ask the assistant to help me design, populate and present."
+    }
+  ],
+  "tier3_responses": [
+    {
+      "scenario": "You're using your AI assistant to help draft an appeal letter for a denied cardiology procedure claim. The denial reason is 'medical necessity not established.' You have the patient's chart notes, the original claim, and the denial letter from the insurance company.",
+      "prompt": "Walk me through exactly how you would instruct the AI to help you write this appeal letter.",
+      "response": "I would first be sure I understood my office rules for uploading patient data to an AI. then I would gather up the data needed to be specific. i'd upload according to the rules. then I'd ask the system to write the letter. I'd look it closely and edit before I use it."
+    },
+    {
+      "scenario": "Your practice is seeing a pattern of denied claims for a specific orthopedic procedure code. The denials come from multiple insurance companies with varying reasons. You want to use AI to help analyze this pattern and prevent future denials.",
+      "prompt": "Describe the specific workflow you would set up to use AI for analyzing and addressing this denial pattern.",
+      "response": "I'd gather up denails from the multiple insurance companies. I'd upload them to the AI and describe the issue. I'd specially ask the tool to identify a pattern. I'd include some successful ones as well in order to give the ai more info. I'd be sure to follow office rules on paitent data protection."
+    },
+    {
+      "scenario": "The EHR's AI is suggesting a higher-level office visit code (99214 instead of 99213) for a routine follow-up appointment. Your experience tells you this visit doesn't meet the complexity requirements for the higher code. However, when you ask your general AI assistant to review the documentation, it agrees with the EHR's suggestion and provides seemingly valid reasoning.",
+      "prompt": "What would you do in this situation and why?",
+      "response": "I'd just take the AI agreement as another data point and and continue looking. I trust my experience more than the AI assessment."
+    },
+    {
+      "scenario": "It's end-of-month with a large batch of claims due by 5 PM to meet filing deadlines. You're behind schedule when a patient calls upset about receiving a bill they believe is wrong. You want to use AI to quickly help research their coverage and draft a response, but you're aware this involves reviewing their PHI and insurance details.",
+      "prompt": "How would you handle using AI in this time-pressured situation involving patient information?",
+      "response": "I'd use AI in this situation to actually help me with the time crunch. I'd be careful with accuracy and patient confidentiality."
+    },
+    {
+      "scenario": "A new team member asks you for advice about when to trust AI suggestions in billing work versus when to double-check them. They've noticed that AI sometimes gives confident-sounding answers that aren't quite right for medical billing, but they're not sure how to tell the difference.",
+      "prompt": "What guidance would you give them about evaluating AI reliability in billing tasks?",
+      "response": "I'd use this as. a teaching moment with my colleague. to help them understand that ai answers are not perfect and we must review them."
+    }
+  ]
+}

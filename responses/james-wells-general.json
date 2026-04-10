@@ -1,0 +1,81 @@
+{
+  "respondent_name": "James Wells",
+  "intake_answers": [
+    "Business / Professional Services",
+    "General Knowledge Worker",
+    "I've used AI tools a few times",
+    "Somewhat comfortable",
+    "I want to use it more, but carefully"
+  ],
+  "tier1_responses": [
+    {
+      "question_id": "t1_q1",
+      "response": "I'm not surprised. I do understand that AI systems can sometimes make up answers."
+    },
+    {
+      "question_id": "t1_q2",
+      "response": "It probably came out this because I didn't give it enough information. So its working with the information it has at hand. I could make the output better if I continue to iterate the discussion and give more information about the product."
+    },
+    {
+      "question_id": "t1_q3",
+      "response": "I'm pretty confident. I do realize it could have made a mistake. I could reasearch more myself. I could also give that output to another ai tool to double check."
+    },
+    {
+      "question_id": "t1_q4",
+      "response": "One thing that gives pause is the sensitivity of the client data. I need to be sure I understand the sensitivity and my companies rule on putting client data into these systems."
+    },
+    {
+      "question_id": "t1_q5",
+      "response": "I could come up with a process where me and my teamates put our status into an ai tool. and ask the tool to summarize and send that and the raw input to my boss."
+    }
+  ],
+  "tier2_responses": [
+    {
+      "question_id": "t2_q1",
+      "response": "I'd give the AI the exact instructions I got from my boss. Then I'd review the output and ensure the tone was as you describe."
+    },
+    {
+      "question_id": "t2_q2",
+      "response": "My reaction is positive. I'd appreciate the idea and work to implement something like that within my project constraints."
+    },
+    {
+      "question_id": "t2_q3",
+      "response": "Since I know the client and their business I'd be able to validate the ai's output. and what questions to ask. and how to improve the output."
+    },
+    {
+      "question_id": "t2_q4",
+      "response": "I'd pause regardless of the time pressure and make sure the use case was the right thing. It's worse to be wrong than late."
+    },
+    {
+      "question_id": "t2_q5",
+      "response": "These are both candidates for help from AI. But different. On the first I'd upload the data so long as I adhere to the rules about data in my firm. And the second I'd probably be more iterative to be sure we arrive at a good product ."
+    }
+  ],
+  "tier3_responses": [
+    {
+      "scenario": "You're preparing a quarterly business review deck for a client meeting tomorrow. You've asked your company's AI assistant to analyze data from three different sources — your CRM, a project tracking tool, and a financial spreadsheet — and produce a summary of account performance with key metrics. The AI returns a clean, professional-looking summary with specific percentages, trend lines, and a conclusion that the account is 'on track across all dimensions.' You notice the numbers look plausible but you haven't cross-checked them, and you know the AI sometimes pulls figures that don't correspond to how your company actually calculates certain KPIs.",
+      "prompt": "Walk me through exactly how you'd evaluate this AI-generated summary before putting it in the deck — what would you check, in what order, and how would you decide it's ready?",
+      "response": "I would first spot check the result against my CRM ,then my project tracking tool, then my financial spreadsheet. I'd then upload my KPI . or ask the tool to look at them in its data and explicityly ask the AI if the KPI's are aligned correctly."
+    },
+    {
+      "scenario": "Your manager has noticed that several people on your team are using the AI assistant to draft weekly status updates for clients, but the quality is inconsistent — some updates go out with accurate information and a professional tone, while others have contained vague claims, slightly wrong project dates, or language that doesn't match the client relationship. Your manager asks you to propose a lightweight, repeatable process the whole team can follow when using AI for client-facing status updates — something practical that people will actually use, not a 20-step checklist.",
+      "prompt": "What process would you propose, and how would you build in safeguards without making it so burdensome that people skip them?",
+      "response": "I'd come up with a markdown file that I could add to the project or whatever folder we use to organize this work. I'd work with colleagues to help them make sure the AI model considers this markdown file when its creating these status updates."
+    },
+    {
+      "scenario": "You're compiling a competitive analysis for your team lead who needs it for a strategy meeting this afternoon. You used the AI assistant to research and summarize a competitor's recent moves, and the AI produced a confident, well-organized analysis claiming the competitor has expanded into two new markets and shifted their pricing model. A colleague who follows this competitor closely glances at your screen and says, 'That doesn't sound right — I'm pretty sure they only expanded into one market, and I haven't heard anything about pricing changes.' But the AI's summary includes what appear to be specific details and logical reasoning, and your colleague admits they haven't checked recently.",
+      "prompt": "The meeting is in two hours. What do you do with this analysis, and how do you decide what to trust?",
+      "response": "I'd take what m colleague says as serious. The current AI systems still get confused and answer confidently when they are."
+    },
+    {
+      "scenario": "You've been using the AI assistant to help you draft a detailed project brief that will guide a cross-functional team's work for the next six weeks. The brief includes scope definitions, success metrics, timelines, and role assignments. You've iterated on it with the AI and it reads well. As you're about to send it to the team and the client, a thought occurs to you: some of the success metrics the AI helped you formulate sound precise, but you're not entirely sure they're measurable with the data your team actually has access to. Your manager is out today and pinging you to send it before end of day because the client is waiting and the team needs to start Monday.",
+      "prompt": "What do you do, and what's your reasoning?",
+      "response": "This seems to be a disconnect. I'd try to get this precised. Or find a solid way to remove the questionable data. I'd default to careful instead of on time."
+    },
+    {
+      "scenario": "Your team has been asked to produce a recommendation report for a leadership decision about whether to invest in a new service line. You've used the AI assistant extensively — to research the market, draft sections, and structure the argument. The report makes a clear recommendation to move forward. As you finalize it, you realize two things simultaneously: first, the AI helped you build a very persuasive case, but you're not sure it gave equal weight to the risks and reasons not to proceed, because you prompted it by asking 'make the case for launching this service line.' Second, you know leadership is leaning toward launching and would probably welcome a report that supports that direction.",
+      "prompt": "How do you handle this before submitting the report, and what's at stake in how you handle it?",
+      "response": "I'd thread a needle here. I'd perhaps allow the AI to make the positive case. But I'd also ask the AI make an addendum that makes the opposite case. I'd present that to my leader and let them make the call."
+    }
+  ]
+}
