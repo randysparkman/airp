@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=DM+Sans:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 20% 97%;
+    --foreground: 0 0% 16.5%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 16.5%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 16.5%;
+
+    --primary: 152 41% 18%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 40 14% 93%;
+    --secondary-foreground: 0 0% 16.5%;
+
+    --muted: 40 14% 93%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 43 70% 47%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 37 14% 85%;
+    --border-light: 37 18% 91%;
+    --input: 37 14% 85%;
+    --ring: 43 70% 47%;
+
+    --radius: 0.625rem;
+
+    /* Custom assessment tokens */
+    --navy: 222 52% 16%;
+    --green: 152 41% 18%;
+    --gold: 43 70% 47%;
+    --gold-light: 43 60% 56%;
+
+    --bg-warm: 40 20% 97%;
+    --bg-card-hover: 40 12% 92%;
+    --text-main: 0 0% 16.5%;
+    --text-light: 0 0% 42%;
+    --text-muted: 0 0% 60%;
+
+    /* Band colors */
+    --band-emerging: 220 14% 35%;
+    --band-emerging-muted: 220 14% 86%;
+    --band-developing: 43 70% 47%;
+    --band-developing-muted: 40 25% 85%;
+    --band-demonstrating: 152 41% 18%;
+    --band-demonstrating-muted: 145 16% 85%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Source Serif 4', Georgia, serif;
+  }
+}
+
+@layer utilities {
+  .font-serif-display {
+    font-family: 'Source Serif 4', Georgia, serif;
+  }
+  .font-body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+}
+
+/* Print styles for PDF export */
+@media print {
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
