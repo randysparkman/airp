@@ -51,7 +51,7 @@ export function WelcomeScreen({ onStart, preselectedContext }: WelcomeScreenProp
   }, []);
 
   return (
-    <div className="text-center max-w-[560px] mx-auto">
+    <div className="text-center max-w-[560px] mx-auto bg-white/70 rounded-2xl border border-border-light/50 px-4 py-8 sm:px-8 sm:py-10 shadow-sm">
       <FadeIn delay={100}>
         <IconCircle><LayersIcon /></IconCircle>
       </FadeIn>
@@ -61,7 +61,7 @@ export function WelcomeScreen({ onStart, preselectedContext }: WelcomeScreenProp
         </p>
       </FadeIn>
       <FadeIn delay={250}>
-        <h1 className="font-serif text-[2.4rem] font-medium text-foreground tracking-[-0.01em] mb-0 leading-[1.15]">
+        <h1 className="font-serif text-[1.7rem] sm:text-[2.4rem] font-medium text-foreground tracking-[-0.01em] mb-0 leading-[1.15]">
           The WorkPath Assessment
         </h1>
       </FadeIn>
