@@ -1,40 +1,58 @@
 # WorkPath — Project Context for Claude
 
 ## What This Is
-WorkPath is Randy Sparkman's AI readiness assessment product. It has two components:
-1. **Brochure** — a static marketing page, live on Vercel
-2. **Harness** — a Node.js pipeline that runs respondents through the assessment and generates a scored PDF profile
-
-A third component — the **assessment app** (currently on Lovable) — will eventually be migrated into this repo under `app/`.
+WorkPath is Randy Sparkman's AI readiness assessment product. It has three components:
+1. **Assessment App** — a Next.js App Router application, live on Vercel (migrated from Lovable, April 2026)
+2. **Brochure** — a static marketing page served from `public/brochure.html`
+3. **Harness** — a Node.js pipeline that runs respondents through the assessment offline and generates a scored PDF profile
 
 ---
 
 ## Repo Structure
 ```
 workpath/
-  brochure/
-    index.html          ← live brochure, single source of truth
-  harness/
-    harness.js          ← main scoring pipeline
-    regen-profile.js    ← regenerate profile from existing scored JSON
-    generate_pdf.py     ← convert scored JSON to PDF
-    create_pdf.py
-    package.json
-    CLAUDE.md           ← detailed harness technical reference
-  responses/            ← respondent Q&A JSON files (input to harness)
-  profiles/             ← scored JSON outputs and generated PDFs
-  app/                  ← future home of migrated assessment app
-  vercel.json
-  .gitignore
+  app/                            # Next.js App Router
+    layout.tsx, globals.css
+    page.tsx                      # Assessment at /
+    [slug]/page.tsx               # Assessment at /:slug
+    api/
+      score-tier1/route.ts        # Sonnet — rubric scoring
+      score-tier2/route.ts        # Sonnet — rubric scoring
+      score-tier3/route.ts        # Sonnet — rubric scoring
+      generate-tier3/route.ts     # Sonnet (summary) + Opus (questions)
+      generate-profile/route.ts   # Opus — narrative profile
+  components/
+    AssessmentPage.tsx            # Main page component
+    assessment/                   # 17 screen + shared components
+  data/                           # Job-role profiles, questions, templates
+  hooks/                          # useAssessmentFlow, useAssessmentScoring
+  lib/
+    anthropic.ts                  # Shared Anthropic SDK client
+    supabase.ts                   # Lazy Supabase client (getSupabase())
+    generatePdf.ts                # Client-side jsPDF generation
+    parse-ai-json.ts              # JSON extraction from Claude responses
+    utils.ts                      # cn() utility
+    prompts/
+      generate-profile-prompt.ts  # ~440-line profile generation system prompt
+  public/
+    brochure.html                 # Static brochure (served via rewrite at /brochure)
+  harness/                        # Offline scoring pipeline (see harness/CLAUDE.md)
+  responses/                      # Respondent Q&A JSON files
+  profiles/                       # Scored JSON outputs and generated PDFs
+  BACKLOG.md                      # Project backlog and pre-launch items
 ```
 
 ---
 
 ## GitHub & Deployment
 - **GitHub repo:** `https://github.com/randysparkman/workpath`
-- **Vercel project:** `workpath` (auto-deploys on push to `main`)
-- **Live brochure URL:** `https://workpath-one.vercel.app/brochure`
-- **Future custom domain:** TBD — not yet configured (not using "airp" subdomain)
+- **Vercel project:** `workpath` (Framework Preset: Next.js, auto-deploys on push to `main`)
+- **Live URLs:**
+  - `https://workpath-one.vercel.app/` — assessment app
+  - `https://workpath-one.vercel.app/brochure` — static brochure
+  - `https://workpath-one.vercel.app/medical-billing` — Medical Billing context
+  - `https://workpath-one.vercel.app/cie499` — CIE499 context
+- **Future custom domain:** TBD — not yet configured
 - **Git remote:** `git@github.com:randysparkman/workpath.git` (SSH)
 
 ### Deploy workflow
@@ -45,9 +63,36 @@ git commit -m "message"
 git push   # Vercel auto-deploys in ~30 seconds
 ```
 
+### Environment Variables (Vercel)
+- `ANTHROPIC_API_KEY` — for API routes
+- `NEXT_PUBLIC_SUPABASE_URL` — Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Supabase anon key (insert-only RLS)
+
 ---
 
-## The Brochure (`brochure/index.html`)
+## Assessment App Architecture
+
+### Model Strategy
+| Route | Model | Why |
+|-------|-------|-----|
+| score-tier1/2/3 | `claude-sonnet-4-20250514` | Structured rubric scoring — fast, cheap |
+| generate-tier3 step 1 | `claude-sonnet-4-20250514` | Performance summary — structured analysis |
+| generate-tier3 step 2 | `claude-opus-4-6` | Adaptive question design — creative |
+| generate-profile | `claude-opus-4-6` | Narrative synthesis — the deliverable |
+
+**Cost:** ~$0.20–0.25 per full assessment.
+
+### Assessment Flow (14 screens)
+welcome → name_input → intake → playback → transition1 → tier1 → analyzing_t1 → transition2 → tier2 → analyzing_t2t3 → transition3 → tier3 → complete → analyzing_profile → profile
+
+### Database
+- Fresh Supabase project (Postgres only, no edge functions)
+- One table: `assessment_completions` (insert-only, anon RLS policy)
+- Client uses lazy `getSupabase()` — returns null if env vars not set
+
+---
+
+## The Brochure (`public/brochure.html`)
 
 ### Brand & Design System
 - **Product name:** The WorkPath Assessment
@@ -60,16 +105,6 @@ git push   # Vercel auto-deploys in ~30 seconds
   - Light: `#F7F8FA`
   - Muted: `#6B7F8E`
 - **Contact button:** always links to `https://rsparkman.net`
-
-### Page Sections (in order)
-1. **Hero** — eyebrow, H1, subtitle, 3-stat bar (15 Scenarios / 3 Dimensions / <30 Minutes)
-2. **Opportunity** — three cards: For the Individual, For the Organization, For the Workforce Developer
-3. **What It Is** — two-column: description left, pull quote right
-4. **How It Works** — three tiers: Baseline (01), Contextualized (02), Adaptive (03)
-5. **What We Measure** — three dimension cards on navy: Orientation, Integration, Judgment
-6. **The Output** — four deliverable items with icons
-7. **Get Started** — CTA with contact button
-8. **Footer** — "The WorkPath Assessment · rsparkman.net"
 
 ### Language Conventions
 - "The WorkPath Assessment" — always use full name with "The"
@@ -133,5 +168,5 @@ Job role profiles and profile generation prompts live in a separate folder outsi
 
 ## What's Next
 - [ ] Set up custom domain (name TBD) in GoDaddy → Vercel
-- [ ] Migrate assessment app from Lovable into `app/`
-- [ ] Move reference assets (job role profiles, prompts) into `workpath/` repo
+- [ ] Remove old `brochure/` directory from repo root
+- [ ] See `BACKLOG.md` for performance optimization and student launch prep
