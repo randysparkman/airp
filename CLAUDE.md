@@ -104,7 +104,8 @@ welcome → name_input → intake → playback → transition1 → tier1 → ana
   - Gold: `#C9983A`
   - Light: `#F7F8FA`
   - Muted: `#6B7F8E`
-- **Contact button:** always links to `https://rsparkman.net`
+- **Contact:** CTA is a copy-to-clipboard button for `info@wkpath.com` (mailto is unreliable across devices)
+- **Domain:** `wkpath.com`
 
 ### Language Conventions
 - "The WorkPath Assessment" — always use full name with "The"

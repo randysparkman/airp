@@ -398,10 +398,15 @@
     }
 
     .output-item-icon {
-      font-size: 1.2rem;
       flex-shrink: 0;
-      margin-top: 1px;
+      margin-top: 2px;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+    .output-item-icon svg { width: 22px; height: 22px; }
 
     .output-item-text strong {
       display: block;
@@ -442,12 +447,19 @@
       text-decoration: none;
       font-size: 0.9rem;
       font-weight: 600;
+      border: none;
+      font-family: inherit;
+      cursor: pointer;
       border-radius: 4px;
       letter-spacing: 0.02em;
-      transition: background 0.2s, transform 0.15s;
+      transition: background 0.2s, transform 0.15s, color 0.2s;
     }
 
     .cta-btn:hover { background: var(--navy-mid); transform: translateY(-1px); }
+    .cta-btn.copied { color: var(--gold); }
+    .cta-btn svg { width: 14px; height: 14px; opacity: 0.55; transition: opacity 0.2s; }
+    .cta-btn:hover svg { opacity: 0.85; }
+    .cta-btn.copied svg { display: none; }
 
     footer {
       padding: 24px 64px;
@@ -504,7 +516,7 @@
   <section id="opportunity">
     <div class="opp-intro">
       <p class="section-label">The Opportunity</p>
-      <h2 class="section-heading">AI is now part of your work. How ready are your people to use it well, safely, and creatively — and how would you know?</h2>
+      <h2 class="section-heading">AI is now part of your work. How ready are you to use it well, safely, and creatively — and how would you know?</h2>
     </div>
     <div class="opp-grid">
       <div class="opp-card">
@@ -528,11 +540,11 @@
     <div>
       <p class="section-label">What It Is</p>
       <h2 class="section-heading">A readiness assessment that produces a profile, not just a score.</h2>
-      <p class="section-body">The WorkPath Assessment places respondents inside realistic workplace situations and reveals how they think. There are no right answers and no trick questions. The result is a personalized written profile — not a pass/fail grade, but a clear picture of where someone is now and what their next growth could look like.</p>
+      <p class="section-body">The WorkPath Assessment places you inside realistic workplace situations and reveals how you think. There are no right answers and no trick questions. The result is a personalized written profile — not a pass/fail grade, but a clear picture of where you are now and what your next growth could look like.</p>
       <p class="section-body" style="margin-top:16px;">It adapts to job role and work context, so what an entry-level analyst sees is calibrated differently from what a senior project manager sees.</p>
     </div>
     <div>
-      <p class="what-quote">"We're not testing what people know about AI — we're looking at how they think when AI tools are part of the picture."</p>
+      <p class="what-quote">"We're not testing what you know about AI — we're watching for how you think when AI tools are part of the picture."</p>
     </div>
   </section>
 
@@ -547,19 +559,19 @@
         <div class="tier-number">01</div>
         <p class="tier-label">Baseline</p>
         <h3>Everyday Situations</h3>
-        <p>Five scenarios drawn from common workplace moments — the kind where AI tools show up in ordinary work. These establish how someone thinks about AI when it's just part of getting something done.</p>
+        <p>Five scenarios drawn from common workplace moments — the kind where AI tools show up in ordinary work. These establish how you think about AI when it's just part of getting something done.</p>
       </div>
       <div class="tier-card">
         <div class="tier-number">02</div>
         <p class="tier-label">Contextualized</p>
         <h3>Role-Specific Work</h3>
-        <p>Five scenarios grounded in the respondent's actual work context — the tasks, decisions, and situations they'd encounter in their specific role. The profile adapts based on job type.</p>
+        <p>Five scenarios grounded in your actual work context — the tasks, decisions, and situations you'd encounter in your specific role. The profile adapts to job type.</p>
       </div>
       <div class="tier-card">
         <div class="tier-number">03</div>
         <p class="tier-label">Adaptive</p>
-        <h3>Where It Gets Interesting</h3>
-        <p>Five scenarios generated from the respondent's earlier answers — probing areas where their thinking was most revealing or where the picture needs more depth. No two profiles are identical.</p>
+        <h3>Goes Deeper Where It Matters</h3>
+        <p>Five scenarios generated from your earlier answers — probing areas where your thinking was most revealing or where the picture needs more depth. No two profiles are identical.</p>
       </div>
     </div>
   </section>
@@ -568,7 +580,7 @@
   <section id="dimensions">
     <p class="section-label" style="color: var(--gold);">What We Measure</p>
     <h2 class="section-heading">Three dimensions of AI readiness.</h2>
-    <p class="dims-intro">Every response is read across three dimensions. Together, they give a complete picture — not just whether someone uses AI, but how well they understand it, integrate it, and reason through it under real conditions.</p>
+    <p class="dims-intro">Every response is read across three dimensions. Together, they give a complete picture — not just whether you use AI, but how well you understand it, integrate it, and reason through it under real conditions.</p>
     <p style="font-size:0.78rem; color: rgba(255,255,255,0.3); letter-spacing:0.05em; margin-top: -36px; margin-bottom: 56px; text-transform: uppercase;">Grounded in multiple established AI literacy frameworks</p>
     <div class="dims-grid">
       <div class="dim-card">
@@ -576,8 +588,8 @@
           <div class="dim-dot"></div>
           <span class="dim-name">Orientation</span>
         </div>
-        <h3>How well they understand AI</h3>
-        <p>Does the person have an accurate mental model for what AI tools actually do — and don't do? Do they understand why confident output can still be wrong?</p>
+        <h3>How well you understand AI</h3>
+        <p>Do you have an accurate mental model for what AI tools actually do — and don't do? Do you understand why confident output can still be wrong?</p>
         <div class="levels">
           <div class="level">Emerging</div>
           <div class="level">Developing</div>
@@ -589,8 +601,8 @@
           <div class="dim-dot"></div>
           <span class="dim-name">Integration</span>
         </div>
-        <h3>How effectively they use AI</h3>
-        <p>Can they describe how they'd actually direct AI to get useful output? Do they think in workflows, not just one-off prompts? Do they know what to do with what the AI gives them?</p>
+        <h3>How effectively you use AI</h3>
+        <p>Can you describe how you'd actually direct AI to get useful output? Do you think in workflows, not just one-off prompts? Do you know what to do with what the AI gives you?</p>
         <div class="levels">
           <div class="level">Emerging</div>
           <div class="level">Developing</div>
@@ -602,8 +614,8 @@
           <div class="dim-dot"></div>
           <span class="dim-name">Judgment</span>
         </div>
-        <h3>How well they reason under pressure</h3>
-        <p>Do they calibrate their scrutiny to what's at stake? Can they recognize when caution matters more than speed? Do they understand the consequences of getting it wrong?</p>
+        <h3>How soundly you reason when stakes vary</h3>
+        <p>Do you calibrate your scrutiny to what's at stake? Can you recognize when caution matters more than speed? Do you understand the consequences of getting it wrong?</p>
         <div class="levels">
           <div class="level">Emerging</div>
           <div class="level">Developing</div>
@@ -616,37 +628,64 @@
   <!-- WHAT HR GETS -->
   <section id="output">
     <div>
-      <p class="section-label">The Output</p>
-      <h2 class="section-heading">What you receive for each respondent.</h2>
-      <p class="section-body">Every completed assessment produces a personalized written profile — generated with AI, grounded in the respondent's own words, and calibrated to their role and work context.</p>
+      <p class="section-label">What You See</p>
+      <h2 class="section-heading">What the assessment reveals.</h2>
+      <p class="section-body">Every completed assessment produces a personalized written profile — generated with AI, grounded in your own words, and calibrated to your role and work context.</p>
     </div>
     <div class="output-items">
       <div class="output-item">
-        <span class="output-item-icon">📄</span>
+        <span class="output-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C9983A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="8" y1="13" x2="16" y2="13"/>
+            <line x1="8" y1="17" x2="16" y2="17"/>
+          </svg>
+        </span>
         <div class="output-item-text">
           <strong>Written Profile Report</strong>
-          <span>A multi-page narrative covering all three dimensions — what the person is doing well, where they have room to grow, and specific next steps.</span>
+          <span>A multi-page narrative covering all three dimensions — what you're doing well, where you have room to grow, and specific next steps.</span>
         </div>
       </div>
       <div class="output-item">
-        <span class="output-item-icon">📊</span>
+        <span class="output-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C9983A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="20" x2="21" y2="20"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="18" y1="20" x2="18" y2="10"/>
+          </svg>
+        </span>
         <div class="output-item-text">
           <strong>Dimension Placement</strong>
           <span>A clear rating on each of the three dimensions — Orientation, Integration, and Judgment — at Emerging, Developing, or Demonstrating.</span>
         </div>
       </div>
       <div class="output-item">
-        <span class="output-item-icon">🏢</span>
+        <span class="output-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C9983A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </span>
         <div class="output-item-text">
           <strong>Organizational Observations</strong>
-          <span>Patterns from the individual's responses that may point to organizational training needs, policy gaps, or workflow opportunities.</span>
+          <span><em>For sponsors.</em> Patterns across individual responses that may point to training needs, policy gaps, or workflow opportunities.</span>
         </div>
       </div>
       <div class="output-item">
-        <span class="output-item-icon">🎯</span>
+        <span class="output-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C9983A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <circle cx="12" cy="12" r="6"/>
+            <circle cx="12" cy="12" r="2"/>
+          </svg>
+        </span>
         <div class="output-item-text">
           <strong>Highest-Leverage Next Move</strong>
-          <span>One concrete, specific habit or action the respondent can take immediately to advance their readiness.</span>
+          <span>One concrete, specific habit or action you can take immediately to advance your readiness.</span>
         </div>
       </div>
     </div>
@@ -655,13 +694,37 @@
   <!-- CTA -->
   <section id="contact">
     <p class="section-label">Get Started</p>
-    <h2 class="section-heading" style="max-width:520px; margin: 8px auto 16px;">Ready to see what AI readiness actually looks like across your team?</h2>
+    <h2 class="section-heading" style="max-width:520px; margin: 8px auto 16px;">Ready to see what AI readiness actually looks like?</h2>
     <p class="section-body" style="margin: 0 auto 40px; text-align:center;">Pilots are available for teams of any size. Each respondent completes the assessment independently and receives an individual profile. Organizational summaries are available for groups.</p>
-    <a href="https://rsparkman.net" class="cta-btn">Contact Randy Sparkman →</a>
+    <button type="button" class="cta-btn" id="copyEmailBtn" onclick="copyEmail()">
+      <span id="copyEmailLabel">info@wkpath.com</span>
+      <svg id="copyEmailIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="9" y="9" width="11" height="11" rx="2"/>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+    </button>
+    <script>
+      function copyEmail() {
+        const btn = document.getElementById('copyEmailBtn');
+        const label = document.getElementById('copyEmailLabel');
+        const original = 'Copy info@wkpath.com';
+        navigator.clipboard.writeText('info@wkpath.com').then(() => {
+          label.textContent = 'Copied ✓';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            label.textContent = original;
+            btn.classList.remove('copied');
+          }, 2000);
+        }).catch(() => {
+          label.textContent = 'Copy manually: info@wkpath.com';
+          setTimeout(() => { label.textContent = original; }, 3000);
+        });
+      }
+    </script>
   </section>
 
   <footer>
-    <p>The WorkPath Assessment · rsparkman.net</p>
+    <p>The WorkPath Assessment · wkpath.com</p>
     <p>© 2026 Randy Sparkman</p>
   </footer>
 </body>
