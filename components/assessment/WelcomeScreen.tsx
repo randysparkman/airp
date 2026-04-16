@@ -67,7 +67,7 @@ export function WelcomeScreen({ onStart, preselectedContext }: WelcomeScreenProp
       </FadeIn>
       <FadeIn delay={400}>
         <p className="text-[1.02rem] text-muted-foreground leading-[1.65] max-w-[480px] mx-auto mb-3 mt-6">
-          A structured, scenario-based assessment that reveals how you actually think when AI is part of your job.
+          A structured, scenario-based assessment that reveals how you actually use AI tools — and how you think when AI is part of your job.
         </p>
         <button
           onClick={() => setShowAbout(!showAbout)}
