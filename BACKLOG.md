@@ -4,7 +4,8 @@
 
 - [ ] Add retry logic with backoff to API calls — gracefully handle rate limits instead of showing errors
 - [ ] Check Anthropic rate limit tier and upgrade if needed for 25 concurrent users
-- [ ] Monitor Vercel Hobby plan limits — serverless function invocations and execution time
+- [x] Raise Vercel function timeout (maxDuration = 60s on all API routes — Hobby default of 10s was blocking Opus profile generation)
+- [ ] Monitor Vercel Hobby plan limits — serverless function invocations (still watch GB-hours and 100k invocation cap)
 - [ ] Time the Sonnet/Opus split in production and tune time estimates on AnalyzingScreen
 - [ ] Consider Vercel Pro if Hobby limits are too tight for student load
 
