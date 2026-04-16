@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { anthropic } from "@/lib/anthropic";
 import { parseAIJson } from "@/lib/parse-ai-json";
 
+export const maxDuration = 60;
+
 export async function POST(request: Request) {
   try {
     const {

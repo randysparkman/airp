@@ -3,6 +3,8 @@ import { anthropic } from "@/lib/anthropic";
 import { parseAIJson } from "@/lib/parse-ai-json";
 import { GENERATE_PROFILE_PROMPT } from "@/lib/prompts/generate-profile-prompt";
 
+export const maxDuration = 60;
+
 export async function POST(request: Request) {
   try {
     const { scored_responses, respondent_name, intake_answers, org_name, org_fluency } = await request.json();
