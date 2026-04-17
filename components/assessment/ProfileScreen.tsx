@@ -234,10 +234,10 @@ export function ProfileScreen({
         delay={700}
       />
 
-      {/* Your Highest-Leverage Next Move */}
+      {/* Your Next Step */}
       <FadeIn delay={800}>
         <h3 className="font-serif text-[1.15rem] font-semibold text-foreground mb-4 mt-8 tracking-[-0.01em]">
-          Your Highest-Leverage Next Move
+          Your Next Step
         </h3>
         <div className="bg-background border-[1.5px] border-border rounded-lg p-6 mb-3.5 border-l-[4px] border-l-accent">
           <p className="text-[0.98rem] text-foreground leading-[1.7] m-0 font-medium">
