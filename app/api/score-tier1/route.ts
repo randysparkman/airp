@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { anthropic } from "@/lib/anthropic";
 import { parseAIJson } from "@/lib/parse-ai-json";
+import { logApiTiming } from "@/lib/api-timing";
 
 export const maxDuration = 60;
 
@@ -41,6 +42,7 @@ Judgment:
 }
 
 export async function POST(request: Request) {
+  const startedAt = Date.now();
   try {
     const { responses, questions } = await request.json();
 
@@ -50,12 +52,14 @@ export async function POST(request: Request) {
 
     const questionsBlock = buildQuestionsBlock(questions, responses);
 
+    const tModel = Date.now();
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-6",
       max_tokens: 4096,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: questionsBlock }],
     });
+    const modelElapsedMs = Date.now() - tModel;
 
     const textContent = message.content.find((c) => c.type === "text");
     if (!textContent || textContent.type !== "text") {
@@ -65,6 +69,7 @@ export async function POST(request: Request) {
     const parsed = parseAIJson(textContent.text);
     const scores = parsed.scores || parsed;
 
+    logApiTiming({ route: "score-tier1", startedAt, modelElapsedMs, usage: message.usage });
     return NextResponse.json({ scores });
   } catch (e: any) {
     console.error("score-tier1 error:", e);

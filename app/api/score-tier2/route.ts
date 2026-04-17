@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { anthropic } from "@/lib/anthropic";
 import { parseAIJson } from "@/lib/parse-ai-json";
+import { logApiTiming } from "@/lib/api-timing";
 
 export const maxDuration = 60;
 
@@ -52,6 +53,7 @@ Judgment:
 }
 
 export async function POST(request: Request) {
+  const startedAt = Date.now();
   try {
     const {
       responses,
@@ -77,18 +79,21 @@ export async function POST(request: Request) {
 
     // If we lack the inputs to summarize, fall back to scoring only.
     if (!canSummarize) {
+      const tModel = Date.now();
       const message = await anthropic.messages.create({
         model: "claude-sonnet-4-6",
         max_tokens: 4096,
         system: `You are scoring 5 responses to an AI-readiness assessment. For each question assign orientation_level, integration_level, and judgment_level (each one of emerging/developing/demonstrating) and 2-3 sentences of evidence_notes. Be calibrated. Return JSON: {"scores": [5 objects with question_id, orientation_level, integration_level, judgment_level, evidence_notes]}.`,
         messages: [{ role: "user", content: questionsBlock }],
       });
+      const modelElapsedMs = Date.now() - tModel;
       const textContent = message.content.find((c) => c.type === "text");
       if (!textContent || textContent.type !== "text") {
         throw new Error("No text content in Claude response");
       }
       const parsed = parseAIJson(textContent.text);
       const scores = parsed.scores || parsed;
+      logApiTiming({ route: "score-tier2", startedAt, modelElapsedMs, usage: message.usage, extra: { mode: "score_only" } });
       return NextResponse.json({ scores });
     }
 
@@ -121,12 +126,14 @@ export async function POST(request: Request) {
       `=== SUMMARY INSTRUCTIONS ===\n${summaryPromptTemplate}\n\n` +
       `Remember: return ONE JSON object with {"scores": [...Tier 2 scores...], "performanceSummary": {...per schema above...}}.`;
 
+    const tModel = Date.now();
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-6",
       max_tokens: 8192,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: userPrompt }],
     });
+    const modelElapsedMs = Date.now() - tModel;
 
     const textContent = message.content.find((c) => c.type === "text");
     if (!textContent || textContent.type !== "text") {
@@ -141,6 +148,7 @@ export async function POST(request: Request) {
       throw new Error("Combined scoring response missing scores or performanceSummary");
     }
 
+    logApiTiming({ route: "score-tier2", startedAt, modelElapsedMs, usage: message.usage, extra: { mode: "score_plus_summary" } });
     return NextResponse.json({ scores, performanceSummary });
   } catch (e: any) {
     console.error("score-tier2 error:", e);

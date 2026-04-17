@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import { anthropic } from "@/lib/anthropic";
 import { parseAIJson } from "@/lib/parse-ai-json";
+import { logApiTiming } from "@/lib/api-timing";
 
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
+  const startedAt = Date.now();
   try {
     const {
       performanceSummary,
@@ -29,6 +31,7 @@ export async function POST(request: Request) {
       "\n\n" +
       orgFluencyBlock;
 
+    const tModel = Date.now();
     const questionMessage = await anthropic.messages.create({
       model: "claude-opus-4-7",
       max_tokens: 6000,
@@ -48,6 +51,7 @@ export async function POST(request: Request) {
         },
       ],
     });
+    const modelElapsedMs = Date.now() - tModel;
 
     const questionText = questionMessage.content.find((c) => c.type === "text");
     if (!questionText || questionText.type !== "text") {
@@ -56,6 +60,7 @@ export async function POST(request: Request) {
 
     const tier3Data = parseAIJson(questionText.text);
 
+    logApiTiming({ route: "generate-tier3", startedAt, modelElapsedMs, usage: questionMessage.usage });
     return NextResponse.json({
       performanceSummary,
       tier3Questions: tier3Data.questions,

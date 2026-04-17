@@ -2,10 +2,12 @@ import { NextResponse } from "next/server";
 import { anthropic } from "@/lib/anthropic";
 import { parseAIJson } from "@/lib/parse-ai-json";
 import { GENERATE_PROFILE_PROMPT } from "@/lib/prompts/generate-profile-prompt";
+import { logApiTiming } from "@/lib/api-timing";
 
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
+  const startedAt = Date.now();
   try {
     const { scored_responses, respondent_name, intake_answers, org_name, org_fluency } = await request.json();
 
@@ -21,6 +23,7 @@ export async function POST(request: Request) {
       org_fluency: org_fluency || null,
     });
 
+    const tModel = Date.now();
     const message = await anthropic.messages.create({
       model: "claude-opus-4-7",
       max_tokens: 4096,
@@ -33,6 +36,7 @@ export async function POST(request: Request) {
       ],
       messages: [{ role: "user", content: userMessage }],
     });
+    const modelElapsedMs = Date.now() - tModel;
 
     const textContent = message.content.find((c) => c.type === "text");
     if (!textContent || textContent.type !== "text") {
@@ -41,6 +45,7 @@ export async function POST(request: Request) {
 
     const profile = parseAIJson(textContent.text);
 
+    logApiTiming({ route: "generate-profile", startedAt, modelElapsedMs, usage: message.usage });
     return NextResponse.json({ profile });
   } catch (e: any) {
     console.error("generate-profile error:", e);
