@@ -36,6 +36,7 @@
 ## Harness
 
 - [ ] **Revisit the harness concept** — step back and evaluate whether the offline scoring pipeline is still doing what we need. Originally built for respondent replay + PDF generation before the Next.js app existed; now that the live app is the primary surface, confirm the harness's purpose (regression testing? prompt iteration? batch scoring for clients without the UI?) and align its capabilities accordingly
+- [ ] **Fix broken harness paths** — `harness.js:26` hardcodes `ASSESSMENT_DIR = '/Users/randysparkman/Desktop/AI-assessment-tool'` (folder no longer exists); references `profile-generation-prompt-v5.md` and `tier3-*-template-v2.json` (diverged from canonical repo versions). Repoint to `../data/` and `../lib/prompts/` or pass as CLI args. Blocks any harness run today.
 - [ ] Update harness model strategy to match production: Sonnet 4.6 for scoring, Opus 4.7 for T3 question generation and profile generation (deferred pending harness concept review)
 
 ## Save & Resume

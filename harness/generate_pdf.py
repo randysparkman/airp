@@ -12,8 +12,8 @@ import json
 import os
 from datetime import datetime
 
-# Pull in the existing PDF generator from the assessment directory
-sys.path.insert(0, '/Users/randysparkman/Desktop/AI-assessment-tool')
+# Pull in the PDF generator from the same directory (harness/generate_profile_pdf.py)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from generate_profile_pdf import build_pdf
 
 

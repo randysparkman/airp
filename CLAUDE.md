@@ -161,10 +161,13 @@ Stored in `~/.zshrc` as `ANTHROPIC_API_KEY`. Run `source ~/.zshrc` if not in env
 | `responses/robert-howell-cie499.json` | Robert Howell | CIE499 profile |
 
 ### Reference Assets
-Job role profiles and profile generation prompts live in a separate folder outside this repo:
-`/Users/randysparkman/Desktop/AI-assessment-tool/`
-- `job-role-profile-medical-billing.md`
-- `profile-generation-prompt-v6.md`
+All canonical build assets now live in the repo:
+- Job-role profiles: `data/job-role-profile-*.md`
+- Profile-generation prompt: `lib/prompts/generate-profile-prompt.ts`
+- Tier 3 templates: `data/tier3-question-template.json`, `data/tier3-summary-template.json`
+- Harness PDF generator: `harness/generate_profile_pdf.py`
+
+Historical design-era artifacts (Lovable changelogs, prototype .jsx, versioned prompt drafts, design docs, org-fluency source files) live outside the repo at `~/Desktop/AI-assessment-tool-claude-chat/`. These are reference-only and not consumed by the current build.
 
 ---
 
