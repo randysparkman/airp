@@ -2,7 +2,7 @@
 
 ## Performance & Scaling (pre-launch: 100 students)
 
-- [ ] Add retry logic with backoff to API calls — gracefully handle rate limits instead of showing errors
+- [x] Add retry logic with backoff to API calls (SDK maxRetries bumped from 2 to 4 — covers 429s, 5xx, and connection errors with exponential backoff)
 - [ ] Check Anthropic rate limit tier and upgrade if needed for 25 concurrent users
 - [x] Raise Vercel function timeout (maxDuration = 60s on all API routes — Hobby default of 10s was blocking Opus profile generation)
 - [ ] Monitor Vercel Hobby plan limits — serverless function invocations (still watch GB-hours and 100k invocation cap)
