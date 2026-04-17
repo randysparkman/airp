@@ -48,11 +48,11 @@ workpath/
 - **GitHub repo:** `https://github.com/randysparkman/workpath`
 - **Vercel project:** `workpath` (Framework Preset: Next.js, auto-deploys on push to `main`)
 - **Live URLs:**
-  - `https://workpath-one.vercel.app/` — assessment app
-  - `https://workpath-one.vercel.app/brochure` — static brochure
-  - `https://workpath-one.vercel.app/medical-billing` — Medical Billing context
-  - `https://workpath-one.vercel.app/cie499` — CIE499 context
-- **Future custom domain:** TBD — not yet configured
+  - `https://wkpath.com/` — assessment app
+  - `https://wkpath.com/brochure` — static brochure
+  - `https://wkpath.com/medical-billing` — Medical Billing context
+  - `https://wkpath.com/cie499` — CIE499 context
+- **Fallback URL:** `https://workpath-one.vercel.app/` (still live, useful for debugging)
 - **Git remote:** `git@github.com:randysparkman/workpath.git` (SSH)
 
 ### Deploy workflow
@@ -168,6 +168,4 @@ Job role profiles and profile generation prompts live in a separate folder outsi
 ---
 
 ## What's Next
-- [ ] Set up custom domain (name TBD) in GoDaddy → Vercel
-- [ ] Remove old `brochure/` directory from repo root
 - [ ] See `BACKLOG.md` for performance optimization and student launch prep
