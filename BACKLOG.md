@@ -35,7 +35,8 @@
 
 ## Harness
 
-- [ ] Update harness model strategy to match production: Sonnet for scoring, Opus for T3 question generation and profile generation
+- [ ] **Revisit the harness concept** — step back and evaluate whether the offline scoring pipeline is still doing what we need. Originally built for respondent replay + PDF generation before the Next.js app existed; now that the live app is the primary surface, confirm the harness's purpose (regression testing? prompt iteration? batch scoring for clients without the UI?) and align its capabilities accordingly
+- [ ] Update harness model strategy to match production: Sonnet 4.6 for scoring, Opus 4.7 for T3 question generation and profile generation (deferred pending harness concept review)
 
 ## Save & Resume
 
@@ -50,7 +51,7 @@
 
 - [ ] Migrate scoring routes to Claude `tool_use` structured output (see design: `.claude/projects/.../memory/project_structured_prompts.md`)
 - [ ] Priority 1: score-tier1/2/3 — eliminate `parseAIJson` fallback logic
-- [ ] Priority 2: generate-tier3 Step 1 (performance summary) — prevent cascade failures into question generation
-- [ ] Priority 3: generate-tier3 Step 2 (question generation) — shrink prompt template, enforce nested rubric schema
+- [ ] Priority 2: score-tier2 `performanceSummary` output (merged from old generate-tier3 step 1) — prevent cascade failures into Tier 3 question generation
+- [ ] Priority 3: generate-tier3 (adaptive question generation) — shrink prompt template, enforce nested rubric schema
 - [ ] Priority 4 (optional): generate-profile — add schema enforcement, keep prose guidance
 

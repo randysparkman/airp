@@ -17,10 +17,10 @@ workpath/
     [slug]/page.tsx               # Assessment at /:slug
     api/
       score-tier1/route.ts        # Sonnet — rubric scoring
-      score-tier2/route.ts        # Sonnet — rubric scoring
+      score-tier2/route.ts        # Sonnet — rubric scoring + performance summary (merged)
       score-tier3/route.ts        # Sonnet — rubric scoring
-      generate-tier3/route.ts     # Sonnet (summary) + Opus (questions)
-      generate-profile/route.ts   # Opus — narrative profile
+      generate-tier3/route.ts     # Opus — adaptive question generation (cached prompt)
+      generate-profile/route.ts   # Opus — narrative profile (cached prompt)
   components/
     AssessmentPage.tsx            # Main page component
     assessment/                   # 17 screen + shared components
@@ -75,12 +75,13 @@ git push   # Vercel auto-deploys in ~30 seconds
 ### Model Strategy
 | Route | Model | Why |
 |-------|-------|-----|
-| score-tier1/2/3 | `claude-sonnet-4-20250514` | Structured rubric scoring — fast, cheap |
-| generate-tier3 step 1 | `claude-sonnet-4-20250514` | Performance summary — structured analysis |
-| generate-tier3 step 2 | `claude-opus-4-6` | Adaptive question design — creative |
-| generate-profile | `claude-opus-4-6` | Narrative synthesis — the deliverable |
+| score-tier1 | `claude-sonnet-4-6` | Structured rubric scoring — fast, cheap |
+| score-tier2 | `claude-sonnet-4-6` | Rubric scoring + performance summary in one call (merged from old generate-tier3 step 1) |
+| score-tier3 | `claude-sonnet-4-6` | Structured rubric scoring — fast, cheap |
+| generate-tier3 | `claude-opus-4-7` | Adaptive question design — creative. Static template cached (ephemeral) |
+| generate-profile | `claude-opus-4-7` | Narrative synthesis — the deliverable. ~438-line system prompt cached (ephemeral) |
 
-**Cost:** ~$0.20–0.25 per full assessment.
+**Cost:** ~$0.20–0.25 per full assessment (before cache discounts).
 
 ### Assessment Flow (14 screens)
 welcome → name_input → intake → playback → transition1 → tier1 → analyzing_t1 → transition2 → tier2 → analyzing_t2t3 → transition3 → tier3 → complete → analyzing_profile → profile
