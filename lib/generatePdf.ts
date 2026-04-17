@@ -361,7 +361,7 @@ export function downloadProfilePdf(
   drawSectionHeading("Next Capabilities to Build", GOLD);
   drawBulletList(profile.next_capabilities, GOLD);
 
-  // ── Your Highest-Leverage Next Move ──
+  // ── Your Next Step ──
   checkSpace(30);
   const nextStepLines = doc.splitTextToSize(profile.primary_next_step, CONTENT_W - 24);
   const nextStepTitleH = 16;
@@ -383,7 +383,7 @@ export function downloadProfilePdf(
   doc.setFontSize(11);
   doc.setTextColor(...TEXT_MAIN);
   doc.setFont("times", "bold");
-  doc.text("Your Highest-Leverage Next Move", MARGIN_X + 14, y + 12);
+  doc.text("Your Next Step", MARGIN_X + 14, y + 12);
 
   // Body inside box
   doc.setFontSize(9.5);
