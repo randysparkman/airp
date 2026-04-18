@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
-import { anthropic } from "@/lib/anthropic";
+import Anthropic from "@anthropic-ai/sdk";
 import { parseAIJson } from "@/lib/parse-ai-json";
 import { logApiTiming } from "@/lib/api-timing";
 
 export const maxDuration = 60;
+
+// Fewer retries so backoff doesn't compound toward the 60s Vercel limit.
+const anthropic = new Anthropic({ maxRetries: 1 });
 
 const SYSTEM_PROMPT = `You are an AI-readiness assessment engine. You will perform TWO tasks in a single response.
 
@@ -52,6 +55,21 @@ Judgment:
   }).join("\n");
 }
 
+function makeAbortController() {
+  const abort = new AbortController();
+  const timeoutId = setTimeout(() => abort.abort(), 55_000);
+  return { signal: abort.signal, clear: () => clearTimeout(timeoutId) };
+}
+
+function isAbortError(e: any): boolean {
+  return (
+    e?.name === "AbortError" ||
+    e?.code === "ERR_CANCELED" ||
+    e?.message?.includes("aborted") ||
+    e?.message?.includes("timed out")
+  );
+}
+
 export async function POST(request: Request) {
   const startedAt = Date.now();
   try {
@@ -79,13 +97,22 @@ export async function POST(request: Request) {
 
     // If we lack the inputs to summarize, fall back to scoring only.
     if (!canSummarize) {
+      const { signal, clear } = makeAbortController();
       const tModel = Date.now();
-      const message = await anthropic.messages.create({
-        model: "claude-sonnet-4-6",
-        max_tokens: 4096,
-        system: `You are scoring 5 responses to an AI-readiness assessment. For each question assign orientation_level, integration_level, and judgment_level (each one of emerging/developing/demonstrating) and 2-3 sentences of evidence_notes. Be calibrated. Return JSON: {"scores": [5 objects with question_id, orientation_level, integration_level, judgment_level, evidence_notes]}.`,
-        messages: [{ role: "user", content: questionsBlock }],
-      });
+      let message: Awaited<ReturnType<typeof anthropic.messages.create>>;
+      try {
+        message = await anthropic.messages.create(
+          {
+            model: "claude-sonnet-4-6",
+            max_tokens: 4096,
+            system: `You are scoring 5 responses to an AI-readiness assessment. For each question assign orientation_level, integration_level, and judgment_level (each one of emerging/developing/demonstrating) and 2-3 sentences of evidence_notes. Be calibrated. Return JSON: {"scores": [5 objects with question_id, orientation_level, integration_level, judgment_level, evidence_notes]}.`,
+            messages: [{ role: "user", content: questionsBlock }],
+          },
+          { signal },
+        );
+      } finally {
+        clear();
+      }
       const modelElapsedMs = Date.now() - tModel;
       const textContent = message.content.find((c) => c.type === "text");
       if (!textContent || textContent.type !== "text") {
@@ -126,13 +153,22 @@ export async function POST(request: Request) {
       `=== SUMMARY INSTRUCTIONS ===\n${summaryPromptTemplate}\n\n` +
       `Remember: return ONE JSON object with {"scores": [...Tier 2 scores...], "performanceSummary": {...per schema above...}}.`;
 
+    const { signal, clear } = makeAbortController();
     const tModel = Date.now();
-    const message = await anthropic.messages.create({
-      model: "claude-sonnet-4-6",
-      max_tokens: 8192,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: "user", content: userPrompt }],
-    });
+    let message: Awaited<ReturnType<typeof anthropic.messages.create>>;
+    try {
+      message = await anthropic.messages.create(
+        {
+          model: "claude-sonnet-4-6",
+          max_tokens: 8192,
+          system: SYSTEM_PROMPT,
+          messages: [{ role: "user", content: userPrompt }],
+        },
+        { signal },
+      );
+    } finally {
+      clear();
+    }
     const modelElapsedMs = Date.now() - tModel;
 
     const textContent = message.content.find((c) => c.type === "text");
@@ -152,6 +188,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ scores, performanceSummary });
   } catch (e: any) {
     console.error("score-tier2 error:", e);
+    if (isAbortError(e)) {
+      return NextResponse.json(
+        { error: "Scoring timed out. Please try again." },
+        { status: 504 },
+      );
+    }
     if (e?.status === 429) {
       return NextResponse.json({ error: "Rate limit exceeded. Please try again in a moment." }, { status: 429 });
     }
