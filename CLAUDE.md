@@ -1,10 +1,9 @@
 # WorkPath — Project Context for Claude
 
 ## What This Is
-WorkPath is Randy Sparkman's AI readiness assessment product. It has three components:
+WorkPath is Randy Sparkman's AI readiness assessment product. It has two components:
 1. **Assessment App** — a Next.js App Router application, live on Vercel (migrated from Lovable, April 2026)
 2. **Brochure** — a static marketing page served from `public/brochure.html`
-3. **Harness** — a Node.js pipeline that runs respondents through the assessment offline and generates a scored PDF profile
 
 ---
 
@@ -36,9 +35,6 @@ workpath/
       generate-profile-prompt.ts  # ~440-line profile generation system prompt
   public/
     brochure.html                 # Static brochure (served via rewrite at /brochure)
-  harness/                        # Offline scoring pipeline (see harness/CLAUDE.md)
-  responses/                      # Respondent Q&A JSON files
-  profiles/                       # Scored JSON outputs and generated PDFs
   BACKLOG.md                      # Project backlog and pre-launch items
 ```
 
@@ -118,54 +114,11 @@ welcome → name_input → intake → playback → transition1 → tier1 → ana
 
 ---
 
-## The Harness (`harness/`)
-
-See `harness/CLAUDE.md` for full technical detail. Summary:
-
-### Pipeline
-T1 scoring (5 baseline Q&A) → T2 scoring (5 contextualized Q&A) → T3 rubric generation → T3 scoring (5 adaptive Q&A) → profile generation → PDF
-
-### Key Commands
-```bash
-cd /Users/randysparkman/Desktop/workpath
-
-# Full pipeline run (replay mode)
-node harness/harness.js \
-  --profile <path-to-job-role-profile.md> \
-  --responses responses/<respondent>.json \
-  --replay
-
-# Regenerate profile only from existing scored JSON (~$0.14 vs ~$0.49)
-node harness/regen-profile.js \
-  profiles/<existing>.json \
-  <path-to-profile-generation-prompt.md> \
-  <path-to-job-role-profile.md> \
-  responses/<respondent>.json
-
-# Generate PDF from scored JSON
-python3 harness/generate_pdf.py profiles/<file>.json
-```
-
-### Models
-- Default: `claude-sonnet-4-20250514`
-- High-fidelity: `claude-opus-4-6` (pass `--model claude-opus-4-6`)
-
-### API Key
-Stored in `~/.zshrc` as `ANTHROPIC_API_KEY`. Run `source ~/.zshrc` if not in environment.
-
-### Respondents on File
-| File | Person | Role |
-|------|--------|------|
-| `responses/james-wells-general.json` | James Wells | General |
-| `responses/jane-maples-medical.json` | Jane Maples | Medical Billing Specialist |
-| `responses/robert-howell-cie499.json` | Robert Howell | CIE499 profile |
-
-### Reference Assets
-All canonical build assets now live in the repo:
+## Reference Assets
+All canonical build assets live in the repo:
 - Job-role profiles: `data/job-role-profile-*.md`
 - Profile-generation prompt: `lib/prompts/generate-profile-prompt.ts`
 - Tier 3 templates: `data/tier3-question-template.json`, `data/tier3-summary-template.json`
-- Harness PDF generator: `harness/generate_profile_pdf.py`
 
 Historical design-era artifacts (Lovable changelogs, prototype .jsx, versioned prompt drafts, design docs, org-fluency source files) live outside the repo at `~/Desktop/AI-assessment-tool-claude-chat/`. These are reference-only and not consumed by the current build.
 

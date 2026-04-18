@@ -1,7 +1,7 @@
 node_modules/
-harness/cache/
 .DS_Store
 .vercel
 .next/
 .env.local
 .env*.local
+tsconfig.tsbuildinfo

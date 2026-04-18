@@ -8,15 +8,12 @@
 - [ ] Monitor Vercel Hobby plan limits — serverless function invocations (still watch GB-hours and 100k invocation cap)
 - [ ] Time the Sonnet/Opus split in production and tune time estimates on AnalyzingScreen
 - [ ] Consider Vercel Pro if Hobby limits are too tight for student load
+- [ ] Purchase Supabase Pro license before student launch (unpauses free-tier project, enables daily backups, removes row/egress caps)
 
 ## Content & Profile Quality
 
 - [ ] Tighten profile summary — currently too verbose, needs to be more concise
 - [ ] Reduce inferred thinking — profile attributes reasoning to the respondent that wasn't explicitly stated; stay closer to what they actually said
-- [ ] Key prompt tuning directions (in `lib/prompts/generate-profile-prompt.ts`):
-  - "Stay close to the evidence." Don't infer thinking the respondent didn't demonstrate. If a response is thin, say so honestly.
-  - "Match the register." If someone gave a two-sentence answer, don't write a paragraph of analysis about it.
-  - "Emerging is not a failure." Calibrate toward accuracy, not encouragement — the prompt may be biased toward generous interpretation.
 - [ ] Build 3–4 new job-role profiles (TBD which roles)
 - [ ] Update `lib/generatePdf.ts` — replace "AI Readiness Profile" references with WorkPath branding
 - [ ] Update `lib/prompts/generate-profile-prompt.ts` — align profile generation language with WorkPath brand voice (see `public/brochure.html` as reference)
@@ -38,12 +35,6 @@
 
 - [ ] Revisit the AI literacy framework "constitution" — foundational document defining the dimensions, levels, and underlying theory of AI readiness that the assessment is built on
 
-## Harness
-
-- [ ] **Revisit the harness concept** — step back and evaluate whether the offline scoring pipeline is still doing what we need. Originally built for respondent replay + PDF generation before the Next.js app existed; now that the live app is the primary surface, confirm the harness's purpose (regression testing? prompt iteration? batch scoring for clients without the UI?) and align its capabilities accordingly
-- [ ] **Fix broken harness paths** — `harness.js:26` hardcodes `ASSESSMENT_DIR = '/Users/randysparkman/Desktop/AI-assessment-tool'` (folder no longer exists); references `profile-generation-prompt-v5.md` and `tier3-*-template-v2.json` (diverged from canonical repo versions). Repoint to `../data/` and `../lib/prompts/` or pass as CLI args. Blocks any harness run today.
-- [ ] Update harness model strategy to match production: Sonnet 4.6 for scoring, Opus 4.7 for T3 question generation and profile generation (deferred pending harness concept review)
-
 ## Save & Resume
 
 - [x] Implement save/resume for in-progress assessments
@@ -63,7 +54,7 @@
 
 ## Structured Output (tool_use)
 
-- [ ] Migrate scoring routes to Claude `tool_use` structured output (see design: `.claude/projects/.../memory/project_structured_prompts.md`)
+- [ ] Migrate scoring routes to Claude `tool_use` structured output
 - [ ] Priority 1: score-tier1/2/3 — eliminate `parseAIJson` fallback logic
 - [ ] Priority 2: score-tier2 `performanceSummary` output (merged from old generate-tier3 step 1) — prevent cascade failures into Tier 3 question generation
 - [ ] Priority 3: generate-tier3 (adaptive question generation) — shrink prompt template, enforce nested rubric schema
