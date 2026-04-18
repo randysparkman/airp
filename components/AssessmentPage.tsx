@@ -16,6 +16,7 @@ import { AnalyzingScreen } from "@/components/assessment/AnalyzingScreen";
 import { ProfileScreen } from "@/components/assessment/ProfileScreen";
 import { AppHeader } from "@/components/assessment/AppHeader";
 import { InvalidProfileScreen } from "@/components/assessment/InvalidProfileScreen";
+import { SaveProgressModal } from "@/components/assessment/SaveProgressModal";
 import { useAssessmentFlow } from "@/hooks/use-assessment-flow";
 import type { AssessmentResponse } from "@/lib/generatePdf";
 
@@ -34,6 +35,7 @@ export default function AssessmentPage({ slug }: AssessmentPageProps) {
   const pathname = usePathname();
   const resumeAttempted = useRef(false);
   const [resumeStatus, setResumeStatus] = useState<"idle" | "loading" | "notfound">("idle");
+  const [saveModalOpen, setSaveModalOpen] = useState(false);
 
   useEffect(() => {
     if (resumeAttempted.current) return;
@@ -68,7 +70,20 @@ export default function AssessmentPage({ slug }: AssessmentPageProps) {
   return (
     <div className={`min-h-screen bg-background ${flow.showHeader ? "pt-7" : "py-[60px]"} px-6 font-sans`}>
       {flow.showHeader && (
-        <AppHeader onBack={flow.handleBack} backLabel={flow.getBackLabel()} orgName={flow.orgName} roleDescription={flow.roleDescription} />
+        <AppHeader
+          onBack={flow.handleBack}
+          backLabel={flow.getBackLabel()}
+          orgName={flow.orgName}
+          roleDescription={flow.roleDescription}
+          onSaveProgress={
+            flow.resumeCode && flow.screen !== "complete" && flow.screen !== "profile"
+              ? () => setSaveModalOpen(true)
+              : undefined
+          }
+        />
+      )}
+      {saveModalOpen && flow.resumeCode && (
+        <SaveProgressModal resumeCode={flow.resumeCode} onClose={() => setSaveModalOpen(false)} />
       )}
 
       {flow.screen === "welcome" && (

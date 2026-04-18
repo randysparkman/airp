@@ -7,9 +7,10 @@ interface AppHeaderProps {
   backLabel?: string;
   orgName?: string;
   roleDescription?: string;
+  onSaveProgress?: () => void;
 }
 
-export function AppHeader({ onBack, backLabel = "Back", orgName, roleDescription }: AppHeaderProps) {
+export function AppHeader({ onBack, backLabel = "Back", orgName, roleDescription, onSaveProgress }: AppHeaderProps) {
   const [showDescription, setShowDescription] = useState(false);
 
   return (
@@ -24,7 +25,16 @@ export function AppHeader({ onBack, backLabel = "Back", orgName, roleDescription
           </svg>
           {backLabel}
         </button>
-        <div className="w-[52px]" />
+        {onSaveProgress ? (
+          <button
+            onClick={onSaveProgress}
+            className="text-[0.82rem] text-muted-foreground hover:text-foreground transition-colors duration-200 cursor-pointer bg-transparent border-none py-1 px-0"
+          >
+            Save my progress
+          </button>
+        ) : (
+          <div className="w-[52px]" />
+        )}
       </div>
       <div className="text-center">
         <p className="font-serif text-[1.05rem] font-semibold text-foreground tracking-[-0.01em] m-0">

@@ -222,6 +222,10 @@ export function WelcomeScreen({ onStart, preselectedContext }: WelcomeScreenProp
           primary
           disabled={!canStart}
         />
+        <p className="text-[0.78rem] text-muted-foreground mt-4 max-w-[420px] mx-auto leading-[1.55]">
+          Need to pause? Your progress saves automatically. You&rsquo;ll get a resume code from the
+          &ldquo;Save my progress&rdquo; link in the header any time during the assessment.
+        </p>
       </FadeIn>
       <FadeIn delay={950}>
         <p className="text-[0.78rem] text-muted-foreground mt-5">
