@@ -2,7 +2,7 @@
 role_identifier: "general"
 role_label: "General Knowledge Work"
 role_description: "An analyst, coordinator, project manager, or account manager at a mid-size professional services company. The kind of role where you're synthesizing information, communicating with stakeholders, producing deliverables, and making judgment calls about how to approach your work — with AI tools increasingly part of the picture."
-version: "0.3.0"
+version: "0.4.0"
 ---
 
 # Job-Role-Profile: General Knowledge Work
@@ -73,6 +73,8 @@ When we assess someone in this role, we want to understand: Can this person use 
 
 ---
 
+---
+
 ## Tier 1 Questions
 
 <!-- tier1-questions-start -->
@@ -81,187 +83,192 @@ When we assess someone in this role, we want to understand: Can this person use 
   "meta": {
     "tier": 1,
     "label": "Baseline Orientation",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "question_count": 5,
     "estimated_minutes": 10,
     "primary_construct": "orientation",
-    "secondary_constructs": ["integration", "judgment"],
-    "job_role_context": "General knowledge worker at a mid-size professional services company",
-    "dol_coverage": [
-      "#4 Evaluate AI Outputs (Q1)",
-      "#3 Direct AI Effectively (Q2)",
-      "#1 Understand AI Principles (Q3)",
-      "#5 Use AI Responsibly (Q4)",
-      "#2 Explore AI Uses (Q5)"
+    "secondary_constructs": [
+      "integration",
+      "judgment"
     ],
-    "human_functions_activated": ["Understand", "Express", "Ideate", "Act"],
-    "design_rationale": "The set opens with an output evaluation scenario grounded in everyday report work, moves into the input-output relationship through a real communication task, tests the mental model through a research scenario that exposes AI's generative nature, probes responsibility through a data sensitivity situation, and closes with opportunity recognition in a team workflow. The progression moves from reacting to AI output toward seeing where AI could be applied — building toward Tier 2's deeper integration focus. Scenarios target routine and lower judgment-embedded decision bands."
+    "job_role_context": "General office professional (analyst, coordinator, project manager, or account manager) at a mid-size professional services company",
+    "dol_coverage": [
+      "#1 Understand AI Principles — Q1 tests whether the person understands that AI generates plausible-sounding content rather than retrieving verified facts, and that confident presentation does not signal accuracy",
+      "#2 Explore AI Uses — Q3 tests whether the person can recognize where AI fits and doesn't fit in their own work, and can articulate the difference between tasks where AI is a useful starting point versus tasks where it creates risk",
+      "#3 Direct AI Effectively — Q4 tests whether the person understands that the quality and specificity of what they provide to AI shapes the usefulness of what comes back",
+      "#4 Evaluate AI Outputs — Q2 tests whether the person can assess whether AI-generated content is accurate and fit for purpose before it reaches a client or stakeholder",
+      "#5 Use AI Responsibly — Q5 tests whether the person recognizes when work content is sensitive and adjusts their use of AI tools accordingly"
+    ],
+    "human_functions_activated": [
+      "Understand",
+      "Express",
+      "Ideate",
+      "Act"
+    ],
+    "design_rationale": "These five scenarios are drawn from the most frequent, personally owned tasks in this role — drafting client communications, building reports, researching topics, preparing deliverables, and handling confidential information — because those are the contexts where AI use is already happening and where the person's understanding of AI most directly shapes outcomes. The set progresses from recognition (Q1: what is AI actually doing when it produces that statistic?) through evaluation (Q2: is this output fit to send?) through application awareness (Q3: where does AI help and where does it create risk?) through input-output understanding (Q4: why does what I ask matter?) through responsibility (Q5: what happens when the content I'm working with shouldn't go into a general-purpose tool?). Together, the questions cover all five DOL areas and activate all four human functions, while staying firmly in the routine and lower judgment-embedded decision bands — the decisions this person owns and executes daily without a second reviewer."
   },
-
   "user_facing": {
     "intro_text": "You'll see a series of short scenarios related to your work. For each one, tell us what you'd do and why — in a few sentences. There are no right answers and no trick questions. We're interested in your thinking, not your writing. Aim for the kind of answer you'd give a coworker who asked for your honest take.",
     "response_placeholder": "2–4 sentences — just your honest take",
-    "completion_text": "That's the first set. Now we'll shift from how you think about AI to how you'd work with it."
+    "completion_text": "That's the first set. Thanks for your responses — we'll use these to shape the next section."
   },
-
   "questions": [
     {
       "id": "t1_q1",
       "sequence": 1,
-      "angle": "fabrication_in_data_context",
-      "dol_content_area": "#4 Evaluate AI Outputs",
-      "dol_secondary": "#1 Understand AI Principles",
+      "angle": "fabrication_detection",
+      "dol_content_area": "#1 Understand AI Principles",
+      "dol_secondary": "#4 Evaluate AI Outputs",
       "human_function_activated": "Understand",
       "decision_band": "routine",
-      "scenario": "You're putting together a brief for your manager comparing your company's quarterly performance to two competitors. You ask the AI assistant to help, and it produces a clean, well-organized comparison — but it includes specific revenue figures and market share percentages for the competitors that you didn't provide.",
-      "prompt": "What do you make of those numbers?",
-      "internal_notes": "Tests whether the person understands that AI generates plausible-sounding data rather than retrieving verified facts. The specific numbers are the diagnostic — does the person recognize that confident, formatted statistics can be fabricated? The data context (competitive analysis for a manager) raises the stakes above a purely personal task.",
+      "scenario": "You're putting together a one-page brief on a competitor for an upcoming internal strategy meeting. You ask an AI assistant to help and it returns a paragraph that includes a specific statistic: 'According to a 2023 industry report, [Competitor X] holds 34% market share in the mid-market segment.' The number sounds right to you and fits the story you're building. You don't recognize the report it's citing.",
+      "prompt": "What's your reaction to that statistic, and what — if anything — does it change about how you'd use it?",
+      "internal_notes": "We're listening for whether the person understands that AI generates plausible-sounding content rather than retrieving verified facts — that a specific, confident-looking statistic is not evidence of accuracy. The key signal is whether they recognize the difference between 'this sounds right' and 'this is verified.' We're not testing whether they know the perfect verification workflow; we're testing whether they see the problem at all.",
       "rubric": {
         "orientation": {
-          "emerging": "Accepts the numbers at face value because they look specific and well-formatted, or focuses on whether the comparison structure is useful rather than questioning the data itself. Has not yet developed a model for how AI can produce precise-looking statistics without a factual basis.",
-          "developing": "Suspects the numbers might be wrong and would want to check them, but frames this as a general accuracy concern rather than connecting it to how AI generates content. May say 'I'd verify the data' without articulating why AI-produced numbers are specifically unreliable.",
-          "demonstrating": "Recognizes that AI generates plausible content rather than looking up verified facts. Understands that specific-looking numbers — revenue figures, percentages, market share data — can be entirely fabricated while appearing authoritative. Sees that the precision and formatting of the output is independent of its accuracy."
+          "emerging": "Does not yet show awareness that AI-generated statistics can be fabricated or misattributed — treats the number as credible because it sounds plausible or fits the narrative, without recognizing that AI does not retrieve verified data from real sources.",
+          "developing": "Shows some awareness that AI output should be checked but has not yet articulated why this particular type of content — a specific statistic citing a named report — carries elevated risk of being inaccurate or entirely fabricated, not merely imprecise.",
+          "demonstrating": "Recognizes that AI systems generate text that can include convincing-looking statistics and source citations that have no real-world basis — understands that the specificity and confidence of the number makes it more important to verify, not less, and that 'sounds right' is not a substitute for sourcing."
         },
         "integration": {
-          "emerging": "Does not yet describe what they would do with the AI output beyond accepting or rejecting it.",
-          "developing": "Mentions checking the numbers but does not yet indicate where they would go for accurate competitive data or how they would use the AI output alongside verified sources.",
-          "demonstrating": "Shows evidence of a practical approach — using the AI's structure or framing while sourcing the actual numbers from reliable places (industry reports, public filings, internal databases). Treats the AI output as a useful scaffold rather than a finished product."
+          "emerging": "Does not yet describe any action they would take in response to the unverified statistic before using it in the brief.",
+          "developing": "Mentions that they would check the statistic but does not yet describe concretely where they would look or how they would handle it if they couldn't verify it.",
+          "demonstrating": "Describes a concrete step — such as searching for the cited report directly, looking for the statistic in a known industry database, or removing or flagging the number if it can't be confirmed — before including it in a deliverable going to colleagues."
         },
         "judgment": {
-          "emerging": "Has not yet considered what happens if fabricated competitive data reaches the manager and informs a business decision. No connection between data quality and downstream consequences.",
-          "developing": "Recognizes that sending unverified numbers to a manager would be a problem, but the concern stays general rather than connecting to the specific pattern of credibility erosion described in the role.",
-          "demonstrating": "Understands that a competitive brief with fabricated statistics isn't just inaccurate — it could shape the manager's strategic thinking in the wrong direction. Recognizes that the person's credibility depends on the reliability of the analysis they provide, and that a pattern of unverified AI-assisted claims erodes trust over time."
+          "emerging": "Does not yet consider the consequences of including an unverified statistic in a brief that will inform an internal strategy discussion.",
+          "developing": "Acknowledges that using an unverified number could be a problem but does not yet connect it to the specific risk of eroding credibility when someone in the meeting challenges the source or asks for the underlying report.",
+          "demonstrating": "Recognizes that presenting a fabricated or misattributed statistic in an internal strategy brief — even if no one catches it immediately — is the kind of error that surfaces later and damages credibility in ways that accumulate, especially when decision-makers act on flawed inputs."
         }
       }
     },
     {
       "id": "t1_q2",
       "sequence": 2,
-      "angle": "input_shapes_output",
-      "dol_content_area": "#3 Direct AI Effectively",
-      "dol_secondary": null,
+      "angle": "output_fitness_for_purpose",
+      "dol_content_area": "#4 Evaluate AI Outputs",
+      "dol_secondary": "#1 Understand AI Principles",
       "human_function_activated": "Express",
       "decision_band": "routine",
-      "scenario": "A client emails asking for a status update on their project. You ask the AI assistant to draft a reply. The draft it produces is professional and polished, but it's vague — it says things like 'progress is on track' and 'the team is making good headway' without any of the specifics the client would actually want to know.",
-      "prompt": "Why do you think the draft came out this way, and what would you do?",
-      "internal_notes": "Tests whether the person understands the input-output relationship — that AI output quality depends on what the AI was given to work with. The vague draft is a direct consequence of a vague request. Does the person see the connection between what they provided and what they got back, or do they treat the AI as an independent author that should have known better?",
+      "scenario": "A client has emailed asking for a status update on a project that's running slightly behind schedule. You're stretched thin and ask an AI assistant to draft the response. The draft it produces is professional, well-organized, and strikes a confident tone — it says the project is 'progressing well and on track for delivery.' That's not quite accurate, but the draft reads smoothly and would be easy to send as-is.",
+      "prompt": "What goes through your mind when you read that draft, and how do you think about what to do next?",
+      "internal_notes": "We're listening for whether the person understands that AI produces fluent, plausible text calibrated to the prompt — not text calibrated to the facts of the situation. The key signal is whether they recognize that 'reads well' and 'is accurate' are independent properties, and that a smooth AI draft can actively misrepresent a situation. We're also listening for whether they understand that they — not the AI — are accountable for what goes to the client.",
       "rubric": {
         "orientation": {
-          "emerging": "Treats the vague output as a quality problem with the AI itself — 'it's not very good at status updates' or 'it doesn't know enough about the project.' Has not yet developed a model connecting input quality to output quality.",
-          "developing": "Recognizes that they would need to add specifics before sending, but does not yet connect the vagueness of the output to the vagueness of their original request. Sees the problem in the output without tracing it to the input.",
-          "demonstrating": "Understands that the AI produced vague content because it had no project-specific details to work with. Recognizes that AI generates language patterns — professional-sounding status updates — but cannot know which milestones were hit, what's behind schedule, or what the client cares about unless told. The quality of the input determines the quality of the output."
+          "emerging": "Does not yet distinguish between a draft that reads well and a draft that accurately represents the situation — treats fluency or professionalism as a sufficient signal that the content is ready to send.",
+          "developing": "Recognizes that the draft contains an inaccuracy and needs to be corrected, but has not yet articulated why AI produced inaccurate content in this case — frames it as a one-time error rather than understanding that AI generates text based on the prompt's framing, not the project's actual status.",
+          "demonstrating": "Understands that AI drafts client communications based on patterns and the framing provided — not on knowledge of the actual project situation — and therefore that the human must verify that the substance of any AI-drafted communication is factually accurate before it goes out, regardless of how polished it reads."
         },
         "integration": {
-          "emerging": "Would either send the vague draft, discard the draft and write from scratch, or manually rewrite the entire thing. Does not yet describe how to work with the AI more effectively.",
-          "developing": "Would edit the draft to add specifics, but treats this as a one-time fix rather than an approach to getting better results. Does not yet describe giving the AI better input.",
-          "demonstrating": "Shows evidence of an iterative approach — would give the AI the actual project details (milestones completed, upcoming deadlines, open issues) and ask for a new draft, or would describe providing context that shapes the output. Sees working with AI as a back-and-forth process, not a single pass."
+          "emerging": "Does not yet describe editing the draft or replacing the inaccurate characterization before sending.",
+          "developing": "Indicates they would correct the draft but does not yet describe how they'd approach writing the more difficult part — accurately acknowledging a delay to a client — whether with AI's help or independently.",
+          "demonstrating": "Describes editing the draft to accurately reflect the project's status, and may note that the harder task — how to frame a delay professionally and constructively — is something they'd own themselves or would re-prompt AI more specifically to help with."
         },
         "judgment": {
-          "emerging": "Has not yet considered what a vague status update communicates to the client. Focuses on the writing quality rather than the communication impact.",
-          "developing": "Recognizes that the client needs real information, but does not yet connect this to the broader pattern — that a client receiving polished but substanceless updates from this person would begin to question the person's engagement with their project.",
-          "demonstrating": "Understands that a client-facing status update represents the person's professional judgment about what's important to communicate. A vague update — even a polished one — signals that the person either doesn't know the details or doesn't think the client needs them. Either way, it erodes the client's confidence in the person managing their project."
+          "emerging": "Does not yet consider the consequences of sending a client an update that characterizes a delayed project as 'on track.'",
+          "developing": "Acknowledges that sending an inaccurate update to a client would be a problem, but does not yet connect it to the specific downstream risk — that the client may make plans based on the stated timeline, and discovering the inaccuracy later damages trust in a way that is hard to recover from.",
+          "demonstrating": "Recognizes that client-facing communications represent the company's voice and that sending an AI-drafted update that mischaracterizes project status — even unintentionally — is the kind of credibility erosion that compounds: the client feels misled, not just informed late."
         }
       }
     },
     {
       "id": "t1_q3",
       "sequence": 3,
-      "angle": "confidence_vs_accuracy",
-      "dol_content_area": "#1 Understand AI Principles",
-      "dol_secondary": "#4 Evaluate AI Outputs",
-      "human_function_activated": "Understand",
-      "decision_band": "judgment-embedded",
-      "scenario": "You need to research a topic you're not very familiar with — a new industry regulation that might affect one of your clients. You ask the AI assistant to explain the regulation and its implications. The response is detailed, clearly organized, and sounds authoritative. It cites what appear to be specific provisions and effective dates.",
-      "prompt": "How confident are you in what the AI just told you?",
-      "internal_notes": "Tests the person's mental model for AI confidence vs. accuracy — particularly in a domain where the person lacks the expertise to independently verify. The regulation context means the person can't easily spot errors through domain knowledge alone. Does the person understand that AI's confident tone and specific-sounding details don't correlate with factual reliability?",
+      "angle": "capability_boundaries",
+      "dol_content_area": "#2 Explore AI Uses",
+      "dol_secondary": "#1 Understand AI Principles",
+      "human_function_activated": "Ideate",
+      "decision_band": "routine",
+      "scenario": "Your manager asks you to help identify ways the team could use AI tools to work more efficiently. You start thinking through your own typical week — drafting emails, pulling together data for reports, researching competitors, tracking project status, preparing slide decks for client meetings. Some of those tasks feel like obvious AI candidates; others feel less straightforward.",
+      "prompt": "Which parts of your typical week feel like a good fit for AI assistance, and which feel less so — and what's the difference?",
+      "internal_notes": "We're listening for whether the person has a functional mental model of what kinds of tasks AI handles well versus where its limitations create risk. The key signal is not whether they pick the 'right' tasks, but whether their reasoning reflects an underlying understanding — for example, that AI is useful for drafting and synthesis where human review follows, but less reliable for tasks where accuracy and currency of information matter and won't be verified. Generic 'AI is good at writing' responses without any acknowledgment of limitation score lower than nuanced but imperfect reasoning.",
       "rubric": {
         "orientation": {
-          "emerging": "Takes the detailed, well-organized response at face value. The authoritative tone and specific provisions create confidence in the output. Has not yet developed a model where AI can sound certain about things it has wrong.",
-          "developing": "Expresses some caution — 'I'd probably double-check a few things' — but the caution is instinctive rather than grounded in an understanding of why AI-generated regulatory information is specifically unreliable. May be more cautious because the topic is unfamiliar rather than because they understand how AI works.",
-          "demonstrating": "Understands that AI presents all information — accurate or fabricated — with the same confident, authoritative tone. Recognizes that detailed organization, specific-sounding provisions, and precise dates do not indicate the AI has access to current regulatory information. Sees that the AI's confident presentation is a feature of how it generates language, not an indicator of factual reliability. May note that this is especially risky when the person lacks domain knowledge to spot errors."
+          "emerging": "Does not yet differentiate between task types in terms of AI fit — either describes AI as useful for all tasks without qualification, or expresses general skepticism without articulating what makes some tasks higher-risk than others.",
+          "developing": "Identifies some tasks as better fits than others but has not yet articulated a principle behind the distinction — the reasoning stays at surface level (e.g., 'writing is fine, data is risky') without connecting to underlying properties of how AI works, such as its tendency to generate plausible but unverified content.",
+          "demonstrating": "Articulates a meaningful distinction — for example, that tasks where AI output will be reviewed and edited (drafting, brainstorming, summarizing) are lower-risk than tasks where the output will be used directly as fact (competitive data, metrics, specific claims), and that the key variable is whether someone with context will verify before the output has consequences."
         },
         "integration": {
-          "emerging": "Would use the AI's explanation as-is for client work, or does not describe any verification approach.",
-          "developing": "Would check some of the information but does not yet describe how — where would they look? What would they verify first? The verification intent is present but the method is vague.",
-          "demonstrating": "Describes a practical approach to verification — checking the regulation through official sources, consulting someone with regulatory expertise, or using the AI output as a starting map that requires independent confirmation before it shapes client-facing work. Treats the AI's response as a hypothesis to test rather than a reference to cite."
+          "emerging": "Does not yet describe any concrete way they would actually use AI in their own workflow, or any concrete area they would avoid.",
+          "developing": "Names specific tasks as AI candidates but does not yet describe what their role would be in those workflows — how they'd review, adjust, or apply their own judgment to AI-assisted output.",
+          "demonstrating": "Describes at least one specific task where they'd use AI as a starting point and notes what human contribution — review, fact-checking, judgment about tone or emphasis — they'd layer on top."
         },
         "judgment": {
-          "emerging": "Has not yet considered what happens if inaccurate regulatory information reaches the client. No connection between this task and the downstream consequences of acting on wrong information.",
-          "developing": "Recognizes that regulatory information needs to be accurate but does not yet connect this to the specific weight this kind of information carries — that a client relying on the person's analysis might make business decisions based on it.",
-          "demonstrating": "Understands that sharing inaccurate regulatory information with a client is not just an error — it's a professional failure that could lead to the client making uninformed decisions. Recognizes that the person's role as the information provider means the client has no way to know the research was AI-generated and unverified. The person's credibility is specifically at risk when they relay information they can't personally vouch for."
+          "emerging": "Does not yet consider whether some tasks in their week involve content or outputs where AI errors would be more consequential than others.",
+          "developing": "Acknowledges that some tasks carry more risk but does not yet connect that to specific consequences — such as a flawed competitive analysis shaping a leadership decision, or an inaccurate client slide damaging a business relationship.",
+          "demonstrating": "Recognizes that the stakes of an error — not just the task type — should shape how much AI involvement is appropriate and how much verification is needed, and can point to at least one task in their own week where getting it wrong would have downstream consequences for colleagues, clients, or decision-makers who rely on their output."
         }
       }
     },
     {
       "id": "t1_q4",
       "sequence": 4,
-      "angle": "data_sensitivity_boundaries",
-      "dol_content_area": "#5 Use AI Responsibly",
-      "dol_secondary": "#1 Understand AI Principles",
+      "angle": "input_output_relationship",
+      "dol_content_area": "#3 Direct AI Effectively",
+      "dol_secondary": "#2 Explore AI Uses",
       "human_function_activated": "Act",
       "decision_band": "routine",
-      "scenario": "You're behind on preparing a quarterly review deck for a major client. You have all the data — client revenue numbers, contract terms, internal margin figures, and some candid notes from your manager about the relationship's future. You're thinking about pasting everything into the AI assistant so it can help you organize the deck quickly.",
-      "prompt": "Anything give you pause here?",
-      "internal_notes": "Tests whether the person recognizes that not all information should be fed into an AI tool, even when the efficiency gain is real. The scenario includes a mix of client confidential data, internal business data, and sensitive internal commentary. Does the person see the boundary, or does the time pressure override it?",
+      "scenario": "You need to prepare a short executive summary of last quarter's project performance for a leadership review. You try asking the AI assistant to 'write an executive summary of Q3 project performance' — and it produces something generic that doesn't reflect your team's actual work, the specific metrics that matter to your leadership, or the right tone for your organization. It's not wrong exactly, but it's not useful.",
+      "prompt": "What does that result tell you, and what — if anything — would you try differently?",
+      "internal_notes": "We're listening for whether the person understands that AI output quality is shaped by the quality and specificity of what goes in — that a vague prompt produces a vague result not because AI is failing, but because AI has no access to context that wasn't provided. The key signal is whether they understand the input-output relationship as a property of how AI works, not as a quirk of this particular tool.",
       "rubric": {
         "orientation": {
-          "emerging": "Focuses entirely on the efficiency opportunity — sees the AI as a tool to organize the deck faster and does not yet recognize a concern with the information being shared. Has not yet developed a model for what happens to data entered into an AI assistant.",
-          "developing": "Feels some hesitation about sharing 'everything' but the concern is vague — may sense that the manager's candid notes are sensitive without articulating why sharing them with an AI tool is different from having them on a shared drive.",
-          "demonstrating": "Recognizes that pasting confidential client data, internal margin figures, and especially candid internal commentary into an AI assistant raises data sensitivity concerns. Understands that AI tools may store or process inputs in ways the person doesn't control, and that the nature of the information matters — not everything in the person's working files should go into an external tool. Distinguishes between information types: some of this data is just numbers, but the manager's relationship notes are the kind of internal commentary that should not leave its original context."
+          "emerging": "Does not yet connect the generic output to the generic input — attributes the unsatisfying result to AI being limited or unreliable in general, rather than recognizing that AI produced a response calibrated to what was asked, not to context it wasn't given.",
+          "developing": "Recognizes that the prompt was too vague and that providing more information would help, but has not yet articulated why — does not yet describe the input-output relationship as a fundamental property of how AI works rather than a tip or technique.",
+          "demonstrating": "Understands that AI generates output based on what's in the prompt — it has no access to the team's actual Q3 data, leadership's priorities, or organizational tone unless those are provided — and therefore that the quality of what comes back is directly shaped by the specificity and context of what goes in."
         },
         "integration": {
-          "emerging": "Would paste everything into the AI and use the output. No differentiation between what to share and what to withhold.",
-          "developing": "Would hold back some information but does not yet describe a clear principle for what to include and what to keep out, or how to still get useful help from the AI without sharing sensitive details.",
-          "demonstrating": "Shows evidence of a practical approach — would give the AI the structural task (organize a quarterly review deck) with non-sensitive information, while keeping confidential specifics and internal commentary out. Sees that the person can get the AI's organizational help without sharing everything."
+          "emerging": "Does not yet describe what they would change about the prompt or what additional information they would provide.",
+          "developing": "Indicates they would give the AI more information but describes this in general terms — 'I'd be more specific' — without identifying what specific context would make the prompt more useful.",
+          "demonstrating": "Describes providing the AI with specific inputs — actual Q3 metrics, key themes from the project, what the leadership audience cares about, or a rough outline — and understands that this is how to get output that's actually usable rather than a generic template."
         },
         "judgment": {
-          "emerging": "Has not yet considered the consequences of sharing sensitive information with an AI tool. Focused on meeting the deadline.",
-          "developing": "Recognizes that some of the information is sensitive but does not yet connect this to specific risks — what could actually go wrong if internal margin figures or candid manager notes were processed by an AI tool.",
-          "demonstrating": "Understands that the risk is concrete: confidential client data and internal strategic commentary shared with an external AI tool could surface in unintended contexts, violate client confidentiality expectations, or expose internal deliberations that were meant to stay between the person and their manager. Recognizes that time pressure doesn't change what information should be protected."
+          "emerging": "Does not yet consider what would happen if they sent the generic AI-generated summary to leadership without additional context or revision.",
+          "developing": "Recognizes that the generic output isn't good enough to use as-is, but does not yet connect this to the specific risk — that an executive summary that doesn't reflect the team's actual performance or leadership's priorities is the kind of output that signals poor preparation and erodes the person's professional credibility.",
+          "demonstrating": "Understands that an executive summary going to leadership is a high-visibility deliverable that reflects on the person's judgment and knowledge of their own work — and that submitting AI-generated content that could have been written about any team's Q3 would undermine trust in the analysis behind it."
         }
       }
     },
     {
       "id": "t1_q5",
       "sequence": 5,
-      "angle": "opportunity_recognition",
-      "dol_content_area": "#2 Explore AI Uses",
-      "dol_secondary": null,
-      "human_function_activated": "Ideate",
-      "decision_band": "routine",
-      "scenario": "Every Monday, you and three teammates each send your manager a separate email summarizing what you worked on last week and what's planned for the coming week. Your manager has mentioned that reading and synthesizing four separate updates takes more time than they'd like, and they wish there were a faster way to get the full picture.",
-      "prompt": "Do you see a way AI could help with this?",
-      "internal_notes": "Tests whether the person can identify an opportunity for AI in a recurring team workflow. The scenario describes a real friction point — manual synthesis of multiple text inputs — that maps well to what AI is good at. Does the person see the fit? Do they also recognize what AI would and wouldn't handle well in this specific situation?",
+      "angle": "data_sensitivity_boundaries",
+      "dol_content_area": "#5 Use AI Responsibly",
+      "dol_secondary": "#1 Understand AI Principles",
+      "human_function_activated": "Understand",
+      "decision_band": "judgment-embedded",
+      "scenario": "You're working on an analysis that involves several sensitive data points: a client's financial performance, details from an ongoing contract negotiation, and some internal headcount numbers that haven't been announced yet. You're finding the analysis slow going and think an AI assistant could help you structure it and draft the narrative. Your company doesn't yet have a formal AI usage policy.",
+      "prompt": "How do you think about whether and how to use AI assistance here?",
+      "internal_notes": "We're listening for whether the person recognizes that general-purpose AI tools process the inputs they receive — and that entering confidential business information into those tools raises questions about data handling that don't disappear just because there's no formal policy. The key signal is whether they understand the nature of the tool well enough to identify the sensitivity question, not whether they know the 'correct' corporate policy answer.",
       "rubric": {
         "orientation": {
-          "emerging": "Either does not see how AI could help, or suggests AI could replace the entire process — including the judgment about what matters most across the team's updates. Has not yet developed a model for which parts of this task AI handles well and which require human judgment.",
-          "developing": "Sees a general opportunity — 'AI could combine the updates' — but does not yet think through what the synthesis task actually involves. The suggestion is plausible but doesn't distinguish between assembling information (something AI does well) and deciding what's important to highlight (something the manager brings).",
-          "demonstrating": "Identifies the specific match: the manager's task is reading four text updates and pulling out the key themes, blockers, and priorities — exactly the kind of text synthesis AI handles well. Also recognizes the limits: the AI can organize and surface patterns but the manager still needs to apply judgment about what matters most, what to act on, and what to flag. Sees AI as reducing the mechanical work, not replacing the manager's perspective."
+          "emerging": "Does not yet recognize that entering confidential client, contract, or personnel information into a general-purpose AI assistant raises data handling concerns — either proceeds without hesitation or avoids AI use for unspecified or purely intuitive reasons without articulating what the concern actually is.",
+          "developing": "Recognizes that the sensitive content creates some hesitation around AI use but has not yet articulated why — does not yet connect the concern to a specific property of general-purpose AI tools, such as the fact that inputs are processed by external systems whose data handling practices may not be suited to confidential business information.",
+          "demonstrating": "Understands that general-purpose AI tools process the content they receive, and that entering client financial data, contract negotiation details, or unannounced personnel information into those tools means that information leaves the organization's control in ways that may not be appropriate — regardless of whether a formal policy exists."
         },
         "integration": {
-          "emerging": "No concrete suggestion for how the AI would be used. The response stays abstract or says 'just use AI for it.'",
-          "developing": "Suggests feeding the updates to the AI for a combined summary but does not yet think through what that looks like in practice — who runs it, what the output looks like, how the manager interacts with it.",
-          "demonstrating": "Describes a concrete application — the four updates go into the AI, which produces a consolidated summary organized by theme or priority, and the manager reviews the synthesis rather than reading four separate emails. The response need not detail every step but should convey that the person sees a practical, specific way to apply AI to this task."
+          "emerging": "Does not yet describe any adjustment to how they would approach the analysis given the sensitivity of the content involved.",
+          "developing": "Indicates they would be cautious or would check with someone, but does not yet describe a concrete adjustment — such as using AI only for the structural or narrative elements that don't involve the confidential specifics, or seeking clarification on approved tools before proceeding.",
+          "demonstrating": "Describes a practical approach to the situation — for example, using AI to help with structure, framing, or narrative scaffolding while keeping the specific sensitive data points out of the prompt, or flagging the question to a manager before proceeding, given the absence of a formal policy."
         },
         "judgment": {
-          "emerging": "Focuses entirely on the efficiency gain without considering what could go wrong or what the manager might lose in a shift to AI-synthesized updates.",
-          "developing": "Mentions that the manager should still review the AI's summary, but the concern is generic rather than connected to what specifically matters about this workflow.",
-          "demonstrating": "Recognizes that the manager's weekly update review isn't just about information transfer — it's how they stay connected to what each team member is actually doing. An AI summary that mischaracterizes someone's update, buries a significant blocker, or flattens nuance could cause the manager to miss something that matters. The person sees the value of the efficiency gain while also recognizing what the human synthesis step provides."
+          "emerging": "Does not yet weigh the sensitivity of the specific content — client financials, contract negotiations, unannounced headcount — against the convenience of AI assistance.",
+          "developing": "Acknowledges that the content is sensitive and that caution is warranted, but does not yet connect a potential misstep to specific consequences — such as a client discovering their financial data was processed through a third-party AI tool, or unannounced personnel decisions becoming exposed before the intended communication.",
+          "demonstrating": "Recognizes that the absence of a formal policy does not eliminate accountability — that exposing confidential client data, live contract terms, or unannounced headcount information through a general-purpose AI tool could damage client trust, affect negotiations, or create legal and reputational risk for the company, and that these consequences would reflect on the person who made the choice to use the tool that way."
         }
       }
     }
   ],
-
   "scoring": {
     "method": "ai_rubric_match",
-    "description": "Each response is scored against the per-question rubric. All three constructs are scored at three levels.",
+    "description": "Each response is scored by sending the user's answer, the scenario, and the full rubric to the AI scoring engine. The AI returns three construct levels and evidence notes.",
     "output_per_question": {
       "orientation_level": "emerging | developing | demonstrating",
       "integration_level": "emerging | developing | demonstrating",
       "judgment_level": "emerging | developing | demonstrating",
       "evidence_notes": "2–3 sentences explaining the scoring decisions across all three constructs"
     },
-    "scoring_prompt_template": "You are scoring a response to an AI-readiness assessment. The context is a general knowledge worker at a mid-size professional services company. You will receive a scenario, a user response, and a rubric with three constructs (Orientation, Integration, Judgment), each scored at three levels (Emerging, Developing, Demonstrating). Scoring principles: (a) Reward what is present. Score the signal in the response, not the elaboration around it. A concise response that contains a clear directional signal — prioritizing compliance, naming a verification need, recognizing a boundary, identifying an opportunity — earns full credit on the construct that signal serves. Brevity is not a deficiency. (b) Separate signal from elaboration. A one-sentence response that conveys strong judgment (e.g., refusing to act on an unverified AI suggestion) is strong judgment with low elaboration — not weak judgment. Do not score down for lack of detail when the directional signal is clear. (c) Match the rubric on substance, not length. If a response captures the key insight described in a Demonstrating descriptor but in fewer words than the descriptor uses, it is still Demonstrating. The rubric descriptors are written richly to guide your evaluation — the respondent is not expected to match their length or specificity of expression. Your job is to: (1) Assign an Orientation level — does the response show a functional mental model of what AI is and how it works? (2) Assign an Integration level — does the response show the person can see where AI fits AND describe how they'd work with it effectively? Both opportunity recognition and effective interaction count. (3) Assign a Judgment level — does the response show the person can evaluate AI output quality AND adjust their approach based on stakes, sensitivity, and consequences? Both output evaluation and responsible use count. (4) Write 2–3 sentences of evidence notes explaining your scoring decisions across all three constructs. When a response is concise, note what signal is present rather than cataloging what elaboration is absent. Respond in JSON format with keys: orientation_level, integration_level, judgment_level, evidence_notes."
+    "scoring_prompt_template": "You are scoring a response to an AI-readiness assessment. The context is general office professional (analyst, coordinator, project manager, or account manager) at a mid-size professional services company. You will receive a scenario, a user response, and a rubric with three constructs (Orientation, Integration, Judgment), each scored at three levels (Emerging, Developing, Demonstrating). Scoring principle: reward what is present in the response. Short responses that demonstrate good judgment or understanding earn full credit on those constructs — brevity is not a deficiency. Score what the person shows, not what they didn't elaborate on. Your job is to: (1) Assign an Orientation level — does the response show a functional mental model of what AI is and how it works? (2) Assign an Integration level — does the response show the person can see where AI fits AND describe how they'd work with it effectively? Both opportunity recognition and effective interaction count. (3) Assign a Judgment level — does the response show the person can evaluate AI output quality AND adjust their approach based on stakes, sensitivity, and consequences? Both output evaluation and responsible use count. (4) Write 2–3 sentences of evidence notes explaining your scoring decisions across all three constructs. Respond in JSON format with keys: orientation_level, integration_level, judgment_level, evidence_notes."
   }
 }
 ```
@@ -277,178 +284,183 @@ When we assess someone in this role, we want to understand: Can this person use 
   "meta": {
     "tier": 2,
     "label": "Contextualized Integration",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "question_count": 5,
     "estimated_minutes": 12,
     "primary_construct": "integration",
-    "secondary_constructs": ["orientation", "judgment"],
-    "job_role_context": "General knowledge worker at a mid-size professional services company",
-    "dol_coverage": [
-      "#3 Direct AI Effectively (Q1)",
-      "#2 Explore AI Uses (Q2)",
-      "#4 Evaluate AI Outputs (Q3)",
-      "#5 Use AI Responsibly (Q4)",
-      "#1 Understand AI Principles + #2 Explore AI Uses (Q5)"
+    "secondary_constructs": [
+      "orientation",
+      "judgment"
     ],
-    "human_functions_activated": ["Express", "Act", "Understand", "Ideate"],
-    "design_rationale": "Tier 2 shifts from recognizing what AI does to working with AI to produce real deliverables. The set opens with a directed drafting task under specific constraints, moves to evaluating an automation opportunity, tests domain-informed output evaluation, probes accountability in a collaborative AI-assisted workflow, and closes with assessing AI fit across different task types. Scenarios target upper judgment-embedded decisions and the escalation boundary — the person is producing work that shapes decisions others will make.",
-    "tier1_complementarity_notes": "Tier 1 established whether the person can spot fabrication, understand the input-output relationship, calibrate confidence, recognize data sensitivity, and see opportunities for AI. Tier 2 builds on all of these by putting the person inside the task — they are not reacting to AI output but actively working with AI to produce deliverables where their process choices carry consequences. Across the 10 questions, all 5 DOL areas and all 4 human functions are covered."
+    "job_role_context": "General office professional (analyst, coordinator, project manager, or account manager) at a mid-size professional services company",
+    "dol_coverage": [
+      "#1 Understand AI Principles — Q3 tests whether the person's mental model of how AI handles structured data and multi-source synthesis holds when they're trying to produce a real analytical deliverable, not just a draft document",
+      "#2 Explore AI Uses — Q1 tests whether the person can identify where AI fits within a complex, multi-step client deliverable workflow, including which stages benefit from AI and which require their own judgment",
+      "#3 Direct AI Effectively — Q2 tests whether the person can describe how they'd construct, frame, and iterate on AI interaction to produce a specific, stakeholder-ready communication under real constraints",
+      "#4 Evaluate AI Outputs — Q4 tests whether the person can assess an AI-generated analysis for fitness for purpose in a high-visibility context, applying their domain knowledge to identify what's missing or misleading",
+      "#5 Use AI Responsibly — Q5 tests whether the person can design a working approach that gets AI's help on a sensitive project without exposing content that shouldn't leave the organization"
+    ],
+    "human_functions_activated": [
+      "Understand",
+      "Express",
+      "Ideate",
+      "Act"
+    ],
+    "design_rationale": "These five scenarios are drawn from the upper end of the judgment-embedded decision band and the boundary with escalation — the moments where this person's workflow choices have real downstream consequences for clients, leadership, and cross-functional partners. Tier 1 established that the person can recognize AI limitations, evaluate output fitness, and identify sensitivity concerns. Tier 2 now asks them to work: to describe a process for building a client deliverable with AI, to articulate how they'd direct AI to produce a specific stakeholder communication, to think through how they'd use AI to synthesize multi-source data for a leadership report, to catch and respond to a subtly flawed AI-generated analysis before it reaches an executive, and to design a working approach for a sensitive project where some content can go to AI and some cannot. Each scenario embeds enough context — a real stakeholder, a specific deliverable, a concrete constraint — that the person must describe a process, not just state a position. The set deliberately activates all four human functions and covers all five DOL areas, complementing Tier 1's coverage without repeating any of its angles.",
+    "tier1_complementarity_notes": "Tier 1 covered all five DOL areas at the recognition and awareness level — testing whether the person can spot fabrication, identify when an AI draft misrepresents reality, distinguish high-fit from low-fit tasks, understand the input-output relationship, and recognize data sensitivity concerns. Tier 1 scenarios were primarily reactive: the person encountered AI output and needed to evaluate or respond to it. Tier 2 builds on this foundation by shifting to production: the person must now describe how they would actively use AI to accomplish a real deliverable, which requires not just understanding but workflow design. Any gap Tier 1 left in DOL #2 and #3 is addressed directly — Q1 and Q2 are anchored there — and the Ideate and Act functions activated in Tier 1 are extended here with richer, constraint-laden scenarios that require the person to think about sequencing, stakeholder context, and output quality simultaneously. Together, the ten questions form a coherent arc from 'do you understand what AI is doing?' through 'can you work with it effectively in your actual job?' — with Tier 3 positioned to test whether that reasoning holds under pressure."
   },
-
   "user_facing": {
-    "transition_text": "These scenarios are closer to the day-to-day work of your role. Same approach — tell us what you'd do and why, in a few sentences.",
+    "transition_text": "Now we're going to shift to some scenarios that are closer to the day-to-day work of your role. Same approach — tell us what you'd do and why, in a few sentences.",
     "response_placeholder": "2–4 sentences — just your honest take",
     "completion_text": "That's the second set. We'll use everything so far to shape the final section."
   },
-
   "questions": [
     {
       "id": "t2_q1",
       "sequence": 1,
-      "angle": "directed_drafting_under_constraints",
-      "dol_content_area": "#3 Direct AI Effectively",
-      "dol_secondary": "#4 Evaluate AI Outputs",
-      "human_function_activated": "Express",
+      "angle": "workflow_opportunity_mapping",
+      "dol_content_area": "#2 Explore AI Uses",
+      "dol_secondary": "#3 Direct AI Effectively",
+      "human_function_activated": "Ideate",
       "decision_band": "judgment-embedded",
-      "scenario": "A long-running client project just hit a major setback — a key deliverable will be three weeks late because of a vendor dependency that fell through. Your manager asks you to draft a client email explaining the delay. The tone matters: this client has been patient through earlier, smaller delays, and your manager specifically says 'we need to be honest without making it sound like we don't have our act together.' You decide to use the AI assistant to help with the draft.",
-      "prompt": "How would you approach this — what would you give the AI, and how would you work with what it produces?",
-      "internal_notes": "Tests whether the person can direct AI effectively in a high-stakes communication task where tone, framing, and specific context all matter. The constraint — honest but not damaging — requires the person to think about what context the AI needs and where human judgment has to shape the final product. A strong response describes what they would feed the AI and how they would evaluate and refine the output.",
+      "scenario": "Your team has just wrapped a six-month client engagement and you've been asked to produce a final client deliverable: a 10–12 slide deck summarizing what was accomplished, key outcomes, and recommendations for next steps. You have access to a folder of materials — meeting notes, weekly status updates, a few data exports, and a draft SOW for the potential follow-on engagement. The deck is due in two days, and your manager has said this client is a strong renewal candidate, so the presentation needs to be polished and accurate. You're thinking through how AI might help you build it.",
+      "prompt": "Walk us through where in this process you'd bring AI in, and where you'd rely on your own judgment — and why.",
+      "internal_notes": "This tests opportunity recognition and workflow design together: the person needs to map AI's role across multiple stages of a real deliverable, not just identify AI as 'helpful for slides.' A strong response identifies specific stages where AI adds value (synthesizing the notes folder, drafting narrative sections, suggesting slide structure) and specific stages where the person owns the judgment (what outcomes to emphasize, how to characterize the client relationship, what to recommend for the follow-on). A weak response says 'AI could help with drafting' without differentiating across the workflow or accounting for the stakes of the renewal context.",
       "rubric": {
         "orientation": {
-          "emerging": "Treats the AI as a standalone drafter — asks it to 'write a professional email about a project delay' and expects the output to handle the nuance. Has not yet developed a model for why a generic prompt produces generic output in a situation that demands specific tone and framing.",
-          "developing": "Recognizes that the AI will need some context about the situation but does not yet think through which details shape the tone and framing — the client's history of patience, the vendor dependency, the manager's specific guidance about honesty without damage.",
-          "demonstrating": "Understands that the quality of this draft depends on what the person provides: the specific situation (vendor failure, not the team's failure), the relationship context (client has been patient, earlier delays exist), and the tonal constraint (honest, not defensive or alarming). Recognizes that AI can produce professional language but cannot navigate the political and relational judgment this email requires without explicit direction."
+          "emerging": "Does not yet distinguish between what AI can usefully do with the source materials and what requires the person's own knowledge of the client relationship and engagement outcomes — treats AI as uniformly helpful or uniformly insufficient for this type of work.",
+          "developing": "Recognizes that AI can help with drafting or organizing but has not yet articulated which specific inputs AI would need from the materials folder, or why certain decisions — like which outcomes to foreground for a renewal-candidate client — require human judgment rather than AI synthesis.",
+          "demonstrating": "Shows a functional understanding that AI can synthesize the notes and draft structural and narrative elements from the materials provided, but that decisions about emphasis, client relationship framing, and follow-on recommendations require the person's knowledge of context that doesn't fully exist in the folder — and that the renewal stakes make the distinction between AI-produced and human-verified content especially consequential."
         },
         "integration": {
-          "emerging": "Describes a single-pass approach: ask AI to write the email, review it, send it. No iteration, no context-shaping, no description of what the review would focus on.",
-          "developing": "Would provide some context and review the draft, but the process stays vague — does not yet describe what specifically they would look for in the review or how they would iterate if the tone isn't right.",
-          "demonstrating": "Describes a working process: gives the AI the key facts and tonal guidance, evaluates the draft against the specific constraint (honest without damaging), and refines — possibly adjusting the framing of the vendor dependency, softening or strengthening language about next steps, ensuring the email acknowledges the client's patience without over-apologizing. The response shows the person working with the AI as a drafting partner, not an autonomous author."
+          "emerging": "Does not yet describe a differentiated workflow — either proposes using AI for the whole deck without describing how, or avoids AI without explaining a process for working with the source materials.",
+          "developing": "Identifies some stages where AI could help and some where the person would take over, but the description stays vague — 'AI could draft slides and I'd review' — without describing what the person would actually give the AI, what they'd do with the output, or how they'd handle the specific challenge of synthesizing across multiple source documents.",
+          "demonstrating": "Describes a concrete, sequenced process: for example, using AI to read through the notes and status updates and pull out themes or key outcomes as a starting point, then drafting the narrative sections with AI while providing the specific data points and framing the person wants emphasized, then personally writing or substantially revising the recommendations section given the follow-on SOW context, and reviewing the full deck for accuracy and tone before it goes to the client."
         },
         "judgment": {
-          "emerging": "Has not yet considered what's at stake in this specific email beyond getting it sent. Focuses on the efficiency of using AI to draft it.",
-          "developing": "Recognizes that the tone matters and the client relationship is delicate, but does not yet connect this to the broader pattern — this email is the latest in a series of communications that define how the client perceives the team's competence.",
-          "demonstrating": "Understands that this email is high-stakes precisely because of the accumulated history. A client who has already been patient through earlier delays is evaluating whether to stay patient. The wrong tone — too casual, too defensive, too corporate — could be the moment the client's goodwill runs out. The person's judgment about framing, not just the AI's prose, determines whether this communication strengthens or erodes the relationship."
+          "emerging": "Does not yet account for the renewal-candidate context in describing how they'd approach the deck — treats this as a routine document task without considering how the stakes shape the level of review or the choices about what AI generates versus what the person owns.",
+          "developing": "Acknowledges that the deck is high-stakes given the renewal context, but has not yet described how that changes their workflow — mentions reviewing carefully but doesn't connect the stakes to specific decisions about which parts of the deck AI should draft versus which the person should write.",
+          "demonstrating": "Accounts for the renewal stakes in the workflow design — for example, noting that client-facing characterizations of the engagement's outcomes, the tone of the relationship framing, and the follow-on recommendations are sections where the person takes direct ownership rather than relying on AI synthesis, because errors or misjudgments in those sections carry real consequences for a business relationship in an active renewal conversation."
         }
       }
     },
     {
       "id": "t2_q2",
       "sequence": 2,
-      "angle": "automation_evaluation",
-      "dol_content_area": "#2 Explore AI Uses",
-      "dol_secondary": null,
-      "human_function_activated": "Act",
+      "angle": "directed_stakeholder_communication",
+      "dol_content_area": "#3 Direct AI Effectively",
+      "dol_secondary": "#5 Use AI Responsibly",
+      "human_function_activated": "Express",
       "decision_band": "judgment-embedded",
-      "scenario": "A colleague shows you a workflow they've set up: every Friday afternoon, the AI assistant automatically pulls the team's project tracker data and generates a summary report that gets emailed to the department head. Your colleague is proud of it — it saves the team about 45 minutes a week and the reports look clean and professional. They suggest you set up something similar for the client-facing project updates you send every week.",
-      "prompt": "What's your reaction? Would you adopt this for your client updates?",
-      "internal_notes": "Tests whether the person can evaluate an existing AI automation and think critically about whether it transfers to a different context — specifically, from an internal report to a client-facing deliverable. The colleague's workflow works for internal use, but applying the same approach to client communications introduces different stakes. A strong response distinguishes between the two contexts rather than accepting or rejecting the idea wholesale.",
+      "scenario": "A cross-functional project you've been coordinating has hit a significant milestone delay — a key deliverable that was due this Friday won't be ready until the end of next week. The delay is due to a dependency on another team that ran into a resourcing issue. You need to send an update to a group of senior stakeholders who've been tracking this project closely and who have downstream dependencies on the Friday date. You want the message to be direct, professional, and constructive — not defensive, not vague, and not so detailed that it buries the key information. You decide to use AI to help you draft it.",
+      "prompt": "How would you approach working with AI to produce this message — what would you give it, and how would you make sure the result is actually what you need?",
+      "internal_notes": "This tests the person's ability to describe directed AI interaction for a specific, high-stakes communication task. A strong response describes what context the person would provide to AI (the nature of the delay, the cause, the new timeline, the audience and their concerns, the tone they want), how they'd evaluate the draft against the specific requirements (direct, not defensive, not vague), and how they'd iterate if the first draft misses. A weak response says 'I'd ask AI to draft a delay email' without describing the framing, context-setting, or review process. The DOL #5 secondary signal is present because the message touches on inter-team resourcing issues that may be sensitive to characterize externally.",
       "rubric": {
         "orientation": {
-          "emerging": "Thinks it's a great idea and would replicate it directly for client updates. Sees the efficiency gain and polished output without distinguishing between an internal summary and a client-facing communication. Has not yet developed a model for how the same AI workflow carries different risks in different contexts.",
-          "developing": "Expresses some hesitation about the client-facing application but the concern is instinctive — 'I'd want to review it first' — without articulating why a client-facing report requires different handling than an internal one.",
-          "demonstrating": "Sees the key distinction: an automated internal summary that goes to a department head operates in a forgiving context where errors can be corrected in conversation. An automated client-facing update operates in a context where the report is the communication — the client won't follow up to clarify, they'll form judgments based on what they read. Understands that the same AI capability carries different risk profiles depending on the audience and stakes."
+          "emerging": "Does not yet show understanding that AI will draft a message calibrated to the prompt and framing provided — expects AI to produce an appropriately toned, accurate stakeholder communication from a minimal request, without recognizing that the specific constraints (direct, not defensive, constructive) need to be explicitly built into the prompt.",
+          "developing": "Recognizes that the prompt needs to include the relevant facts but has not yet articulated that the tone requirements — direct but not defensive, constructive — are instructions the person needs to give AI explicitly, and that the first draft may need to be adjusted if AI defaults to a more apologetic or vague register.",
+          "demonstrating": "Understands that to get a draft that meets the specific constraints of this message, the person needs to give AI the key facts (what's delayed, why, new timeline), the audience context (senior stakeholders with downstream dependencies), and the explicit tone guidance (direct, not defensive, not overly detailed) — and that reviewing the draft against those criteria is how they'd decide whether to send it, revise it, or re-prompt."
         },
         "integration": {
-          "emerging": "Would adopt the workflow as-is for client updates. No adaptation described.",
-          "developing": "Would add a review step but does not yet describe how the workflow would change — what the review would focus on, or how the process would be restructured for a client-facing context.",
-          "demonstrating": "Describes how to adapt the workflow: might use the AI to generate a draft from the project tracker data, but build in a review and editing step where the person applies their knowledge of the client — what they care about, what to emphasize, what to leave out, what needs human framing. Restructures from fully automated to AI-assisted, matching the process to the stakes."
+          "emerging": "Does not yet describe a concrete approach to directing AI for this specific communication — either describes asking AI to 'write a delay update' without additional detail, or describes writing the message without AI at all without explaining their process.",
+          "developing": "Describes providing the AI with some context and reviewing the result, but the description is incomplete — doesn't address how they'd handle the tone requirements specifically, what they'd do if the draft came back too apologetic or too vague, or how they'd verify the message accurately represents the situation before sending.",
+          "demonstrating": "Describes a concrete directing-and-review process: providing AI with the specific facts of the delay, the new timeline, the stakeholder audience and their downstream dependencies, and explicit tone guidance; reviewing the draft against the stated criteria (direct, constructive, not burying the key information); and iterating — either re-prompting with specific corrections or editing directly — before sending, with final sign-off as their own."
         },
         "judgment": {
-          "emerging": "Focuses entirely on the time savings. Has not yet considered the consequences of an automated AI report going directly to a client.",
-          "developing": "Recognizes that errors reaching a client would be worse than errors reaching a department head, but the reasoning is surface-level.",
-          "demonstrating": "Understands that a client-facing project update carries the company's credibility. An AI-generated report that mischaracterizes project status, omits a problem the team is working through, or uses generic language where the client expects tailored insight could damage the relationship in ways that are hard to trace back to the automation. Sees that the 45-minute time savings needs to be weighed against the risk of an unreviewed communication going out under the person's name."
+          "emerging": "Does not yet consider how characterizing the delay's cause — a resourcing issue on another team — could create problems if handled without care, or how the senior-stakeholder audience shapes what level of detail and what framing is appropriate.",
+          "developing": "Acknowledges that the message needs to be carefully worded given the audience or the sensitivity of attributing the delay to another team, but has not yet described how that concern shapes the specific instructions they'd give AI or the specific things they'd look for in the draft.",
+          "demonstrating": "Accounts for both the audience stakes and the attribution sensitivity in their approach — for example, being specific with AI about how to characterize the cause in a way that's accurate but doesn't assign blame or create inter-team friction, and reviewing the draft specifically for whether it hits the right level of detail for senior stakeholders who need to know the impact without a full post-mortem."
         }
       }
     },
     {
       "id": "t2_q3",
       "sequence": 3,
-      "angle": "domain_informed_output_evaluation",
-      "dol_content_area": "#4 Evaluate AI Outputs",
-      "dol_secondary": "#1 Understand AI Principles",
+      "angle": "multi_source_data_synthesis",
+      "dol_content_area": "#1 Understand AI Principles",
+      "dol_secondary": "#2 Explore AI Uses",
       "human_function_activated": "Understand",
       "decision_band": "judgment-embedded",
-      "scenario": "You're preparing a slide deck for a quarterly business review with a major client. You ask the AI assistant to analyze the client's account data from the past quarter and produce three key takeaways for the executive summary slide. The AI returns: (1) revenue grew 12% quarter-over-quarter, (2) the client's engagement with your team's deliverables increased significantly, and (3) the account is on track to exceed its annual target. You know the account — you've been the day-to-day contact for six months.",
-      "prompt": "How do you evaluate these three takeaways before they go into the deck?",
-      "internal_notes": "Tests whether the person can bring their domain knowledge to bear on evaluating AI-generated analysis. The three takeaways sound reasonable but may not reflect reality — and the person has the relationship knowledge to assess them. Does the person rely on the AI's summary because it sounds right, or do they test it against what they actually know about this client? This is Tier 2 because the person needs to describe a process for evaluation, not just recognize a concern.",
+      "scenario": "Your manager has asked you to put together a brief analysis — two or three pages — comparing your company's performance on a set of KPIs against industry benchmarks for the past two quarters. You have internal data in a spreadsheet, a couple of recent industry reports in PDF form, and some notes from a recent client conversation that touched on how the client sees the industry trending. The deadline is tomorrow morning, and the analysis will be used in a quarterly business review with the leadership team.",
+      "prompt": "How would you use AI to help you pull this together — what role would it play, and what would you handle yourself?",
+      "internal_notes": "This tests whether the person understands AI's real and practical limitations when working with multi-source data — specifically that AI can help synthesize and draft narrative, but cannot reliably extract accurate figures from data it hasn't been given in the right format, and cannot access or verify the industry reports without those being explicitly provided. A strong response describes a concrete process that accounts for where AI can add genuine value (framing the analysis structure, drafting narrative around data the person provides, identifying themes from the reports) and where the person must own the work (ensuring the actual data figures are accurate, deciding which benchmarks are most relevant, verifying that any numbers in the narrative match the source). A weak response treats AI as a general data analysis tool that will pull the comparison together from the source files without describing the person's role in managing accuracy.",
       "rubric": {
         "orientation": {
-          "emerging": "Accepts the three takeaways because they sound positive and plausible. Has not yet developed a model for questioning AI-generated analysis when it aligns with what they'd want to hear — confirmation bias makes AI output harder to scrutinize when the news is good.",
-          "developing": "Would check the revenue number against the actual data but does not yet think through the softer claims — 'engagement increased significantly' and 'on track to exceed annual target' — which are the kind of qualitative assessments that AI generates confidently without supporting evidence.",
-          "demonstrating": "Recognizes that each takeaway requires different evaluation. The revenue figure is verifiable against data. 'Engagement increased significantly' is a qualitative claim that may mean different things — the AI could be interpreting any metric as 'engagement.' 'On track to exceed annual target' is a forward-looking projection that depends on assumptions the person needs to examine. Understands that AI-generated takeaways that sound like strategic analysis are often pattern-matched language rather than actual analytical reasoning."
+          "emerging": "Does not yet show awareness that AI cannot autonomously access, read, and accurately extract data from the person's spreadsheet and PDFs without those inputs being explicitly provided and formatted — describes a process in which AI 'analyzes the data' or 'reads the reports' as though it can reliably pull accurate figures from any source file without guidance or verification.",
+          "developing": "Recognizes that the person needs to be involved in providing data to AI and reviewing the output, but has not yet articulated the specific limitation: that AI-generated numerical comparisons and benchmark citations need to be verified against the actual sources because AI may synthesize plausible-sounding figures that don't accurately reflect the documents provided.",
+          "demonstrating": "Understands that AI can help structure the analysis, draft the narrative around data the person explicitly provides, and identify themes from the industry reports if those are shared in a usable format — but that the person must own the accuracy of the numbers, verify that any figures in the AI-drafted narrative match the source data, and not treat AI's synthesis of the reports as a substitute for checking the benchmarks themselves."
         },
         "integration": {
-          "emerging": "Would put the takeaways into the deck, possibly with minor wording changes. No evaluation process described.",
-          "developing": "Would verify the revenue number and maybe adjust the wording of the other two, but does not yet describe a systematic approach to evaluating AI-generated analysis against their own knowledge of the account.",
-          "demonstrating": "Describes checking each takeaway against what they know: verifying the revenue figure against the actual data, testing 'engagement increased' against their firsthand experience with the client's responsiveness and satisfaction, and examining the annual target claim against the pipeline and contract structure they're familiar with. Uses their six months of relationship context as the primary evaluation lens, not just the data."
+          "emerging": "Does not yet describe a concrete process for using AI in this multi-source analysis — either proposes that AI will handle the analysis with minimal input, or describes writing the whole analysis manually without describing any AI role.",
+          "developing": "Identifies a role for AI in the drafting or structuring phase, but the description is incomplete — doesn't address how they'd handle the data inputs specifically, how they'd verify numerical accuracy in the AI-drafted narrative, or how they'd make sure the industry benchmark figures are real rather than AI-generated approximations.",
+          "demonstrating": "Describes a concrete, sequenced process: for example, organizing the internal KPI data and key benchmark figures themselves first, then using AI to help draft the narrative structure and frame the comparison, providing AI with the specific data points to work from rather than asking it to extract from raw files, and reviewing every number in the final analysis against the source documents before it goes to leadership — with particular attention to any benchmark figures AI cited."
         },
         "judgment": {
-          "emerging": "Has not yet considered the consequences of presenting AI-generated takeaways to a client in a quarterly business review. Focuses on whether the slide looks good.",
-          "developing": "Recognizes that inaccurate claims in a QBR deck would be embarrassing, but does not yet think through the specific dynamic — that presenting overly optimistic AI-generated analysis to a client executive could create expectations the team can't meet, or signal that the person preparing the deck doesn't actually understand the account.",
-          "demonstrating": "Understands that a quarterly business review is a moment where the client evaluates whether the team understands their business. Presenting AI-generated takeaways that don't match the client's own experience of the engagement — claiming engagement increased when the client knows they've been frustrated, or projecting growth that isn't supported by the pipeline — doesn't just look wrong. It signals that the person presenting is disconnected from the actual relationship. The deck represents the person's understanding of the account, and getting it wrong in front of the client erodes trust in a way that's immediately visible."
+          "emerging": "Does not yet account for the fact that this analysis will be used by the leadership team in a quarterly business review, which means errors in the KPI comparisons or benchmark figures will be visible to senior decision-makers and may inform resource or strategic decisions.",
+          "developing": "Acknowledges that the analysis is high-visibility and needs to be accurate, but has not yet described how the leadership-audience stakes specifically shape their verification process or their decisions about how much to rely on AI for the numerical content versus the narrative framing.",
+          "demonstrating": "Accounts for the QBR context in how they'd allocate their effort — recognizing that a leadership team acting on flawed KPI comparisons or inaccurate benchmarks represents exactly the kind of downstream decision risk described in their accountability, and describing a process where the accuracy of the numbers is treated as non-negotiable regardless of how confident the AI-drafted narrative reads."
         }
       }
     },
     {
       "id": "t2_q4",
       "sequence": 4,
-      "angle": "accountability_in_collaborative_ai_use",
-      "dol_content_area": "#5 Use AI Responsibly",
+      "angle": "output_quality_in_high_visibility_context",
+      "dol_content_area": "#4 Evaluate AI Outputs",
       "dol_secondary": "#3 Direct AI Effectively",
-      "human_function_activated": "Express",
+      "human_function_activated": "Act",
       "decision_band": "escalation",
-      "scenario": "Your team is responding to an RFP (request for proposal) from a potential new client. The deadline is tight. Your teammate uses the AI assistant to draft the 'Company Background and Qualifications' section, pulling from the company website and past proposals. Another teammate uses AI to generate the proposed project timeline. You're responsible for assembling the final document, writing the executive summary, and submitting it. As you review the assembled draft, you notice the qualifications section includes a case study you don't recognize, and the timeline seems aggressive compared to similar past projects.",
-      "prompt": "How do you handle this, given the deadline pressure?",
-      "internal_notes": "Tests accountability in a collaborative workflow where multiple people used AI and the person assembling the final product discovers potential issues. The deadline pressure creates tension between thoroughness and speed. Does the person take ownership of the final product's accuracy, or treat each section as their teammate's responsibility? This is an escalation-boundary scenario — the person needs to decide whether to flag concerns to the team or let things go to meet the deadline.",
+      "scenario": "A colleague is out sick and you've been asked to cover for them by finalizing a market analysis they'd started. They used an AI assistant to pull together a first draft, and the document looks thorough — it has sections covering market size, key competitors, recent trends, and growth projections. As you read through it carefully before sending it to a director who needs it for an external client proposal, you notice a few things: one of the competitor descriptions seems to be missing a major product line that you know exists; the growth projections cite a '2024 forecast' but don't specify a source; and one section uses a confident phrase — 'industry experts widely agree' — without attributing any specific experts.",
+      "prompt": "How do you handle this — what's your process for getting this document to a state where you're comfortable putting it in front of a director for a client proposal?",
+      "internal_notes": "This tests the person's ability to evaluate a complex AI-generated document for fitness for purpose in a high-visibility context, and to describe a concrete remediation process. The scenario is calibrated to the escalation boundary: the person must decide what they can fix themselves, what needs to be flagged to the director before it goes to the client, and whether the document is in a state where it can go forward at all. A strong response describes a systematic review process, prioritizes the specific issues by risk (fabricated growth projections > vague competitor data > unsourced consensus claim), and addresses what the person would do with each: verify, rewrite with verified data, flag to the director, or hold the document until issues are resolved. A weak response treats the issues as minor edits and describes a light review before sending.",
       "rubric": {
         "orientation": {
-          "emerging": "Treats each section as the responsibility of the person who wrote it. Assumes the AI-generated content is probably fine because teammates reviewed it. Has not yet developed a model for how AI-generated content can introduce errors that propagate through a collaborative workflow — a fabricated case study or unrealistic timeline can end up in a submitted proposal precisely because everyone assumed someone else checked.",
-          "developing": "Recognizes both concerns — the unfamiliar case study and the aggressive timeline — but does not yet connect them to a pattern of how AI generates content. May see the case study issue as a mistake and the timeline issue as an opinion, without recognizing that both may be artifacts of AI generating plausible-sounding content without grounding.",
-          "demonstrating": "Understands that both issues have the same root: AI generating confident, specific content that may not be grounded in fact. A fabricated case study is a hallucination. An aggressive timeline may reflect AI pattern-matching against optimistic project descriptions rather than realistic scheduling. Recognizes that in a collaborative AI-assisted workflow, the person assembling the final product is the last line of defense — if they don't catch it, nobody will."
+          "emerging": "Does not yet recognize that the three issues identified — missing competitor information, unsourced growth projections, and unattributed 'expert consensus' — are characteristic AI output problems rather than simple editorial gaps, and does not connect them to the risk of fabrication or confident-sounding synthesis without underlying evidence.",
+          "developing": "Recognizes that the issues need to be addressed before the document goes to the director, but has not yet articulated that unsourced projections and unattributed consensus claims are the type of content AI routinely generates as plausible-sounding synthesis — and therefore carry a specific risk of being inaccurate or entirely fabricated rather than merely imprecise.",
+          "demonstrating": "Recognizes that growth projections without a named source and 'industry experts widely agree' without attribution are classic AI synthesis patterns — generated to sound credible rather than retrieved from verified sources — and that a document containing these elements in their current form is not ready for a client-facing proposal regardless of how polished the rest looks."
         },
         "integration": {
-          "emerging": "Submits the proposal as-is to meet the deadline, or makes minor wording changes without verifying the substance. No process for resolving the concerns.",
-          "developing": "Would flag the issues to teammates but does not yet describe how to handle the deadline tension — what to do if verification takes longer than the deadline allows, or how to triage which concerns are higher priority.",
-          "demonstrating": "Describes a practical process under time pressure: verifies the case study (can they find it in past proposals or on the company website?), checks the timeline against comparable past projects or asks the teammate who generated it about their assumptions, and makes a judgment call about what to fix, what to flag, and what to escalate. Recognizes that assembling the final document means owning its accuracy — the client won't see individual contributions, they'll see a single proposal with the company's name on it."
+          "emerging": "Does not yet describe a concrete process for evaluating and remediating the specific issues before the document moves forward — either proposes light copyediting and sending, or describes flagging the whole document without describing what they'd address themselves.",
+          "developing": "Describes fixing the issues but stays at a general level — 'I'd verify the facts and add sources' — without describing which issues they'd prioritize, how they'd verify the growth projections or competitor information specifically, or at what point they'd involve the director rather than resolving issues on their own.",
+          "demonstrating": "Describes a systematic, prioritized remediation process: for example, attempting to verify the growth projection by finding the cited 2024 forecast source; checking the competitor's current product line directly; treating the 'experts widely agree' phrase as requiring either a real source or removal; and making a clear decision about what they can fix versus what they need to flag to the director — including being explicit with the director about what was AI-generated and what they were able to verify before it goes to the client."
         },
         "judgment": {
-          "emerging": "Prioritizes the deadline over verification. Has not yet considered the consequences of submitting a proposal with a fabricated case study or unrealistic timeline.",
-          "developing": "Recognizes that submitting inaccurate content would be bad, but frames the decision as a simple choice between quality and speed rather than thinking through the specific consequences.",
-          "demonstrating": "Understands the asymmetry: a late proposal might still be considered, but a proposal with a fabricated case study that the client checks — or a timeline the team can't deliver — creates a credibility problem that can't be walked back. The company's reputation with a potential new client is on the line. The person recognizes that deadline pressure doesn't change what's at stake, and that their role as final assembler makes them accountable for what gets submitted."
+          "emerging": "Does not yet weigh the consequences of forwarding a client-facing market analysis that contains unverified projections, an incomplete competitor description, or unsourced consensus claims — treats the issues as editorial rather than substantive risks for the director and the client relationship.",
+          "developing": "Recognizes that the document has real issues that could reflect badly if they surface with the client, but has not yet described how the client-proposal context specifically shapes the standard of review — whether 'probably fine' is a sufficient bar for a document going into an external proposal, and what the director needs to know about the document's provenance to make that call.",
+          "demonstrating": "Treats the escalation boundary explicitly: the person's job here is not just to clean up the document but to give the director what they need to make an informed decision about whether and how to use it — which means being transparent about what was AI-generated, what the person verified, and what they couldn't resolve in the time available, so the director can decide whether to delay, supplement, or proceed with the analysis as-is."
         }
       }
     },
     {
       "id": "t2_q5",
       "sequence": 5,
-      "angle": "task_differentiation_for_ai_fit",
-      "dol_content_area": "#2 Explore AI Uses",
-      "dol_secondary": "#1 Understand AI Principles",
-      "human_function_activated": "Ideate",
+      "angle": "responsible_use_workflow_design",
+      "dol_content_area": "#5 Use AI Responsibly",
+      "dol_secondary": "#2 Explore AI Uses",
+      "human_function_activated": "Act",
       "decision_band": "judgment-embedded",
-      "scenario": "Your manager asks you to prepare two things by end of week: (1) a summary of the last three months of client feedback surveys for the team meeting — there are about 60 survey responses in a spreadsheet, and (2) a recommendation memo on whether to renew or restructure a struggling client engagement — this client has been unhappy, and leadership will use the memo to decide next steps.",
-      "prompt": "You're thinking about using AI to help with both. Would you approach them the same way?",
-      "internal_notes": "Tests whether the person can differentiate tasks by their AI fit — recognizing that the same tool operates very differently depending on what kind of work is being done. The survey synthesis is high-volume text aggregation where AI excels. The recommendation memo requires judgment, relationship context, and persuasive framing where AI can assist but shouldn't lead. Does the person treat both tasks the same, or do they calibrate their approach?",
+      "scenario": "You've been asked to prepare a briefing document for your manager ahead of a contract renewal negotiation with one of your company's largest clients. The briefing should cover the history of the relationship, key engagement metrics from the past year, a summary of any issues or friction points that came up, and a few talking points for the negotiation. You have access to everything you'd need — CRM notes, project records, invoices, and some candid internal emails about a service delivery issue that happened earlier in the year. You'd like to use AI to help you draft the document efficiently, but some of what you're working with feels sensitive.",
+      "prompt": "How would you think through which parts of this project AI can help with, and how you'd structure your approach to the parts it can't — or shouldn't?",
+      "internal_notes": "This tests whether the person can design a practical, differentiated working approach that gets real value from AI while keeping sensitive content appropriately bounded — not just recognizing sensitivity in the abstract (Tier 1 tested that) but describing a concrete workflow that accounts for it. A strong response distinguishes between content that can go to AI (general structure, drafting talking points from non-sensitive framing, synthesizing non-confidential engagement metrics) and content that needs to stay out (candid internal emails about service issues, specific contract terms, negotiation strategy), and describes how they'd actually work across both categories. A weak response either avoids AI entirely for safety or ignores the sensitivity and describes using AI on everything.",
       "rubric": {
         "orientation": {
-          "emerging": "Approaches both tasks the same way — either using AI heavily for both or being cautious about both. Has not yet developed a model for why different types of knowledge work map differently to AI capabilities.",
-          "developing": "Senses that the two tasks are different in some way but does not yet articulate the distinction clearly. May say 'the memo is more important' without connecting importance to the type of thinking required and how that maps to what AI can and can't do.",
-          "demonstrating": "Sees the structural difference: the survey summary is a synthesis task — extracting themes, patterns, and key points from 60 text responses — which is squarely in AI's strengths. The recommendation memo requires the person's judgment about a relationship, a strategic assessment of the engagement's value, and a persuasive case aimed at leadership decision-makers. AI can help with structure and drafting, but the substance of the recommendation must come from the person's understanding of the situation. Different tasks call for different AI roles."
+          "emerging": "Does not yet show awareness that different categories of content in this briefing carry different levels of sensitivity — treats all of the source material as either uniformly safe or uniformly off-limits for AI use, without distinguishing between engagement metrics and candid internal emails about service failures.",
+          "developing": "Recognizes that the candid internal emails and negotiation-related content are more sensitive than the general relationship history or metrics, but has not yet articulated why the distinction matters in terms of what happens when content enters a general-purpose AI tool — does not connect the concern to the nature of how AI processes inputs.",
+          "demonstrating": "Shows a functional understanding that general-purpose AI tools process and may retain the content they receive — and that candid internal communications about service delivery failures, active contract terms, and negotiation strategy represent categories of information that are particularly sensitive to expose through an external tool, both because of what the information contains and because of the active business context in which it's being used."
         },
         "integration": {
-          "emerging": "Describes a single approach applied to both tasks — 'I'd feed both into the AI and review the output.' No differentiation in process.",
-          "developing": "Would use AI more carefully for the memo than the surveys, but does not yet describe what 'more carefully' looks like in practice — how the interaction with AI would differ between the two tasks.",
-          "demonstrating": "Describes two distinct approaches: for the surveys, the AI does heavy lifting — summarizing themes, counting frequencies, identifying patterns — with the person reviewing for accuracy and adding interpretation. For the memo, the person leads — forming the recommendation, structuring the argument, providing the context about the client relationship — and uses AI to help with drafting, organizing, or refining language. The AI's role scales based on the task's demands."
+          "emerging": "Does not yet describe a differentiated approach — either proposes using AI for the entire briefing including the sensitive source materials, or avoids AI entirely without describing any workflow for how they'd produce the document efficiently.",
+          "developing": "Identifies that some content should stay out of AI and some is fine to use, but describes the division in general terms without mapping it to the specific categories of content in this scenario or describing how they'd actually produce the sensitive sections without AI assistance.",
+          "demonstrating": "Describes a concrete, differentiated workflow: for example, using AI to draft the relationship history section and the talking points framework from publicly available or non-sensitive context the person provides directly; keeping the candid service delivery emails and negotiation specifics out of the AI prompt and writing those sections — or the summary of friction points — directly from their own notes; and using AI for structure and language refinement on the output without feeding it the sensitive source content."
         },
         "judgment": {
-          "emerging": "Has not yet considered how the stakes differ between the two deliverables. Treats both as tasks to complete by Friday.",
-          "developing": "Recognizes that the recommendation memo is higher-stakes but does not yet connect this to how the AI interaction should differ — the stakes inform the level of human involvement in the process.",
-          "demonstrating": "Understands that a survey summary that misses a theme is correctable — someone at the team meeting will notice. But a recommendation memo that leadership uses to decide whether to restructure or end a client engagement is a different category. If the memo's recommendation is shaped by AI's generic analysis rather than the person's informed judgment, leadership could make a consequential decision based on a shallow assessment. The person's reputation and the client relationship are both on the line. The stakes should visibly shape how much they rely on AI for each task."
+          "emerging": "Does not yet weigh the consequences of feeding sensitive content — candid internal emails about a service issue, active contract renewal terms — into a general-purpose AI tool ahead of a negotiation with the company's largest client.",
+          "developing": "Acknowledges that the sensitive content shouldn't go into AI without fully articulating what the downstream consequences would be — for example, that internal characterizations of a service failure could shape the AI's framing in ways that expose the company's position, or that contract details entering an external tool creates a data handling issue that could affect the client relationship if discovered.",
+          "demonstrating": "Accounts for the active negotiation context specifically: recognizes that the combination of candid internal communications about friction points and live contract renewal discussions represents a category of information where the stakes of inappropriate AI use are heightened — not just as an abstract data sensitivity matter, but because how that information is handled in the weeks before a negotiation has direct business consequences — and describes a workflow designed around that reality rather than general caution."
         }
       }
     }
   ],
-
   "scoring": {
     "method": "ai_rubric_match",
     "description": "Each response is scored against the per-question rubric. All three constructs are scored at three levels.",
@@ -458,7 +470,7 @@ When we assess someone in this role, we want to understand: Can this person use 
       "judgment_level": "emerging | developing | demonstrating",
       "evidence_notes": "2–3 sentences explaining the scoring decisions across all three constructs"
     },
-    "scoring_prompt_template": "You are scoring a response to an AI-readiness assessment. The context is a general knowledge worker at a mid-size professional services company. You will receive a scenario, a user response, and a rubric with three constructs (Orientation, Integration, Judgment), each scored at three levels (Emerging, Developing, Demonstrating). Scoring principles: (a) Reward what is present. Score the signal in the response, not the elaboration around it. A concise response that contains a clear directional signal — prioritizing compliance, naming a verification need, recognizing a boundary, identifying an opportunity — earns full credit on the construct that signal serves. Brevity is not a deficiency. (b) Separate signal from elaboration. A one-sentence response that conveys strong judgment (e.g., refusing to act on an unverified AI suggestion) is strong judgment with low elaboration — not weak judgment. Do not score down for lack of detail when the directional signal is clear. (c) Match the rubric on substance, not length. If a response captures the key insight described in a Demonstrating descriptor but in fewer words than the descriptor uses, it is still Demonstrating. The rubric descriptors are written richly to guide your evaluation — the respondent is not expected to match their length or specificity of expression. Your job is to: (1) Assign an Orientation level — does the response show a functional mental model of what AI is and how it works? (2) Assign an Integration level — does the response show the person can see where AI fits AND describe how they'd work with it effectively? Both opportunity recognition and effective interaction count. (3) Assign a Judgment level — does the response show the person can evaluate AI output quality AND adjust their approach based on stakes, sensitivity, and consequences? Both output evaluation and responsible use count. (4) Write 2–3 sentences of evidence notes explaining your scoring decisions across all three constructs. When a response is concise, note what signal is present rather than cataloging what elaboration is absent. Respond in JSON format with keys: orientation_level, integration_level, judgment_level, evidence_notes."
+    "scoring_prompt_template": "You are scoring a response to an AI-readiness assessment. The context is general office professional (analyst, coordinator, project manager, or account manager) at a mid-size professional services company. You will receive a scenario, a user response, and a rubric with three constructs (Orientation, Integration, Judgment), each scored at three levels (Emerging, Developing, Demonstrating). Scoring principle: reward what is present in the response. Short responses that demonstrate good judgment or understanding earn full credit on those constructs — brevity is not a deficiency. Score what the person shows, not what they didn't elaborate on. Your job is to: (1) Assign an Orientation level — does the response show a functional mental model of what AI is and how it works? (2) Assign an Integration level — does the response show the person can see where AI fits AND describe how they'd work with it effectively? Both opportunity recognition and effective interaction count. (3) Assign a Judgment level — does the response show the person can evaluate AI output quality AND adjust their approach based on stakes, sensitivity, and consequences? Both output evaluation and responsible use count. (4) Write 2–3 sentences of evidence notes explaining your scoring decisions across all three constructs. Respond in JSON format with keys: orientation_level, integration_level, judgment_level, evidence_notes."
   }
 }
 ```
