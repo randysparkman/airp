@@ -216,27 +216,26 @@
     /* ── WHAT IT IS ── */
     #what {
       background: var(--light);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
     }
 
-    .what-quote {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1.35rem;
-      color: var(--navy);
-      line-height: 1.6;
-      padding-left: 24px;
-      border-left: 3px solid var(--gold);
+    .what-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: start;
+      margin-bottom: 80px;
     }
 
     .what-beats {
       display: flex;
       flex-direction: column;
-      gap: 22px;
-      margin-top: 28px;
+      gap: 32px;
+      padding-top: 8px;
+    }
+
+    .beat {
+      padding: 4px 0 4px 24px;
+      border-left: 2px solid var(--gold);
     }
 
     .beat-lead {
@@ -244,13 +243,43 @@
       font-style: italic;
       font-weight: 500;
       color: var(--navy);
-      font-size: 1.05rem;
+      font-size: 1.15rem;
+      display: block;
+      margin-bottom: 6px;
     }
 
     .beat-body {
       color: var(--muted);
-      font-size: 1.02rem;
-      line-height: 1.8;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .what-pullquote-wrap {
+      display: flex;
+      justify-content: center;
+      padding-top: 8px;
+    }
+
+    .what-pullquote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 1.55rem;
+      line-height: 1.45;
+      color: var(--navy);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      max-width: 780px;
+    }
+
+    .what-pullquote::before {
+      content: "";
+      display: block;
+      width: 48px;
+      height: 2px;
+      background: var(--gold);
+      margin: 0 auto 28px;
     }
 
     /* ── THREE TIERS ── */
@@ -503,7 +532,9 @@
     @media (max-width: 860px) {
       section { padding: 64px 28px; }
       .hero { padding: 72px 28px 64px; }
-      #what, #output { grid-template-columns: 1fr; gap: 40px; }
+      #output { grid-template-columns: 1fr; gap: 40px; }
+      .what-grid { grid-template-columns: 1fr; gap: 40px; margin-bottom: 56px; }
+      .what-pullquote { font-size: 1.25rem; }
       .tier-list, .dims-grid { grid-template-columns: 1fr; }
       .hero-stats { flex-direction: column; }
       footer { flex-direction: column; gap: 8px; text-align: center; padding: 20px 28px; }
@@ -568,18 +599,31 @@
 
   <!-- WHAT IT IS -->
   <section id="what">
-    <div>
-      <p class="section-label">What It Is</p>
-      <h2 class="section-heading">A readiness assessment that produces a profile, not just a score.</h2>
-      <p class="section-body">The WorkPath Assessment places you inside realistic workplace situations and reveals how you think. There are no right answers and no trick questions. The result is a personalized written profile — not a pass/fail grade, but a clear picture of where you are now and what your next growth could look like.</p>
+    <p class="section-label">What It Is</p>
+    <div class="what-grid">
+      <div>
+        <h2 class="section-heading">A readiness assessment that produces a profile, not just a score.</h2>
+        <p class="section-body">The WorkPath Assessment places you inside realistic workplace situations and reveals how you think. There are no right answers and no trick questions. The result is a personalized written profile — not a pass/fail grade, but a clear picture of where you are now and what your next growth could look like.</p>
+      </div>
       <div class="what-beats">
-        <p><span class="beat-lead">It sees the individual.</span> <span class="beat-body">What an entry-level analyst reveals about their thinking is different from what a senior project manager reveals — and the profile is written to each.</span></p>
-        <p><span class="beat-lead">It's shaped to the work.</span> <span class="beat-body">Scenarios are tailored to a specific occupation, to a role inside a specific organization, or to the conditions of a specific job site.</span></p>
-        <p><span class="beat-lead">It rests on shared definitions of success.</span> <span class="beat-body">The three dimensions draw on multiple recognized AI literacy frameworks, so the profile reflects how the field itself defines readiness.</span></p>
+        <div class="beat">
+          <span class="beat-lead">It sees the individual.</span>
+          <span class="beat-body">What an entry-level analyst reveals about their thinking is different from what a senior project manager reveals — and the profile is written to each.</span>
+        </div>
+        <div class="beat">
+          <span class="beat-lead">It's shaped to the work.</span>
+          <span class="beat-body">Scenarios are tailored to a specific occupation, to a role inside a specific organization, or to the conditions of a specific job site.</span>
+        </div>
+        <div class="beat">
+          <span class="beat-lead">It rests on shared definitions of success.</span>
+          <span class="beat-body">The three dimensions draw on multiple recognized AI literacy frameworks, so the profile reflects how the field itself defines readiness.</span>
+        </div>
       </div>
     </div>
-    <div>
-      <p class="what-quote">"We're not testing what you know about AI — we're watching for how you think when AI tools are part of the picture."</p>
+    <div class="what-pullquote-wrap">
+      <blockquote class="what-pullquote">
+        "We're not testing what you know about AI — we're watching for how you think when AI tools are part of the picture."
+      </blockquote>
     </div>
   </section>
 
