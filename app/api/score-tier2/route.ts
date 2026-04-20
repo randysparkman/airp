@@ -9,26 +9,7 @@ export const maxDuration = 120;
 // Fewer retries so backoff doesn't compound the timeout.
 const anthropic = new Anthropic({ maxRetries: 1 });
 
-const SYSTEM_PROMPT = `You are an AI-readiness assessment engine. You will perform TWO tasks in a single response.
-
-TASK A — SCORE 5 TIER 2 RESPONSES
-For each of the 5 scenarios, assign:
-- orientation_level (emerging / developing / demonstrating)
-- integration_level (emerging / developing / demonstrating)
-- judgment_level (emerging / developing / demonstrating)
-- evidence_notes (2–3 sentences explaining the scoring decisions across all three constructs)
-
-Be calibrated. Most people fall in the "developing" range. "Demonstrating" requires specific, nuanced reasoning — not just mentioning the right concepts. "Emerging" means genuine lack of awareness, not just brevity.
-
-TASK B — PERFORMANCE SUMMARY ACROSS ALL 10 RESPONSES
-Using the Tier 1 scores provided (already computed) combined with the Tier 2 scores you just produced in Task A, generate a structured performance summary following the schema in the SUMMARY INSTRUCTIONS block.
-
-OUTPUT FORMAT
-Return a single JSON object with this exact top-level shape:
-{
-  "scores": [ 5 Tier 2 score objects, each with: question_id, orientation_level, integration_level, judgment_level, evidence_notes ],
-  "performanceSummary": { ...object matching the schema given in SUMMARY INSTRUCTIONS... }
-}`;
+const SCORE_ONLY_SYSTEM = `You are scoring 5 responses to an AI-readiness assessment. For each question assign orientation_level, integration_level, and judgment_level (each one of emerging/developing/demonstrating) and 2-3 sentences of evidence_notes. Be calibrated. Most people fall in the "developing" range. "Demonstrating" requires specific, nuanced reasoning — not just mentioning the right concepts. "Emerging" means genuine lack of awareness, not just brevity. Return JSON: {"scores": [5 objects with question_id, orientation_level, integration_level, judgment_level, evidence_notes]}.`;
 
 function buildQuestionsBlock(questions: any[], responses: Record<string, string>): string {
   return questions.map((q: any, i: number) => {
@@ -56,9 +37,94 @@ Judgment:
   }).join("\n");
 }
 
-function makeAbortController() {
+type ConstructKey = "orientation" | "integration" | "judgment";
+type Level = "emerging" | "developing" | "demonstrating";
+
+interface ConstructCounts {
+  t1: Record<Level, number>;
+  t2: Record<Level, number>;
+  combined: Record<Level, number>;
+  modal: Level;
+  t1_question_levels: Array<{ question_id: string; level: Level }>;
+  t2_question_levels: Array<{ question_id: string; level: Level }>;
+}
+
+function zeroCounts(): Record<Level, number> {
+  return { emerging: 0, developing: 0, demonstrating: 0 };
+}
+
+function tallyConstruct(
+  key: ConstructKey,
+  t1Scores: any[],
+  t2Scores: any[],
+): ConstructCounts {
+  const field = `${key}_level` as const;
+  const t1 = zeroCounts();
+  const t2 = zeroCounts();
+  const t1_question_levels: Array<{ question_id: string; level: Level }> = [];
+  const t2_question_levels: Array<{ question_id: string; level: Level }> = [];
+
+  for (const s of t1Scores) {
+    const lvl = (s?.[field] as Level) || "developing";
+    if (lvl in t1) t1[lvl] += 1;
+    t1_question_levels.push({ question_id: s?.question_id || "unknown", level: lvl });
+  }
+  for (const s of t2Scores) {
+    const lvl = (s?.[field] as Level) || "developing";
+    if (lvl in t2) t2[lvl] += 1;
+    t2_question_levels.push({ question_id: s?.question_id || "unknown", level: lvl });
+  }
+
+  const combined: Record<Level, number> = {
+    emerging: t1.emerging + t2.emerging,
+    developing: t1.developing + t2.developing,
+    demonstrating: t1.demonstrating + t2.demonstrating,
+  };
+
+  const modal = (["demonstrating", "developing", "emerging"] as Level[]).reduce(
+    (best, cur) => (combined[cur] > combined[best] ? cur : best),
+    "developing" as Level,
+  );
+
+  return { t1, t2, combined, modal, t1_question_levels, t2_question_levels };
+}
+
+function formatCountLine(c: ConstructCounts, label: string): string {
+  const q = (arr: { question_id: string; level: Level }[], lvl: Level) =>
+    arr.filter((x) => x.level === lvl).map((x) => x.question_id).join(", ") || "none";
+  return (
+    `${label}:\n` +
+    `  Combined (10 responses): ${c.combined.demonstrating} demonstrating, ${c.combined.developing} developing, ${c.combined.emerging} emerging (modal: ${c.modal})\n` +
+    `  Tier 1 (5): ${c.t1.demonstrating} dem / ${c.t1.developing} dev / ${c.t1.emerging} emerg — ` +
+    `dem=[${q(c.t1_question_levels, "demonstrating")}], dev=[${q(c.t1_question_levels, "developing")}], emerg=[${q(c.t1_question_levels, "emerging")}]\n` +
+    `  Tier 2 (5): ${c.t2.demonstrating} dem / ${c.t2.developing} dev / ${c.t2.emerging} emerg — ` +
+    `dem=[${q(c.t2_question_levels, "demonstrating")}], dev=[${q(c.t2_question_levels, "developing")}], emerg=[${q(c.t2_question_levels, "emerging")}]`
+  );
+}
+
+function buildPrecomputedFactsBlock(
+  orientation: ConstructCounts,
+  integration: ConstructCounts,
+  judgment: ConstructCounts,
+): string {
+  return (
+    `=== PRE-COMPUTED SCORE TALLIES (AUTHORITATIVE) ===\n` +
+    `These counts were computed deterministically in code from the scored_responses array. ` +
+    `When your performance summary narrative references tallies, proportions, or "N of 10" counts on any construct, ` +
+    `you MUST use these numbers exactly. Do not recalculate. Do not restate them differently. ` +
+    `Do not invent counts the data doesn't support. If your narrative contradicts these counts, rewrite the narrative — the counts are ground truth.\n\n` +
+    formatCountLine(orientation, "ORIENTATION") +
+    `\n\n` +
+    formatCountLine(integration, "INTEGRATION") +
+    `\n\n` +
+    formatCountLine(judgment, "JUDGMENT") +
+    `\n`
+  );
+}
+
+function makeAbortController(timeoutMs: number = 110_000) {
   const abort = new AbortController();
-  const timeoutId = setTimeout(() => abort.abort(), 110_000);
+  const timeoutId = setTimeout(() => abort.abort(), timeoutMs);
   return { signal: abort.signal, clear: () => clearTimeout(timeoutId) };
 }
 
@@ -68,6 +134,24 @@ function isAbortError(e: any): boolean {
     e?.code === "ERR_CANCELED" ||
     e?.message?.includes("aborted") ||
     e?.message?.includes("timed out")
+  );
+}
+
+async function scoreTier2Only(questionsBlock: string, signal: AbortSignal) {
+  return anthropic.messages.create(
+    {
+      model: "claude-sonnet-4-6",
+      max_tokens: 4096,
+      system: [
+        {
+          type: "text",
+          text: SCORE_ONLY_SYSTEM,
+          cache_control: { type: "ephemeral" },
+        },
+      ],
+      messages: [{ role: "user", content: questionsBlock }],
+    },
+    { signal },
   );
 }
 
@@ -96,42 +180,50 @@ export async function POST(request: Request) {
 
     const questionsBlock = buildQuestionsBlock(questions, responses);
 
-    // If we lack the inputs to summarize, fall back to scoring only.
+    // ====== Call 1: Score Tier 2 (always) ======
+    const t2Abort = makeAbortController(60_000);
+    const tScore = Date.now();
+    let scoreMessage: Awaited<ReturnType<typeof anthropic.messages.create>>;
+    try {
+      scoreMessage = await scoreTier2Only(questionsBlock, t2Abort.signal);
+    } finally {
+      t2Abort.clear();
+    }
+    const scoreElapsedMs = Date.now() - tScore;
+    const scoreText = scoreMessage.content.find((c) => c.type === "text");
+    if (!scoreText || scoreText.type !== "text") {
+      throw new Error("No text content in Tier 2 scoring response");
+    }
+    const scoreParsed = parseAIJson(scoreText.text);
+    const scores = scoreParsed.scores || scoreParsed;
+
+    // If we lack the inputs to summarize, return scores only.
     if (!canSummarize) {
-      const { signal, clear } = makeAbortController();
-      const tModel = Date.now();
-      let message: Awaited<ReturnType<typeof anthropic.messages.create>>;
-      try {
-        message = await anthropic.messages.create(
-          {
-            model: "claude-sonnet-4-6",
-            max_tokens: 4096,
-            system: [
-              {
-                type: "text",
-                text: `You are scoring 5 responses to an AI-readiness assessment. For each question assign orientation_level, integration_level, and judgment_level (each one of emerging/developing/demonstrating) and 2-3 sentences of evidence_notes. Be calibrated. Return JSON: {"scores": [5 objects with question_id, orientation_level, integration_level, judgment_level, evidence_notes]}.`,
-                cache_control: { type: "ephemeral" },
-              },
-            ],
-            messages: [{ role: "user", content: questionsBlock }],
-          },
-          { signal },
-        );
-      } finally {
-        clear();
-      }
-      const modelElapsedMs = Date.now() - tModel;
-      const textContent = message.content.find((c) => c.type === "text");
-      if (!textContent || textContent.type !== "text") {
-        throw new Error("No text content in Claude response");
-      }
-      const parsed = parseAIJson(textContent.text);
-      const scores = parsed.scores || parsed;
-      logApiTiming({ route: "score-tier2", startedAt, modelElapsedMs, usage: message.usage, extra: { mode: "score_only" } });
+      logApiTiming({
+        route: "score-tier2",
+        startedAt,
+        modelElapsedMs: scoreElapsedMs,
+        usage: scoreMessage.usage,
+        extra: { mode: "score_only" },
+      });
       return NextResponse.json({ scores });
     }
 
-    // Build T1 context (already scored) with the same enrichment the summary expects.
+    // ====== Deterministic tally (between the two calls) ======
+    const orientation = tallyConstruct("orientation", t1Scores, scores);
+    const integration = tallyConstruct("integration", t1Scores, scores);
+    const judgment = tallyConstruct("judgment", t1Scores, scores);
+    const precomputedFactsBlock = buildPrecomputedFactsBlock(orientation, integration, judgment);
+    console.log(
+      "[counts] route=score-tier2 " +
+        JSON.stringify({
+          orientation: orientation.combined,
+          integration: integration.combined,
+          judgment: judgment.combined,
+        }),
+    );
+
+    // Build T1 context enriched the way the summary expects.
     const t1Context = t1Scores.map((s: any, i: number) => ({
       ...s,
       tier: 1,
@@ -142,67 +234,82 @@ export async function POST(request: Request) {
       user_response: t1Responses[t1Questions[i]?.id] || "",
     }));
 
-    // Build T2 metadata context the summary will merge with the model's own scores.
-    const t2Context = questions.map((q: any) => ({
-      question_id: q.id,
-      tier: 2,
-      question_angle: q.angle || "unknown",
-      dol_content_area: q.dol_content_area || "",
-      human_function_activated: q.human_function_activated || "",
-      scenario: q.scenario?.substring(0, 100) || "",
-      user_response: responses[q.id] || "",
-    }));
+    // Build T2 context merging the Tier 2 scores we just produced.
+    const t2Context = questions.map((q: any, i: number) => {
+      const s = scores[i] || {};
+      return {
+        ...s,
+        question_id: q.id,
+        tier: 2,
+        question_angle: q.angle || "unknown",
+        dol_content_area: q.dol_content_area || "",
+        human_function_activated: q.human_function_activated || "",
+        scenario: q.scenario?.substring(0, 100) || "",
+        user_response: responses[q.id] || "",
+      };
+    });
 
-    // Static prompt content goes in system (cached); dynamic run data in user message.
-    const cachedSystem =
-      SYSTEM_PROMPT +
-      "\n\n=== SUMMARY INSTRUCTIONS ===\n" +
+    // ====== Call 2: Performance Summary (counts injected) ======
+    const summarySystem =
+      `You are an AI-readiness assessment engine generating a performance summary across 10 scored responses (5 Tier 1 + 5 Tier 2).\n\n` +
+      `=== SUMMARY INSTRUCTIONS ===\n` +
       summaryPromptTemplate +
-      '\n\nRemember: return ONE JSON object with {"scores": [...Tier 2 scores...], "performanceSummary": {...per schema above...}}.';
+      `\n\nReturn a single JSON object matching the schema above.`;
 
-    const userPrompt =
-      `=== TIER 2 SCORING INPUT (score these 5) ===\n${questionsBlock}\n\n` +
-      `=== TIER 1 SCORED RESPONSES (already computed, use for the summary) ===\n${JSON.stringify(t1Context, null, 2)}\n\n` +
-      `=== TIER 2 METADATA (merge with your Task A scores for the summary) ===\n${JSON.stringify(t2Context, null, 2)}`;
+    const summaryUser =
+      precomputedFactsBlock +
+      `\n\n=== TIER 1 SCORED RESPONSES ===\n${JSON.stringify(t1Context, null, 2)}\n\n` +
+      `=== TIER 2 SCORED RESPONSES ===\n${JSON.stringify(t2Context, null, 2)}`;
 
-    const { signal, clear } = makeAbortController();
-    const tModel = Date.now();
-    let message: Awaited<ReturnType<typeof anthropic.messages.create>>;
+    const sumAbort = makeAbortController(110_000);
+    const tSum = Date.now();
+    let summaryMessage: Awaited<ReturnType<typeof anthropic.messages.create>>;
     try {
-      message = await anthropic.messages.create(
+      summaryMessage = await anthropic.messages.create(
         {
           model: "claude-sonnet-4-6",
-          max_tokens: 8192,
+          max_tokens: 4096,
           system: [
             {
               type: "text",
-              text: cachedSystem,
+              text: summarySystem,
               cache_control: { type: "ephemeral" },
             },
           ],
-          messages: [{ role: "user", content: userPrompt }],
+          messages: [{ role: "user", content: summaryUser }],
         },
-        { signal },
+        { signal: sumAbort.signal },
       );
     } finally {
-      clear();
+      sumAbort.clear();
     }
-    const modelElapsedMs = Date.now() - tModel;
+    const summaryElapsedMs = Date.now() - tSum;
 
-    const textContent = message.content.find((c) => c.type === "text");
-    if (!textContent || textContent.type !== "text") {
-      throw new Error("No text content in Claude response");
+    const summaryText = summaryMessage.content.find((c) => c.type === "text");
+    if (!summaryText || summaryText.type !== "text") {
+      throw new Error("No text content in summary response");
     }
-
-    const parsed = parseAIJson(textContent.text);
-    const scores = parsed.scores;
-    const performanceSummary = parsed.performanceSummary;
+    const summaryParsed = parseAIJson(summaryText.text);
+    const performanceSummary = summaryParsed.performanceSummary || summaryParsed;
 
     if (!scores || !performanceSummary) {
       throw new Error("Combined scoring response missing scores or performanceSummary");
     }
 
-    logApiTiming({ route: "score-tier2", startedAt, modelElapsedMs, usage: message.usage, extra: { mode: "score_plus_summary" } });
+    logApiTiming({
+      route: "score-tier2",
+      startedAt,
+      modelElapsedMs: scoreElapsedMs + summaryElapsedMs,
+      usage: {
+        input_tokens: (scoreMessage.usage?.input_tokens || 0) + (summaryMessage.usage?.input_tokens || 0),
+        output_tokens: (scoreMessage.usage?.output_tokens || 0) + (summaryMessage.usage?.output_tokens || 0),
+        cache_read_input_tokens:
+          (scoreMessage.usage?.cache_read_input_tokens || 0) + (summaryMessage.usage?.cache_read_input_tokens || 0),
+        cache_creation_input_tokens:
+          (scoreMessage.usage?.cache_creation_input_tokens || 0) + (summaryMessage.usage?.cache_creation_input_tokens || 0),
+      } as any,
+      extra: { mode: "score_plus_summary_split", score_ms: scoreElapsedMs, summary_ms: summaryElapsedMs },
+    });
 
     // Phase 1 (log-only): derive questioning_brief from performanceSummary
     // and log it alongside the source so we can eyeball the derivation
