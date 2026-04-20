@@ -2,7 +2,7 @@
 role_identifier: "cie499"
 role_label: "AI Fluency for Entry-Level Knowledge Work"
 role_description: "A recently hired entry-level professional at a mid-size company — a junior analyst, project coordinator, marketing assistant, or operations associate. The kind of role where you're researching, writing, organizing data, and preparing deliverables for your manager — with AI tools built into the everyday workflow and an expectation that you'll use them thoughtfully."
-version: "0.2.0"
+version: "0.3.0"
 ---
 
 # Job-Role-Profile: AI Fluency for Entry-Level Knowledge Work
@@ -88,7 +88,7 @@ This assessment should test across the full breadth of the DOL AI Literacy Frame
   "meta": {
     "tier": 1,
     "label": "Baseline Orientation",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "question_count": 5,
     "estimated_minutes": 10,
     "primary_construct": "orientation",
@@ -132,8 +132,8 @@ This assessment should test across the full breadth of the DOL AI Literacy Frame
       "rubric": {
         "orientation": {
           "emerging": "Does not yet distinguish between AI generating plausible-sounding content and actually retrieving verified facts. Treats the clean formatting and specific details as indicators that the summary is accurate and ready to share.",
-          "developing": "Has some sense that AI output should be checked but has not yet connected this to the specific risk that AI-generated facts — including named dates, events, and awards — can be fabricated even when they appear confident and specific. May say 'I'd double-check it' without articulating what that checking is for.",
-          "demonstrating": "Recognizes that AI-generated content can include specific-sounding details — dates, product launches, awards — that are plausible but unverified or fabricated, and that fluent, organized output does not signal accuracy. Understands that before sharing, each factual claim in the summary needs to be confirmed against a reliable source."
+          "developing": "Recognizes that AI-generated facts like dates, events, and awards may be wrong and should be checked, but frames this as a reliability quirk rather than articulating why AI specifically fabricates confident-sounding specifics — that AI generates plausible-continuation text rather than retrieving verified records, and specificity is a byproduct of fluent generation, not a signal of sourcing.",
+          "demonstrating": "Recognizes that AI fabricates specific-sounding details — dates, product launches, awards — *because* it generates plausible-continuation text rather than retrieving live or verified records, meaning specificity is produced by the same mechanism that produces the prose, not by a lookup step. Understands that fluent, organized output shares no causal connection with accuracy, and that before sharing, each factual claim needs independent verification against a reliable source."
         },
         "integration": {
           "emerging": "Does not yet describe any action they would take to verify or review the summary before passing it along.",
@@ -161,8 +161,8 @@ This assessment should test across the full breadth of the DOL AI Literacy Frame
       "rubric": {
         "orientation": {
           "emerging": "Does not yet recognize that AI-generated statistics may be approximations or composites rather than verifiable figures from a specific source, and treats 'similar to what I found' as sufficient confirmation. May interpret the AI's confident phrasing ('according to industry data') as evidence that the figures are sourced and accurate.",
-          "developing": "Recognizes that the numbers should be checked but has not yet articulated why 'similar but not identical' figures are a problem — does not yet connect this to the fact that AI statistics may not be traceable to any real source, even when they sound authoritative.",
-          "demonstrating": "Understands that AI-generated statistics can sound authoritative while being unverifiable — the AI may be producing plausible numbers that approximate real data without actually sourcing them. Recognizes that 'similar but not identical' means the AI figures are not confirmed, and that a report containing these numbers needs to cite an actual, traceable source."
+          "developing": "Recognizes that 'similar but not identical' figures are a problem and the numbers need checking, but frames it as uncertainty about which number is right rather than articulating why AI statistics behave this way in the first place — that AI is generating plausible numerical continuations rather than retrieving from a database, so its 'statistics' are not sourced at all and 'close to real' is coincidental, not confirmatory.",
+          "demonstrating": "Understands that AI statistics can sound authoritative while being unverifiable *because* the AI is producing plausible numerical text rather than querying a data source — meaning 'close to real' is a function of the training data's distribution, not evidence that any specific number is sourced. Recognizes that a traceable citation is not an optional polish on an AI number but a separate act of verification against a real source, because the AI's version has no source by construction."
         },
         "integration": {
           "emerging": "Does not yet describe a specific step for resolving the discrepancy between the AI's numbers and what they found in their own search.",
@@ -219,8 +219,8 @@ This assessment should test across the full breadth of the DOL AI Literacy Frame
       "rubric": {
         "orientation": {
           "emerging": "Does not yet connect the generic output to the generic prompt — treats the AI's output as fixed or as a reflection of what AI is capable of, rather than recognizing that the output was shaped by the information (or lack of it) the person provided.",
-          "developing": "Has some sense that giving AI more information would help, but has not yet articulated the underlying principle: that AI produces output based on what it's given, and that context — client name, meeting details, tone expectations — is the input that makes the output useful rather than generic.",
-          "demonstrating": "Recognizes that the generic output is a direct result of the generic prompt — the AI had no client name, no meeting time, and no sense of the team's communication style to work with. Understands that providing that context (who the email is for, what the meeting is about, what tone fits this client relationship) is what allows the AI to produce something actually usable."
+          "developing": "Understands that giving AI more information improves the output and can name some categories of information that would help, but frames it as 'AI works better with more detail' rather than articulating the underlying principle — that AI has no access to context outside the prompt and therefore produces a statistical average of the genre it was asked for when it isn't given anything specific to work from.",
+          "demonstrating": "Recognizes that the generic output is a direct result of the generic prompt *because* the AI has access only to what's in the prompt and will produce a statistical average of the requested genre when context isn't provided — meaning 'generic' is not a failure mode, it is the expected output for a context-free request. Understands that providing client name, meeting details, audience, and tone constraints is what gives the AI the specific inputs it needs to produce something targeted rather than average."
         },
         "integration": {
           "emerging": "Does not yet describe any change they would make to the prompt or the way they're interacting with the AI.",
@@ -289,7 +289,7 @@ This assessment should test across the full breadth of the DOL AI Literacy Frame
   "meta": {
     "tier": 2,
     "label": "Contextualized Integration",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "question_count": 5,
     "estimated_minutes": 12,
     "primary_construct": "integration",
@@ -421,8 +421,8 @@ This assessment should test across the full breadth of the DOL AI Literacy Frame
       "rubric": {
         "orientation": {
           "emerging": "Does not yet recognize that an AI-generated chart can look polished and credible while visualizing incorrect, incomplete, or misinterpreted data — treats the clean formatting and trend line as indicators that the chart is accurate and presentation-ready.",
-          "developing": "Has a sense that the chart should be checked but has not yet articulated what that checking involves — does not distinguish between verifying the visual design (axis labels, title) and verifying that the data the chart is drawing from is correct and complete for the four quarters in question.",
-          "demonstrating": "Recognizes that the chart's professional appearance does not confirm that the underlying data is correct — understands that AI chart-generation tools visualize whatever they're given, and that the verification question is whether the data feeding the chart accurately represents the team's actual KPI performance across all four quarters."
+          "developing": "Recognizes that the chart needs to be checked and may distinguish the visual design (axes, labels) from the underlying data, but frames this as 'I'd verify it' without articulating why AI-generated visualizations are specifically vulnerable to showing plausible-looking but wrong trends — that the AI has no model of what the data *should* show and will cleanly render whatever subset, mislabeling, or aggregation it happened to apply.",
+          "demonstrating": "Recognizes that the chart's professional appearance has no causal connection to data accuracy *because* the AI visualization tool renders whatever data it happened to use, without validating that it pulled the correct metric, the correct time periods, or complete records — meaning a chart can be both clean-looking and wrong, and the two are not in tension. Understands that the verification question is not whether the chart looks right but whether the underlying data selection, scope, and aggregation match what the chart is claiming to show."
         },
         "integration": {
           "emerging": "Does not yet describe a verification step before using the chart in the presentation — either proceeds with the chart as-is or says 'it looks good' without describing how they'd confirm it.",
