@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { parseAIJson } from "@/lib/parse-ai-json";
 import { logApiTiming } from "@/lib/api-timing";
+import { deriveQuestioningBrief } from "@/lib/questioning-brief";
 
 export const maxDuration = 120;
 
@@ -185,6 +186,18 @@ export async function POST(request: Request) {
     }
 
     logApiTiming({ route: "score-tier2", startedAt, modelElapsedMs, usage: message.usage, extra: { mode: "score_plus_summary" } });
+
+    // Phase 1 (log-only): derive questioning_brief from performanceSummary
+    // and log it alongside the source so we can eyeball the derivation
+    // against real runs. Not yet returned in the API response.
+    try {
+      const brief = deriveQuestioningBrief(performanceSummary);
+      console.log("[brief-draft] route=score-tier2 brief=" + JSON.stringify(brief));
+      console.log("[brief-source] route=score-tier2 summary=" + JSON.stringify(performanceSummary));
+    } catch (logErr) {
+      console.log("[brief-draft] route=score-tier2 error=" + (logErr as Error).message);
+    }
+
     return NextResponse.json({ scores, performanceSummary });
   } catch (e: any) {
     console.error("score-tier2 error:", e);
