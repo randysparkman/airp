@@ -479,6 +479,80 @@
       line-height: 1.6;
     }
 
+    /* ── OUTPUT USES ── */
+    .output-uses {
+      margin-top: 8px;
+      padding: 20px 22px;
+      background: var(--white);
+      border-radius: 6px;
+      border-left: 3px solid var(--mid);
+    }
+
+    .output-uses-heading {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .output-uses-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .output-uses-list li {
+      font-size: 0.83rem;
+      color: var(--muted);
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .output-uses-list li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+    }
+
+    /* ── WHAT THIS IS NOT ── */
+    .not-section {
+      background: var(--white);
+      border-top: 1px solid var(--mid);
+      padding: 48px 64px;
+      text-align: center;
+    }
+
+    .not-heading {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .not-list {
+      list-style: none;
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 32px;
+    }
+
+    .not-list li {
+      font-size: 0.83rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 860px) {
+      .not-section { padding: 40px 28px; }
+      .not-list { flex-direction: column; gap: 8px; align-items: center; }
+    }
+
     /* ── CTA ── */
     #contact {
       background: var(--white);
@@ -586,7 +660,7 @@
       <div class="opp-card">
         <h3>For the Organization</h3>
         <p>Your people may be further along than you think — or they may need development you haven't targeted. You're making AI investments without a clear view of the readiness you already have.</p>
-        <p class="opp-hook">Use this assessment to work smarter.</p>
+        <p class="opp-hook">Use this assessment to identify training needs, support hiring conversations, and inform AI policy rollout.</p>
       </div>
       <div class="opp-card">
         <h3>For the Workforce Developer</h3>
@@ -604,6 +678,7 @@
       <div>
         <h2 class="section-heading">A readiness assessment that produces a profile, not just a score.</h2>
         <p class="section-body">The WorkPath Assessment places you inside realistic workplace situations and reveals how you think. There are no right answers and no trick questions. The result is a personalized written profile — not a pass/fail grade, but a clear picture of where you are now and what your next growth could look like.</p>
+        <p class="section-body" style="margin-top: 16px;">It is a practical diagnostic and conversation tool for understanding workplace AI readiness.</p>
       </div>
       <div class="what-beats">
         <div class="beat">
@@ -766,7 +841,28 @@
           <span>One concrete, specific habit or action you can take immediately to advance your readiness.</span>
         </div>
       </div>
+      <div class="output-uses">
+        <p class="output-uses-heading">How organizations use it</p>
+        <ul class="output-uses-list">
+          <li>Hiring screen support</li>
+          <li>Training needs identification</li>
+          <li>AI policy rollout readiness</li>
+          <li>Cohort benchmarking</li>
+          <li>Baseline / endpoint comparison for classes or programs</li>
+        </ul>
+      </div>
     </div>
+  </section>
+
+  <!-- WHAT THIS IS NOT -->
+  <section id="not" class="not-section">
+    <p class="not-heading">What this is not</p>
+    <ul class="not-list">
+      <li>Not a personality test</li>
+      <li>Not a psychometric evaluation</li>
+      <li>Not a certification</li>
+      <li>Not a substitute for direct observation or job performance</li>
+    </ul>
   </section>
 
   <!-- CTA -->
