@@ -18,11 +18,11 @@ const stepMessages: Record<string, string> = {
 };
 
 const stepTimingMessages: Record<string, string> = {
-  scoring_t1: "This takes about 10 seconds.",
-  scoring_t2: "This takes about 1.5–2.5 minutes. We're scoring your responses and designing adaptive questions tailored to you.",
-  generating_t3: "This takes about 1.5–2.5 minutes. We're scoring your responses and designing adaptive questions tailored to you.",
-  scoring_t3: "This takes about 30–60 seconds. We're scoring your final responses.",
-  generating_profile: "This takes about 1–2 minutes. We're synthesizing your readiness profile — this is the deepest part of the analysis.",
+  scoring_t1: "This takes about 20 seconds.",
+  scoring_t2: "This takes about 1 to 1.5 minutes. We're scoring your responses and designing adaptive questions tailored to you.",
+  generating_t3: "This takes about 1 to 1.5 minutes. We're scoring your responses and designing adaptive questions tailored to you.",
+  scoring_t3: "This takes about 30 seconds. We're scoring your final responses.",
+  generating_profile: "This takes about 1 minute. We're synthesizing your readiness profile — this is the deepest part of the analysis.",
   done: "Wrapping up…",
 };
 
