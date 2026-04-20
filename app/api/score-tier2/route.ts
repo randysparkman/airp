@@ -106,7 +106,13 @@ export async function POST(request: Request) {
           {
             model: "claude-sonnet-4-6",
             max_tokens: 4096,
-            system: `You are scoring 5 responses to an AI-readiness assessment. For each question assign orientation_level, integration_level, and judgment_level (each one of emerging/developing/demonstrating) and 2-3 sentences of evidence_notes. Be calibrated. Return JSON: {"scores": [5 objects with question_id, orientation_level, integration_level, judgment_level, evidence_notes]}.`,
+            system: [
+              {
+                type: "text",
+                text: `You are scoring 5 responses to an AI-readiness assessment. For each question assign orientation_level, integration_level, and judgment_level (each one of emerging/developing/demonstrating) and 2-3 sentences of evidence_notes. Be calibrated. Return JSON: {"scores": [5 objects with question_id, orientation_level, integration_level, judgment_level, evidence_notes]}.`,
+                cache_control: { type: "ephemeral" },
+              },
+            ],
             messages: [{ role: "user", content: questionsBlock }],
           },
           { signal },
@@ -147,12 +153,17 @@ export async function POST(request: Request) {
       user_response: responses[q.id] || "",
     }));
 
+    // Static prompt content goes in system (cached); dynamic run data in user message.
+    const cachedSystem =
+      SYSTEM_PROMPT +
+      "\n\n=== SUMMARY INSTRUCTIONS ===\n" +
+      summaryPromptTemplate +
+      '\n\nRemember: return ONE JSON object with {"scores": [...Tier 2 scores...], "performanceSummary": {...per schema above...}}.';
+
     const userPrompt =
       `=== TIER 2 SCORING INPUT (score these 5) ===\n${questionsBlock}\n\n` +
       `=== TIER 1 SCORED RESPONSES (already computed, use for the summary) ===\n${JSON.stringify(t1Context, null, 2)}\n\n` +
-      `=== TIER 2 METADATA (merge with your Task A scores for the summary) ===\n${JSON.stringify(t2Context, null, 2)}\n\n` +
-      `=== SUMMARY INSTRUCTIONS ===\n${summaryPromptTemplate}\n\n` +
-      `Remember: return ONE JSON object with {"scores": [...Tier 2 scores...], "performanceSummary": {...per schema above...}}.`;
+      `=== TIER 2 METADATA (merge with your Task A scores for the summary) ===\n${JSON.stringify(t2Context, null, 2)}`;
 
     const { signal, clear } = makeAbortController();
     const tModel = Date.now();
@@ -162,7 +173,13 @@ export async function POST(request: Request) {
         {
           model: "claude-sonnet-4-6",
           max_tokens: 8192,
-          system: SYSTEM_PROMPT,
+          system: [
+            {
+              type: "text",
+              text: cachedSystem,
+              cache_control: { type: "ephemeral" },
+            },
+          ],
           messages: [{ role: "user", content: userPrompt }],
         },
         { signal },
