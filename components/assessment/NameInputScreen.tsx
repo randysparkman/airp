@@ -150,8 +150,7 @@ export function NameInputScreen({ userName, onNameChange, onContinue, onBack }: 
         </FadeIn>
       )}
       <FadeIn delay={500}>
-        <div className="flex justify-between items-center">
-          <NavButton label="← Back" onClick={onBack} />
+        <div className="flex justify-end items-center">
           <NavButton label="Continue →" onClick={handleContinue} primary />
         </div>
       </FadeIn>
