@@ -2,7 +2,7 @@
 role_identifier: "medical-billing"
 role_label: "Medical Billing Specialist"
 role_description: "An insurance billing clerk at a 10-physician multi-specialty medical practice. The role handles claim submission, denial management, prior authorizations, coordination of benefits, and patient billing inquiries — with AI tools increasingly part of the workflow."
-version: "0.4.0"
+version: "0.4.1"
 ---
 
 # Job-Role-Profile: Medical Billing Specialist
@@ -82,7 +82,7 @@ When we assess a billing clerk candidate, we want to understand: Can this person
   "meta": {
     "tier": 1,
     "label": "Baseline Orientation",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "question_count": 5,
     "estimated_minutes": 10,
     "primary_construct": "orientation",
@@ -213,8 +213,8 @@ When we assess a billing clerk candidate, we want to understand: Can this person
       "rubric": {
         "orientation": {
           "emerging": "Does not yet connect the generic output to what was (or wasn't) provided as input. Treats the poor letter as a failure of the AI tool itself rather than a consequence of what was asked — has not yet developed a mental model of how context and specificity in a prompt shape what the AI can produce.",
-          "developing": "Recognizes that the letter needs to be more specific but attributes this to needing to edit the output rather than understanding that providing the patient's clinical details upfront would have shaped the draft differently.",
-          "demonstrating": "Understands that AI generates from what it's given — a prompt without the patient's diagnosis, documented findings, and the specific reason for the visit will produce a letter that argues in the abstract. Recognizes that feeding in the relevant clinical context — what was documented, why the visit was indicated — is what enables the AI to produce a draft that's actually useful as a starting point for this specific appeal."
+          "developing": "Recognizes that the letter needs to be more specific and that adding detail would help, but frames it as editing the output or 'giving the AI more to work with' rather than articulating the underlying principle: that the AI has no access to the patient's chart, the documented findings, or the payer's specific denial reasoning, and when asked to draft a medical necessity appeal without those inputs, it produces a statistical average of appeal-letter language because that is the only material it had.",
+          "demonstrating": "Recognizes that the generic, in-the-abstract letter is the expected output for a context-free appeal request, because the AI has access only to what's in the prompt and will produce a statistical average of the requested genre — 'medical necessity appeal' — when no patient-specific clinical details are supplied. Understands that the specific diagnosis, documented findings, and the payer's stated denial reason are not polish on top of an AI draft; they are the inputs that make the draft possible to produce as something other than boilerplate. Providing them upfront is what distinguishes an appeal letter that argues this patient's case from one that argues appeals in general."
         },
         "integration": {
           "emerging": "Does not yet describe what they would change about how they approached the task — either accepts the generic draft or asks the AI to 'make it better' without specifying what to add.",
@@ -283,7 +283,7 @@ When we assess a billing clerk candidate, we want to understand: Can this person
   "meta": {
     "tier": 2,
     "label": "Contextualized Integration",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "question_count": 5,
     "estimated_minutes": 12,
     "primary_construct": "integration",
