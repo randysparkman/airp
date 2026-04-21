@@ -13,7 +13,7 @@ The repo at `github.com/randysparkman/workpath` is the single source of truth fo
 
 Claude Chat does not mirror these files. Project knowledge is not a reflection of the repo.
 
-When Claude Chat needs a file that lives in the repo, Randy pulls it from the repo and uploads it to the conversation. When Claude Chat modifies a file, output goes back as a changelog for Claude Code to apply in the repo. Claude Code is the sole writer to the repo. This makes staleness structurally impossible: there is one canonical source, one writer, and one direction of flow for edits.
+When Claude Chat needs a file that lives in the repo, Randy pulls it from the repo and uploads it to the conversation. When Claude Chat modifies a file, output goes back as a changelog with precise edit instructions for Claude Code to apply — not as a replacement file. Claude Code is the sole writer to the repo. This makes staleness structurally impossible: there is one canonical source, one writer, and one direction of flow for edits.
 
 **What Claude Chat project knowledge retains:** documentation snapshots that have no repo analog or are labeled as point-in-time references — specifically:
 
@@ -25,6 +25,8 @@ When Claude Chat needs a file that lives in the repo, Randy pulls it from the re
 These are treated as reference material, not canonical source. When uncertainty arises about current state, pull from the repo rather than trust project knowledge.
 
 **What this means for session start:** Any session involving active work on profiles, prompts, personas, CLAUDE.md, BACKLOG.md, or any other repo-resident file begins with Randy pulling the relevant file(s) from the repo. Typical sessions start with a pull of CLAUDE.md and BACKLOG.md so Claude Chat has operational ground truth.
+
+**Changelog format, not file output.** When Claude Chat works on a repo-resident file, the handoff to Claude Code is a changelog describing the edits — not the modified file itself. Chat produces precise instructions (section headers, insertion points, replacement text); Claude Code reads the current file from the repo and applies the edits as targeted changes. This eliminates the zip-upload step, keeps Claude Code as the sole file author, and makes any drift or conflict visible at apply-time rather than silently overwritten. A changelog instruction that can't be applied cleanly is a signal that the file has diverged — surface it, don't paper over it.
 
 **Candidate future optimization:** a small script Claude Code can run on demand to generate a "session briefing" bundle — CLAUDE.md, BACKLOG.md, plus a requested subset of other files — zipped for single-upload bootstrap. Not worth building now; worth keeping in backlog.
 
