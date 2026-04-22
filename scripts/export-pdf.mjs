@@ -218,13 +218,15 @@ function drawHeaderBlock(showBadge = false) {
   doc.text('Structured scenario assessment with evidence-based placement', MARGIN_X, y);
   y += 8;
 
+  // Gold accent divider — stops short of badge area
   const goldRuleY = y;
   doc.setDrawColor(...GOLD);
   doc.setLineWidth(2);
-  doc.line(MARGIN_X, y, PAGE_W - MARGIN_X, y);
+  doc.line(MARGIN_X, y, showBadge ? BADGE_X - 4 : PAGE_W - MARGIN_X, y);
   y += 8;
 
-  if (showBadge) drawVerificationBadge(BADGE_X, goldRuleY - 2.4, BADGE_W);
+  // Badge PNG placeholder — insert doc.addImage(...) here once PNG is ready
+  // Position: (BADGE_X, goldRuleY - 2.4), size: (BADGE_W, <badge_height>)
 
   const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   if (name.trim()) drawMetaRow('Prepared for', name.trim());
