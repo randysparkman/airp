@@ -28,6 +28,7 @@ function hexToRgb(hex: string): [number, number, number] {
 // ── Brand colors ──
 
 const NAVY = hexToRgb("#14213d");
+const BADGE_NAVY = hexToRgb("#0C2D48");
 const GREEN = hexToRgb("#1b4332");
 const GOLD = hexToRgb("#c9a227");
 const TEXT_MAIN: [number, number, number] = [42, 42, 42];
@@ -117,8 +118,59 @@ export function downloadProfilePdf(
     }
   }
 
+  // ── Verification badge ──
+  function drawVerificationBadge(bx: number, by: number, bw: number) {
+    const STRIP_H = 9;
+    const LINE_H = 4.3;
+    const BODY_LINES = [
+      "Structured Scenario Assessment",
+      "Role-Specific Rubric",
+      "15 Scored Scenarios",
+    ];
+    const TOTAL_H = STRIP_H + 4 + BODY_LINES.length * LINE_H + 3 + 4 + 4;
+
+    doc.setFillColor(...BG_WARM);
+    doc.setDrawColor(216, 212, 206);
+    doc.setLineWidth(0.4);
+    doc.rect(bx, by, bw, TOTAL_H, "FD");
+
+    doc.setFillColor(...BADGE_NAVY);
+    doc.rect(bx, by, bw, STRIP_H, "F");
+
+    doc.setFontSize(6.5);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.text("WORKPATH VERIFIED", bx + bw / 2, by + 6.2, { align: "center" });
+
+    let ly = by + STRIP_H + 4 + 3;
+    doc.setFontSize(7.5);
+    doc.setTextColor(...TEXT_MAIN);
+    doc.setFont("helvetica", "normal");
+    for (const line of BODY_LINES) {
+      doc.text(line, bx + 4, ly);
+      ly += LINE_H;
+    }
+
+    doc.setDrawColor(210, 206, 200);
+    doc.setLineWidth(0.3);
+    doc.line(bx + 4, ly + 1, bx + bw - 4, ly + 1);
+
+    doc.setFontSize(7);
+    doc.setTextColor(...TEXT_MUTED);
+    doc.setFont("helvetica", "normal");
+    doc.text("Assessment v1.4", bx + 4, ly + 5);
+  }
+
   // ── Header block (reusable for appendix) ──
-  function drawHeaderBlock() {
+  function drawHeaderBlock(showBadge = false) {
+    const BADGE_W = 56;
+    const BADGE_X = PAGE_W - MARGIN_X - BADGE_W;
+    const headerStartY = y;
+
+    if (showBadge) {
+      drawVerificationBadge(BADGE_X, headerStartY, BADGE_W);
+    }
+
     // Title
     doc.setFontSize(18);
     doc.setTextColor(...TEXT_MAIN);
@@ -126,16 +178,12 @@ export function downloadProfilePdf(
     doc.text("AI Readiness Profile", MARGIN_X, y);
     y += 7;
 
-    // Role label
-    if (orgName) {
-      doc.setFontSize(10);
-      doc.setTextColor(...TEXT_MUTED);
-      doc.setFont("helvetica", "normal");
-      doc.text(orgName, MARGIN_X, y);
-      y += 8;
-    } else {
-      y += 4;
-    }
+    // Subtitle
+    doc.setFontSize(9);
+    doc.setTextColor(...TEXT_MUTED);
+    doc.setFont("helvetica", "normal");
+    doc.text("Structured scenario assessment with evidence-based placement", MARGIN_X, y);
+    y += 8;
 
     // Gold accent divider
     doc.setDrawColor(...GOLD);
@@ -158,7 +206,16 @@ export function downloadProfilePdf(
     // Placement scale
     drawPlacementRow(profile.band);
 
-    y += 4;
+    // Placement note
+    doc.setFontSize(7.5);
+    doc.setTextColor(...TEXT_MUTED);
+    doc.setFont("helvetica", "normal");
+    const noteLines = doc.splitTextToSize(
+      "Placement reflects demonstrated performance across scored scenarios, not self-report.",
+      showBadge ? BADGE_X - MARGIN_X - 6 : CONTENT_W
+    );
+    doc.text(noteLines, MARGIN_X, y);
+    y += noteLines.length * 3.8 + 4;
 
     // Thin divider
     doc.setDrawColor(...DIVIDER);
@@ -295,7 +352,7 @@ export function downloadProfilePdf(
   // ════════════════════════════════════════════
   // PAGE 1 — HEADER
   // ════════════════════════════════════════════
-  drawHeaderBlock();
+  drawHeaderBlock(true);
 
   // ── Summary (tight to header) ──
   doc.setFontSize(13);
