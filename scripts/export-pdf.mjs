@@ -136,53 +136,70 @@ function drawPlacementRow(activeBand) {
 
 function drawVerificationBadge(bx, by, bw) {
   const CAP_H = 1.8;
-  const LINE_H = 5.2;
+  const PAD_X = 4.5;
+  const PAD_TOP = 5.5;
+
+  const TITLE_SIZE = 7.5;
+  const BODY_SIZE = 8.5;
+  const META_SIZE = 7.5;
+
+  const TITLE_TO_BODY_GAP = 3.5;
+  const LINE_H = 5.6;
+  const BEFORE_DIVIDER_GAP = 4.8;
+  const AFTER_DIVIDER_GAP = 3.5;
+  const BOTTOM_PAD = 4.0;
+
   const BODY_LINES = [
     'Structured Scenario Assessment',
     'Role-Specific Rubric',
     '15 Scored Scenarios',
   ];
-  const TOTAL_H = CAP_H + 5 + 3 + 4 + BODY_LINES.length * LINE_H + 4.5 + 0.3 + 4 + 3 + 4;
 
-  // Background + border
+  const TOTAL_H =
+    CAP_H +
+    PAD_TOP +
+    3 +
+    TITLE_TO_BODY_GAP +
+    BODY_LINES.length * LINE_H +
+    BEFORE_DIVIDER_GAP +
+    0.3 +
+    AFTER_DIVIDER_GAP +
+    3 +
+    BOTTOM_PAD;
+
   doc.setFillColor(...BG_WARM);
   doc.setDrawColor(217, 212, 204);
   doc.setLineWidth(0.4);
   doc.rect(bx, by, bw, TOTAL_H, 'FD');
 
-  // Thin navy cap
   doc.setFillColor(...BADGE_NAVY);
   doc.rect(bx, by, bw, CAP_H, 'F');
 
-  // "WORKPATH VERIFIED" — navy text below cap
-  let ly = by + CAP_H + 5 + 3;
-  doc.setFontSize(7.5);
+  let ly = by + CAP_H + PAD_TOP + 3;
+  doc.setFontSize(TITLE_SIZE);
   doc.setTextColor(...BADGE_NAVY);
   doc.setFont('helvetica', 'bold');
-  doc.text('WORKPATH VERIFIED', bx + 4.5, ly);
-  ly += 4;
+  doc.text('WORKPATH VERIFIED', bx + PAD_X, ly);
+  ly += TITLE_TO_BODY_GAP;
 
-  // Body lines
-  doc.setFontSize(8.5);
+  doc.setFontSize(BODY_SIZE);
   doc.setTextColor(...TEXT_MAIN);
   doc.setFont('helvetica', 'normal');
   for (const line of BODY_LINES) {
-    doc.text(line, bx + 4.5, ly);
+    doc.text(line, bx + PAD_X, ly);
     ly += LINE_H;
   }
 
-  // Divider
-  ly += 4.5;
+  ly += BEFORE_DIVIDER_GAP;
   doc.setDrawColor(217, 212, 204);
   doc.setLineWidth(0.3);
-  doc.line(bx + 4.5, ly, bx + bw - 4.5, ly);
-  ly += 4;
+  doc.line(bx + PAD_X, ly, bx + bw - PAD_X, ly);
+  ly += AFTER_DIVIDER_GAP;
 
-  // Version
-  doc.setFontSize(7.5);
+  doc.setFontSize(META_SIZE);
   doc.setTextColor(...TEXT_MUTED);
   doc.setFont('helvetica', 'normal');
-  doc.text('Assessment v1.4', bx + 4.5, ly);
+  doc.text('Assessment v1.4', bx + PAD_X, ly);
 }
 
 function drawHeaderBlock(showBadge = false) {
