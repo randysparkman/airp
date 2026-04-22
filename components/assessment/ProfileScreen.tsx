@@ -386,7 +386,7 @@ export function ProfileScreen({
               )}
             </button>
           </div>
-          {audioState === "done" ? (
+          {audioBlobUrlRef.current ? (
             <button
               onClick={handleDownloadMp3}
               className="mt-2.5 text-[0.78rem] text-primary underline underline-offset-2 cursor-pointer bg-transparent border-none"
@@ -399,8 +399,12 @@ export function ProfileScreen({
             </p>
           )}
           <button
-            onClick={onReset}
-            className="mt-6 py-2.5 px-6 bg-transparent text-muted-foreground border border-border-light rounded-lg font-sans text-[0.82rem] cursor-pointer transition-colors duration-200 hover:text-foreground hover:border-border active:scale-[0.97]"
+            onClick={() => {
+              if (window.confirm("Start a new assessment? Your current profile will close — download the PDF or MP3 first if you want to keep them.")) {
+                onReset();
+              }
+            }}
+            className="mt-6 ml-3 py-2.5 px-6 bg-transparent text-muted-foreground border border-border-light rounded-lg font-sans text-[0.82rem] cursor-pointer transition-colors duration-200 hover:text-green hover:border-green active:scale-[0.97]"
           >
             Start New Assessment
           </button>
