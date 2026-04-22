@@ -135,30 +135,35 @@ function drawPlacementRow(activeBand) {
 }
 
 function drawVerificationBadge(bx, by, bw) {
-  const STRIP_H = 9;
-  const LINE_H = 4.3;
+  const CAP_H = 1.8;
+  const LINE_H = 4.5;
   const BODY_LINES = [
     'Structured Scenario Assessment',
     'Role-Specific Rubric',
     '15 Scored Scenarios',
   ];
-  const TOTAL_H = STRIP_H + 4 + BODY_LINES.length * LINE_H + 3 + 4 + 4;
+  const TOTAL_H = CAP_H + 4.5 + 3 + 3.5 + BODY_LINES.length * LINE_H + 3 + 0.3 + 3.5 + 3 + 3.5;
 
+  // Background + border
   doc.setFillColor(...BG_WARM);
-  doc.setDrawColor(216, 212, 206);
+  doc.setDrawColor(217, 212, 204);
   doc.setLineWidth(0.4);
   doc.rect(bx, by, bw, TOTAL_H, 'FD');
 
+  // Thin navy cap
   doc.setFillColor(...BADGE_NAVY);
-  doc.rect(bx, by, bw, STRIP_H, 'F');
+  doc.rect(bx, by, bw, CAP_H, 'F');
 
-  doc.setFontSize(6.5);
-  doc.setTextColor(255, 255, 255);
-  doc.setFont('helvetica', 'bold');
-  doc.text('WORKPATH VERIFIED', bx + bw / 2, by + 6.2, { align: 'center' });
-
-  let ly = by + STRIP_H + 4 + 3;
+  // "WORKPATH VERIFIED" — navy text in body, below cap
+  let ly = by + CAP_H + 4.5 + 3;
   doc.setFontSize(7.5);
+  doc.setTextColor(...BADGE_NAVY);
+  doc.setFont('helvetica', 'bold');
+  doc.text('WORKPATH VERIFIED', bx + 4, ly);
+  ly += 3.5;
+
+  // Body lines
+  doc.setFontSize(8);
   doc.setTextColor(...TEXT_MAIN);
   doc.setFont('helvetica', 'normal');
   for (const line of BODY_LINES) {
@@ -166,22 +171,23 @@ function drawVerificationBadge(bx, by, bw) {
     ly += LINE_H;
   }
 
-  doc.setDrawColor(210, 206, 200);
+  // Divider
+  ly += 3;
+  doc.setDrawColor(217, 212, 204);
   doc.setLineWidth(0.3);
-  doc.line(bx + 4, ly + 1, bx + bw - 4, ly + 1);
+  doc.line(bx + 4, ly, bx + bw - 4, ly);
+  ly += 3.5;
 
+  // Version
   doc.setFontSize(7);
   doc.setTextColor(...TEXT_MUTED);
   doc.setFont('helvetica', 'normal');
-  doc.text('Assessment v1.4', bx + 4, ly + 5);
+  doc.text('Assessment v1.4', bx + 4, ly);
 }
 
 function drawHeaderBlock(showBadge = false) {
   const BADGE_W = 56;
   const BADGE_X = PAGE_W - MARGIN_X - BADGE_W;
-  const headerStartY = y;
-
-  if (showBadge) drawVerificationBadge(BADGE_X, headerStartY, BADGE_W);
 
   doc.setFontSize(18);
   doc.setTextColor(...TEXT_MAIN);
@@ -195,10 +201,14 @@ function drawHeaderBlock(showBadge = false) {
   doc.text('Structured scenario assessment with evidence-based placement', MARGIN_X, y);
   y += 8;
 
+  const goldRuleY = y;
   doc.setDrawColor(...GOLD);
   doc.setLineWidth(2);
   doc.line(MARGIN_X, y, PAGE_W - MARGIN_X, y);
   y += 8;
+
+  // Badge anchored so its thin cap aligns with the gold rule
+  if (showBadge) drawVerificationBadge(BADGE_X, goldRuleY - 1, BADGE_W);
 
   const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   if (name.trim()) drawMetaRow('Prepared for', name.trim());
