@@ -56,6 +56,7 @@ Steps 1, 3 (structural), and 4 (score-tier2) are landed. Remaining latency lever
 - [ ] Reduce inferred thinking — profile attributes reasoning to the respondent that wasn't explicitly stated; stay closer to what they actually said. _Partially addressed by Ticket 3 (commit `6442717` — doing_well first item must open with respondent-specific observation, not template). Broader prompt pass still warranted._
 - [ ] Build 3–4 new job-role profiles (TBD which roles)
 - [ ] Update `lib/prompts/generate-profile-prompt.ts` — align profile generation language with WorkPath brand voice (see `public/brochure.html` as reference)
+- [ ] Assessment badge version number — baseline the version shown on the "WORKPATH VERIFIED" badge (PDF page 1) and get it config-managed. Today it's baked into the PNG / render code; needs a single source of truth so future rubric or prompt revisions can bump it deliberately.
 
 ## Calibration & Scoring
 
@@ -79,11 +80,6 @@ Recent shipped work (Jasmine post-rubric-retune audit, 2026-04-20):
 - [ ] Compare against limit — if at capacity, show "assessment unavailable" screen instead of welcome
 - [ ] Build as a server-side API route (e.g. `/api/check-capacity`) — uses `SUPABASE_SERVICE_ROLE_KEY` (not public) to read count, keeps anon key insert-only
 - [ ] Add `SUPABASE_SERVICE_ROLE_KEY` to Vercel env vars (find in Supabase → Settings → API → Service role key)
-
-## Wait Screen UX
-
-- [ ] **Phase 1 — Informational cards on `analyzing_t2t3`:** Show two phases while Tier 3 questions generate: (1) brief explanation that T3 questions are personalized based on their answers, (2) cards describing the three assessment tiers (Orientation, Integration, Judgment). Progress bar underneath runs on a time-based estimate (not wired to actual API progress). Copy must follow brand language conventions in CLAUDE.md.
-- [ ] **Phase 2 (future) — Streaming progress:** Convert `generate-tier3/route.ts` to a streaming response and consume it on the client to drive a real progress signal. Defer until performance is otherwise optimized — wiring is non-trivial and the problem may be solved at the infrastructure level first.
 
 ## Framework
 
