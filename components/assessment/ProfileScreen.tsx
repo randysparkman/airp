@@ -147,13 +147,23 @@ export function ProfileScreen({
   assessmentResponses = [],
 }: ProfileScreenProps) {
   const p = profile;
-  const [audioState, setAudioState] = useState<"idle" | "loading" | "playing" | "error">("idle");
+  const [audioState, setAudioState] = useState<"idle" | "loading" | "playing" | "done" | "error">("idle");
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioBlobUrlRef = useRef<string | null>(null);
 
-  async function handleListenSummary() {
+  async function handleAudioButton() {
     if (audioState === "playing") {
       audioRef.current?.pause();
-      setAudioState("idle");
+      setAudioState("done");
+      return;
+    }
+    if (audioState === "done" && audioBlobUrlRef.current) {
+      // replay from cached blob
+      const audio = new Audio(audioBlobUrlRef.current);
+      audioRef.current = audio;
+      audio.onended = () => setAudioState("done");
+      audio.play();
+      setAudioState("playing");
       return;
     }
     setAudioState("loading");
@@ -166,15 +176,24 @@ export function ProfileScreen({
       if (!res.ok) throw new Error("audio generation failed");
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
+      audioBlobUrlRef.current = url;
       const audio = new Audio(url);
       audioRef.current = audio;
-      audio.onended = () => setAudioState("idle");
+      audio.onended = () => setAudioState("done");
       audio.play();
       setAudioState("playing");
     } catch {
       setAudioState("error");
       setTimeout(() => setAudioState("idle"), 3000);
     }
+  }
+
+  function handleDownloadMp3() {
+    if (!audioBlobUrlRef.current) return;
+    const a = document.createElement("a");
+    a.href = audioBlobUrlRef.current;
+    a.download = "ai-readiness-summary.mp3";
+    a.click();
   }
 
   const firstName = userName.trim().split(/\s+/)[0];
@@ -321,11 +340,19 @@ export function ProfileScreen({
               Download PDF
             </button>
             <button
-              onClick={handleListenSummary}
+              onClick={handleAudioButton}
               disabled={audioState === "loading" || audioState === "error"}
               className="py-3 px-7 bg-transparent text-primary border-[1.5px] border-primary rounded-lg font-sans text-[0.88rem] font-medium cursor-pointer tracking-[0.02em] transition-all duration-250 ease-out inline-flex items-center gap-2 hover:bg-primary hover:text-primary-foreground active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {audioState === "error" ? (
+              {audioState === "done" ? (
+                <>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                  </svg>
+                  Play Again
+                </>
+              ) : audioState === "error" ? (
                 <>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
@@ -359,9 +386,18 @@ export function ProfileScreen({
               )}
             </button>
           </div>
-          <p className="text-[0.78rem] text-muted-foreground mt-2.5">
-            Download a formatted PDF · or hear your summary read aloud
-          </p>
+          {audioState === "done" ? (
+            <button
+              onClick={handleDownloadMp3}
+              className="mt-2.5 text-[0.78rem] text-primary underline underline-offset-2 cursor-pointer bg-transparent border-none"
+            >
+              Download MP3
+            </button>
+          ) : (
+            <p className="text-[0.78rem] text-muted-foreground mt-2.5">
+              Download a formatted PDF · or hear your summary read aloud
+            </p>
+          )}
           <button
             onClick={onReset}
             className="mt-6 py-2.5 px-6 bg-transparent text-muted-foreground border border-border-light rounded-lg font-sans text-[0.82rem] cursor-pointer transition-colors duration-200 hover:text-foreground hover:border-border active:scale-[0.97]"
