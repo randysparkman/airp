@@ -147,7 +147,7 @@ export function ProfileScreen({
   assessmentResponses = [],
 }: ProfileScreenProps) {
   const p = profile;
-  const [audioState, setAudioState] = useState<"idle" | "loading" | "playing">("idle");
+  const [audioState, setAudioState] = useState<"idle" | "loading" | "playing" | "error">("idle");
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   async function handleListenSummary() {
@@ -172,7 +172,8 @@ export function ProfileScreen({
       audio.play();
       setAudioState("playing");
     } catch {
-      setAudioState("idle");
+      setAudioState("error");
+      setTimeout(() => setAudioState("idle"), 3000);
     }
   }
 
@@ -321,10 +322,17 @@ export function ProfileScreen({
             </button>
             <button
               onClick={handleListenSummary}
-              disabled={audioState === "loading"}
+              disabled={audioState === "loading" || audioState === "error"}
               className="py-3 px-7 bg-transparent text-primary border-[1.5px] border-primary rounded-lg font-sans text-[0.88rem] font-medium cursor-pointer tracking-[0.02em] transition-all duration-250 ease-out inline-flex items-center gap-2 hover:bg-primary hover:text-primary-foreground active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {audioState === "loading" ? (
+              {audioState === "error" ? (
+                <>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  Audio unavailable
+                </>
+              ) : audioState === "loading" ? (
                 <>
                   <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 12a9 9 0 1 1-6.219-8.56" />
