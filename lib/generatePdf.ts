@@ -227,8 +227,8 @@ export async function downloadProfilePdf(
     y += 8;
 
     if (showBadge && badgeDataUrl) {
-      const badgeH = BADGE_W / 1.382;
-      doc.addImage(badgeDataUrl, "PNG", BADGE_X, goldRuleY - 2.4, BADGE_W, badgeH);
+      const badgeH = BADGE_W / 1.404;
+      doc.addImage(badgeDataUrl, "PNG", BADGE_X, goldRuleY - 4, BADGE_W, badgeH);
     }
 
     // Metadata rows
