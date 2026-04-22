@@ -22,6 +22,11 @@ if (!inputFile) {
 }
 
 const data    = JSON.parse(fs.readFileSync(path.resolve(inputFile), 'utf8'));
+
+const BADGE_PNG = path.join(ROOT, 'public', 'workpath_verified_badge.png');
+const badgeImageData = fs.existsSync(BADGE_PNG)
+  ? 'data:image/png;base64,' + fs.readFileSync(BADGE_PNG).toString('base64')
+  : null;
 const profile = data.profile;
 const name    = data.meta?.persona ?? '';
 const org     = '';
@@ -225,8 +230,10 @@ function drawHeaderBlock(showBadge = false) {
   doc.line(MARGIN_X, y, showBadge ? BADGE_X - 4 : PAGE_W - MARGIN_X, y);
   y += 8;
 
-  // Badge PNG placeholder — insert doc.addImage(...) here once PNG is ready
-  // Position: (BADGE_X, goldRuleY - 2.4), size: (BADGE_W, <badge_height>)
+  if (showBadge && badgeImageData) {
+    const badgeH = BADGE_W / 1.382;
+    doc.addImage(badgeImageData, 'PNG', BADGE_X, goldRuleY - 2.4, BADGE_W, badgeH);
+  }
 
   const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   if (name.trim()) drawMetaRow('Prepared for', name.trim());

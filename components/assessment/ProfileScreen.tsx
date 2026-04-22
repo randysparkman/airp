@@ -332,7 +332,7 @@ export function ProfileScreen({
           <div className="flex items-center justify-center gap-3 flex-wrap">
             <button
               onClick={() =>
-                downloadProfilePdf(p, userName, orgName, assessmentResponses)
+                void downloadProfilePdf(p, userName, orgName, assessmentResponses)
               }
               className="py-3 px-7 bg-transparent text-primary border-[1.5px] border-primary rounded-lg font-sans text-[0.88rem] font-medium cursor-pointer tracking-[0.02em] transition-all duration-250 ease-out inline-flex items-center gap-2 hover:bg-primary hover:text-primary-foreground active:scale-[0.97]"
             >

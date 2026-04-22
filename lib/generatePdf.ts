@@ -86,12 +86,24 @@ function buildFilename(userName: string): string {
 
 // ── Main export ──
 
-export function downloadProfilePdf(
+export async function downloadProfilePdf(
   profile: ProfileData,
   userName = "",
   orgName = "",
   assessmentResponses: AssessmentResponse[] = []
 ) {
+  // Pre-load badge image
+  let badgeDataUrl: string | null = null;
+  try {
+    const res = await fetch("/workpath_verified_badge.png");
+    const blob = await res.blob();
+    badgeDataUrl = await new Promise<string>((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.readAsDataURL(blob);
+    });
+  } catch {}
+
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   let y = MARGIN_TOP;
 
@@ -214,8 +226,10 @@ export function downloadProfilePdf(
     doc.line(MARGIN_X, y, showBadge ? BADGE_X - 4 : PAGE_W - MARGIN_X, y);
     y += 8;
 
-    // Badge PNG placeholder — insert doc.addImage(...) here once PNG is ready
-    // Position: (BADGE_X, goldRuleY - 2.4), size: (BADGE_W, <badge_height>)
+    if (showBadge && badgeDataUrl) {
+      const badgeH = BADGE_W / 1.382;
+      doc.addImage(badgeDataUrl, "PNG", BADGE_X, goldRuleY - 2.4, BADGE_W, badgeH);
+    }
 
     // Metadata rows
     const dateStr = new Date().toLocaleDateString("en-US", {
