@@ -90,7 +90,10 @@ export async function downloadProfilePdf(
   profile: ProfileData,
   userName = "",
   orgName = "",
-  assessmentResponses: AssessmentResponse[] = []
+  assessmentResponses: AssessmentResponse[] = [],
+  roleLabel = "",
+  sponsor = "",
+  roleDescription = ""
 ) {
   // Pre-load badge image
   let badgeDataUrl: string | null = null;
@@ -126,7 +129,36 @@ export async function downloadProfilePdf(
       doc.setTextColor(...TEXT_MUTED);
       doc.setFont("helvetica", "normal");
       doc.text(`WorkPath Profile · Confidential · ${i}`, MARGIN_X, PAGE_H - 13);
-      doc.text("Prototype Version · rsparkman.net", PAGE_W - MARGIN_X, PAGE_H - 13, { align: "right" });
+      doc.text("wkpath.com", PAGE_W - MARGIN_X, PAGE_H - 13, { align: "right" });
+    }
+  }
+
+  // ── Running header ──
+  // Drawn as a post-pass on pages 2+ and appendix pages 2+.
+  // Page 1 and appendix page 1 carry the full header block instead.
+  function drawRunningHeader(skipPages: Set<number>) {
+    const pageCount = doc.getNumberOfPages();
+    const firstName = userName.trim().split(/\s+/)[0];
+    const title = firstName ? `${firstName}'s WorkPath Profile` : "WorkPath Profile";
+    const dateStr = new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    for (let i = 1; i <= pageCount; i++) {
+      if (skipPages.has(i)) continue;
+      doc.setPage(i);
+
+      doc.setFontSize(8);
+      doc.setTextColor(...TEXT_MUTED);
+      doc.setFont("helvetica", "normal");
+      doc.text(title, MARGIN_X, 12);
+      doc.text(dateStr, PAGE_W - MARGIN_X, 12, { align: "right" });
+
+      doc.setDrawColor(...DIVIDER);
+      doc.setLineWidth(0.3);
+      doc.line(MARGIN_X, 16, PAGE_W - MARGIN_X, 16);
     }
   }
 
@@ -219,7 +251,21 @@ export async function downloadProfilePdf(
     doc.setTextColor(...TEXT_MUTED);
     doc.setFont("helvetica", "normal");
     doc.text("Structured scenario assessment with evidence-based placement", MARGIN_X, y);
-    y += 8;
+    y += 5;
+
+    // Sponsor lines (only rendered when sponsor is present)
+    if (sponsor && sponsor.trim() && roleLabel && roleLabel.trim()) {
+      y += 3;
+      doc.setFontSize(9);
+      doc.setTextColor(...TEXT_MUTED);
+      doc.setFont("helvetica", "normal");
+      doc.text(roleLabel.trim(), MARGIN_X, y);
+      y += 5;
+      doc.text(`Sponsored by ${sponsor.trim()}`, MARGIN_X, y);
+      y += 5;
+    } else {
+      y += 3;
+    }
 
     // Gold accent divider — stops short of badge area
     const goldRuleY = y;
@@ -257,7 +303,17 @@ export async function downloadProfilePdf(
       showBadge ? BADGE_X - MARGIN_X - 6 : CONTENT_W
     );
     doc.text(noteLines, MARGIN_X, y);
-    y += noteLines.length * 3.8 + 4;
+    y += noteLines.length * 3.8 + 6;
+
+    // Role description paragraph (only when present)
+    if (roleDescription && roleDescription.trim()) {
+      doc.setFontSize(9);
+      doc.setTextColor(...TEXT_MUTED);
+      doc.setFont("helvetica", "normal");
+      const descLines = doc.splitTextToSize(roleDescription.trim(), CONTENT_W);
+      doc.text(descLines, MARGIN_X, y, { lineHeightFactor: 1.45 });
+      y += descLines.length * 4.2 + 6;
+    }
 
     // Thin divider
     doc.setDrawColor(...DIVIDER);
@@ -418,6 +474,11 @@ export async function downloadProfilePdf(
   doc.text(summaryLines, MARGIN_X + 5, y + 2, { lineHeightFactor: 1.5 });
   y += summaryBoxH + 4;
 
+  // ── Hard page break: page 1 is the cover (header + role_description + summary).
+  // Readiness Dimensions and everything after it begin on page 2.
+  doc.addPage();
+  y = MARGIN_TOP;
+
   // ── Readiness Dimensions ──
   if (profile.dimensions) {
     drawSectionHeading("Readiness Dimensions");
@@ -512,9 +573,11 @@ export async function downloadProfilePdf(
   // ════════════════════════════════════════════
   // APPENDIX — Assessment Responses
   // ════════════════════════════════════════════
+  let appendixFirstPage = 0;
   if (assessmentResponses.length > 0) {
     doc.addPage();
     y = MARGIN_TOP;
+    appendixFirstPage = doc.getNumberOfPages();
 
     // Repeat header on appendix page
     drawHeaderBlock();
@@ -589,6 +652,11 @@ export async function downloadProfilePdf(
       y += respBlockH + 8;
     }
   }
+
+  // ── Running header on all pages except cover and appendix cover ──
+  const skipPages = new Set<number>([1]);
+  if (appendixFirstPage > 0) skipPages.add(appendixFirstPage);
+  drawRunningHeader(skipPages);
 
   // ── Footer on all pages ──
   drawFooter();

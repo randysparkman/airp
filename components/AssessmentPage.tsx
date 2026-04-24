@@ -270,6 +270,9 @@ export default function AssessmentPage({ slug }: AssessmentPageProps) {
             onReset={flow.handleReset}
             userName={flow.userName.trim() || "Anonymous"}
             orgName={flow.orgName}
+            roleLabel={flow.roleLabel}
+            sponsor={flow.sponsor}
+            roleDescription={flow.roleDescription}
             assessmentResponses={responses}
           />
         );

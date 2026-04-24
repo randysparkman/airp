@@ -2,6 +2,7 @@
 role_identifier: "front-door"
 role_label: "Everyday Knowledge Work"
 role_description: "For people whose work mixes moving through the world with time at a keyboard — managers, teachers, supervisors, owner-operators, account reps. Part of your day is in rooms with people or on your feet. Part of it is in documents, email, and the steady stream of things that need thinking through. AI is starting to show up in both."
+sponsor: ""
 version: "0.2.1"
 ---
 

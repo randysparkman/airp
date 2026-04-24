@@ -2,6 +2,7 @@
 role_identifier: "general"
 role_label: "General Knowledge Work"
 role_description: "An analyst, coordinator, project manager, or account manager at a mid-size professional services company. The kind of role where you're synthesizing information, communicating with stakeholders, producing deliverables, and making judgment calls about how to approach your work — with AI tools increasingly part of the picture."
+sponsor: ""
 version: "0.4.0"
 ---
 

@@ -2,7 +2,8 @@
 role_identifier: "cie499"
 role_label: "AI Fluency for Entry-Level Knowledge Work"
 role_description: "A recently hired entry-level professional at a mid-size company — a junior analyst, project coordinator, marketing assistant, or operations associate. The kind of role where you're researching, writing, organizing data, and preparing deliverables for your manager — with AI tools built into the everyday workflow and an expectation that you'll use them thoughtfully."
-version: "0.3.0"
+sponsor: "Dr. Laura McNeill, University of Alabama, CIE499"
+version: "0.3.1"
 ---
 
 # Job-Role-Profile: AI Fluency for Entry-Level Knowledge Work
@@ -88,7 +89,7 @@ This assessment should test across the full breadth of the DOL AI Literacy Frame
   "meta": {
     "tier": 1,
     "label": "Baseline Orientation",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "question_count": 5,
     "estimated_minutes": 10,
     "primary_construct": "orientation",
@@ -289,7 +290,7 @@ This assessment should test across the full breadth of the DOL AI Literacy Frame
   "meta": {
     "tier": 2,
     "label": "Contextualized Integration",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "question_count": 5,
     "estimated_minutes": 12,
     "primary_construct": "integration",

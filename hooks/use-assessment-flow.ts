@@ -54,7 +54,9 @@ export function useAssessmentFlow(urlSlug?: string) {
 
   // Derived from selected context
   const orgName = selectedContext?.orgName || "";
+  const roleLabel = selectedContext?.roleLabel || "";
   const roleDescription = selectedContext?.roleDescription || "";
+  const sponsor = selectedContext?.sponsor || "";
   const tier1Questions: ScenarioQuestion[] = selectedContext ? getTier1Questions(selectedContext) : [];
   const tier1QuestionsRaw = selectedContext ? getTier1QuestionsRaw(selectedContext) : [];
   const tier2Questions: ScenarioQuestion[] = selectedContext ? getTier2Questions(selectedContext) : [];
@@ -353,7 +355,9 @@ export function useAssessmentFlow(urlSlug?: string) {
     selectedContext,
     setSelectedContext: handleSetSelectedContext,
     orgName,
+    roleLabel,
     roleDescription,
+    sponsor,
 
     // Tier questions (display)
     tier1Questions,

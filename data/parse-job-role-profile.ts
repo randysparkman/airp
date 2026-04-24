@@ -11,21 +11,24 @@ export interface ParsedJobRoleProfile {
   roleLabel: string;
   roleIdentifier: string;
   roleDescription: string;
+  sponsor: string;
   tier1Data: any;
   tier2Data: any;
 }
 
-function parseFrontMatter(raw: string): { roleLabel: string; roleIdentifier: string; roleDescription: string } {
+function parseFrontMatter(raw: string): { roleLabel: string; roleIdentifier: string; roleDescription: string; sponsor: string } {
   const match = raw.match(/^---\s*\n([\s\S]*?)\n---/);
-  if (!match) return { roleLabel: "General", roleIdentifier: "general", roleDescription: "" };
+  if (!match) return { roleLabel: "General", roleIdentifier: "general", roleDescription: "", sponsor: "" };
   const fm = match[1];
   const labelMatch = fm.match(/role_label:\s*"([^"]+)"/);
   const idMatch = fm.match(/role_identifier:\s*"([^"]+)"/);
   const descMatch = fm.match(/role_description:\s*"([^"]+)"/);
+  const sponsorMatch = fm.match(/sponsor:\s*"([^"]*)"/);
   return {
     roleLabel: labelMatch ? labelMatch[1] : "General",
     roleIdentifier: idMatch ? idMatch[1] : "general",
     roleDescription: descMatch ? descMatch[1] : "",
+    sponsor: sponsorMatch ? sponsorMatch[1] : "",
   };
 }
 
@@ -64,7 +67,7 @@ function escapeRegex(str: string): string {
 }
 
 export function parseJobRoleProfile(raw: string): ParsedJobRoleProfile {
-  const { roleLabel, roleIdentifier, roleDescription } = parseFrontMatter(raw);
+  const { roleLabel, roleIdentifier, roleDescription, sponsor } = parseFrontMatter(raw);
 
   const contextEnd = raw.indexOf("## Tier 1 Questions");
   const roleContext = contextEnd >= 0 ? raw.substring(0, contextEnd).trim() : raw;
@@ -76,5 +79,5 @@ export function parseJobRoleProfile(raw: string): ParsedJobRoleProfile {
     extractJsonBlock(raw, "<!-- tier2-questions-start -->", "<!-- tier2-questions-end -->")
   );
 
-  return { roleContext, roleLabel, roleIdentifier, roleDescription, tier1Data, tier2Data };
+  return { roleContext, roleLabel, roleIdentifier, roleDescription, sponsor, tier1Data, tier2Data };
 }

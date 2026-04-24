@@ -1,6 +1,6 @@
 # Job-Role-Profile Structure Specification
 
-**Version:** 0.2.0
+**Version:** 0.3.0
 **Purpose:** Defines the canonical structure of a job-role-profile `.md` file — the complete assessment package for a specific role
 **Used by:** Job-role-profile authoring (Claude Chat session using this spec; a UI wrapper is in backlog), Tier 1 and Tier 2 generation prompts, app runtime
 **Upstream authority:** AI Readiness Literacy Constitution v0.2.0
@@ -29,6 +29,7 @@ Every job-role-profile begins with a YAML front matter block delimited by `---`.
 role_identifier: "medical-billing"
 role_label: "Medical Billing Specialist"
 role_description: "An insurance billing clerk at a 10-physician multi-specialty medical practice. The role handles claim submission, denial management, prior authorizations, coordination of benefits, and patient billing inquiries — with AI tools increasingly part of the workflow."
+sponsor: ""
 version: "0.4.0"
 ---
 ```
@@ -41,11 +42,13 @@ version: "0.4.0"
 
 - **`role_description`** — a short paragraph (2-4 sentences) shown as clickable expandable text behind the header subtitle link. This is the respondent's first orientation to what the assessment is about and who it is for. Should be concrete and specific: name the role or role type, establish the stakes or work context, and hint at where AI shows up. Avoid generic framing like "professionals who use AI in their work."
 
+- **`sponsor`** — optional. Names the organization, partner, or individual sponsoring this deployment of the assessment (e.g., `"Dr. Laura McNeill, University of Alabama, CIE499"`, `"Alabama Workforce Council"`). When present, rendered on the PDF first page and appendix header directly beneath the subtitle as two stacked lines: the `role_label` on one line and `Sponsored by {sponsor}` on the next. When absent or empty, neither line is rendered and the PDF layout is unchanged from a profile without a sponsor. Leave as an empty string (`""`) for walk-up or unsponsored deployments.
+
 - **`version`** — semantic version of the profile itself, starting at `0.1.0` for new profiles. Version bumps follow the conventions in the "Versioning" section at the bottom of this spec.
 
 **Why each matters:**
 
-The `role_identifier` is the only one the app *must* have to function — it's the key everything else is looked up from. `role_label` and `role_description` shape respondent experience; if either is weak or stale, the whole assessment feels generic. `version` is what makes calibration reproducible — without it, we can't tell whether a profile run today used the same rubrics as the run last month.
+The `role_identifier` is the only one the app *must* have to function — it's the key everything else is looked up from. `role_label` and `role_description` shape respondent experience; if either is weak or stale, the whole assessment feels generic. `sponsor` is optional and only affects PDF output — it lets a deployment name the partner or institution behind this run of the assessment without overloading `role_label`. `version` is what makes calibration reproducible — without it, we can't tell whether a profile run today used the same rubrics as the run last month.
 
 ---
 
@@ -243,6 +246,7 @@ The identifier should be descriptive and hyphenated:
 |---------|------|---------|
 | 0.1.0 | March 2026 | Initial structure. Eight context sections + two question sections. Decision Authority and Accountability added as Section 5. |
 | 0.2.0 | April 2026 | Added YAML front matter specification as a dedicated section with field definitions. Rewrote Overview from two-part to three-part structure (front matter + context + questions). Replaced "React authoring tool" framing with interactive Claude Chat authoring flow (UI tool moved to backlog; we're still refining the spec and a UI over a shifting spec would need constant rework). Added Stylistic Alignment section pointing to CLAUDE.md language conventions. Added companion-persona pattern note to Authoring Flow. Added profile-level versioning conventions (see below). |
+| 0.3.0 | April 2026 | Added optional `sponsor` field to YAML front matter. Renders on PDF first page and appendix header as `{role_label}` / `Sponsored by {sponsor}` stacked lines beneath the subtitle. Absent or empty → no change to PDF layout. |
 
 ### Profile files (job-role-profile-*.md)
 

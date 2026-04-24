@@ -2,6 +2,7 @@
 role_identifier: "medical-billing"
 role_label: "Medical Billing Specialist"
 role_description: "An insurance billing clerk at a 10-physician multi-specialty medical practice. The role handles claim submission, denial management, prior authorizations, coordination of benefits, and patient billing inquiries — with AI tools increasingly part of the workflow."
+sponsor: ""
 version: "0.4.1"
 ---
 

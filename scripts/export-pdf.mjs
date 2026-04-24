@@ -31,6 +31,27 @@ const profile = data.profile;
 const name    = data.meta?.persona ?? '';
 const org     = '';
 
+// Pull role_label + sponsor + role_description from the associated job-role-profile markdown.
+const profileKey = data.meta?.profile ?? '';
+const profileMdPath = profileKey
+  ? path.join(ROOT, 'data', `job-role-profile-${profileKey}.md`)
+  : '';
+let roleLabel = '';
+let sponsor = '';
+let roleDescription = '';
+if (profileMdPath && fs.existsSync(profileMdPath)) {
+  const raw = fs.readFileSync(profileMdPath, 'utf8');
+  const fm = raw.match(/^---\s*\n([\s\S]*?)\n---/);
+  if (fm) {
+    const labelMatch = fm[1].match(/role_label:\s*"([^"]+)"/);
+    const sponsorMatch = fm[1].match(/sponsor:\s*"([^"]*)"/);
+    const descMatch = fm[1].match(/role_description:\s*"([^"]+)"/);
+    roleLabel = labelMatch ? labelMatch[1] : '';
+    sponsor = sponsorMatch ? sponsorMatch[1] : '';
+    roleDescription = descMatch ? descMatch[1] : '';
+  }
+}
+
 // Build assessment responses from all_scored_responses
 const assessmentResponses = (data.all_scored_responses ?? []).map((r, i) => ({
   tier: r.tier,
@@ -99,7 +120,7 @@ function drawFooter() {
     doc.setTextColor(...TEXT_MUTED);
     doc.setFont('helvetica', 'normal');
     doc.text(`WorkPath Profile · Confidential · ${i}`, MARGIN_X, PAGE_H - 13);
-    doc.text('The WorkPath Assessment · wkpath.com', PAGE_W - MARGIN_X, PAGE_H - 13, { align: 'right' });
+    doc.text('wkpath.com', PAGE_W - MARGIN_X, PAGE_H - 13, { align: 'right' });
   }
 }
 
@@ -223,7 +244,20 @@ function drawHeaderBlock(showBadge = false) {
   doc.setTextColor(...TEXT_MUTED);
   doc.setFont('helvetica', 'normal');
   doc.text('Structured scenario assessment with evidence-based placement', MARGIN_X, y);
-  y += 8;
+  y += 5;
+
+  if (sponsor && sponsor.trim() && roleLabel && roleLabel.trim()) {
+    y += 3;
+    doc.setFontSize(9);
+    doc.setTextColor(...TEXT_MUTED);
+    doc.setFont('helvetica', 'normal');
+    doc.text(roleLabel.trim(), MARGIN_X, y);
+    y += 5;
+    doc.text(`Sponsored by ${sponsor.trim()}`, MARGIN_X, y);
+    y += 5;
+  } else {
+    y += 3;
+  }
 
   // Gold accent divider — stops short of badge area
   const goldRuleY = y;
@@ -250,12 +284,40 @@ function drawHeaderBlock(showBadge = false) {
     showBadge ? BADGE_X - MARGIN_X - 6 : CONTENT_W
   );
   doc.text(noteLines, MARGIN_X, y);
-  y += noteLines.length * 3.8 + 4;
+  y += noteLines.length * 3.8 + 6;
+
+  if (roleDescription && roleDescription.trim()) {
+    doc.setFontSize(9);
+    doc.setTextColor(...TEXT_MUTED);
+    doc.setFont('helvetica', 'normal');
+    const descLines = doc.splitTextToSize(roleDescription.trim(), CONTENT_W);
+    doc.text(descLines, MARGIN_X, y, { lineHeightFactor: 1.45 });
+    y += descLines.length * 4.2 + 6;
+  }
 
   doc.setDrawColor(...DIVIDER);
   doc.setLineWidth(0.5);
   doc.line(MARGIN_X, y, PAGE_W - MARGIN_X, y);
   y += 6;
+}
+
+function drawRunningHeader(skipPages) {
+  const pageCount = doc.getNumberOfPages();
+  const firstName = (name || '').trim().split(/\s+/)[0];
+  const title = firstName ? `${firstName}'s WorkPath Profile` : 'WorkPath Profile';
+  const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  for (let i = 1; i <= pageCount; i++) {
+    if (skipPages.has(i)) continue;
+    doc.setPage(i);
+    doc.setFontSize(8);
+    doc.setTextColor(...TEXT_MUTED);
+    doc.setFont('helvetica', 'normal');
+    doc.text(title, MARGIN_X, 12);
+    doc.text(dateStr, PAGE_W - MARGIN_X, 12, { align: 'right' });
+    doc.setDrawColor(...DIVIDER);
+    doc.setLineWidth(0.3);
+    doc.line(MARGIN_X, 16, PAGE_W - MARGIN_X, 16);
+  }
 }
 
 function drawSectionHeading(title, color = TEXT_MAIN, spaceBefore = 10) {
@@ -345,6 +407,10 @@ doc.rect(MARGIN_X, y - 3, 1.2, summaryBoxH, 'F');
 doc.text(summaryLines, MARGIN_X + 5, y + 2, { lineHeightFactor: 1.5 });
 y += summaryBoxH + 4;
 
+// Hard page break: page 1 is the cover. Readiness Dimensions and beyond start on page 2.
+doc.addPage();
+y = MARGIN_TOP;
+
 // Dimensions
 if (profile.dimensions) {
   drawSectionHeading('Readiness Dimensions');
@@ -420,9 +486,11 @@ if (profile.organizational_opportunities?.length > 0) {
 
 // ── Appendix ─────────────────────────────────────────────────────────────────
 
+let appendixFirstPage = 0;
 if (assessmentResponses.length > 0) {
   doc.addPage();
   y = MARGIN_TOP;
+  appendixFirstPage = doc.getNumberOfPages();
   drawHeaderBlock();
   drawSectionHeading('Assessment Responses', TEXT_MAIN, 2);
   y += 2;
@@ -477,6 +545,10 @@ if (assessmentResponses.length > 0) {
     y += respBlockH + 8;
   }
 }
+
+const skipPages = new Set([1]);
+if (appendixFirstPage > 0) skipPages.add(appendixFirstPage);
+drawRunningHeader(skipPages);
 
 drawFooter();
 

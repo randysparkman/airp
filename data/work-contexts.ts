@@ -19,7 +19,9 @@ export interface WorkContext {
   slug: string;
   label: string;
   description: string;
+  roleLabel: string;
   roleDescription: string;
+  sponsor: string;
   enabled: boolean;
   /** Whether this profile appears in the public dropdown on the root welcome screen. */
   public: boolean;
@@ -35,7 +37,9 @@ export const workContexts: WorkContext[] = [
     slug: "front-door",
     label: frontDoorProfile.roleLabel,
     description: "",
+    roleLabel: frontDoorProfile.roleLabel,
     roleDescription: frontDoorProfile.roleDescription,
+    sponsor: frontDoorProfile.sponsor,
     enabled: true,
     public: true,
     orgName: frontDoorProfile.roleLabel,
@@ -48,7 +52,9 @@ export const workContexts: WorkContext[] = [
     slug: "general",
     label: generalProfile.roleLabel,
     description: "",
+    roleLabel: generalProfile.roleLabel,
     roleDescription: generalProfile.roleDescription,
+    sponsor: generalProfile.sponsor,
     enabled: true,
     public: false,
     orgName: generalProfile.roleLabel,
@@ -61,7 +67,9 @@ export const workContexts: WorkContext[] = [
     slug: "medical-billing",
     label: medicalProfile.roleLabel,
     description: "",
+    roleLabel: medicalProfile.roleLabel,
     roleDescription: medicalProfile.roleDescription,
+    sponsor: medicalProfile.sponsor,
     enabled: true,
     public: false,
     orgName: medicalProfile.roleLabel,
@@ -74,7 +82,9 @@ export const workContexts: WorkContext[] = [
     slug: "cie499",
     label: cie499Profile.roleLabel,
     description: "",
+    roleLabel: cie499Profile.roleLabel,
     roleDescription: cie499Profile.roleDescription,
+    sponsor: cie499Profile.sponsor,
     enabled: true,
     public: false,
     orgName: cie499Profile.roleLabel,
@@ -87,7 +97,9 @@ export const workContexts: WorkContext[] = [
     slug: "custom",
     label: "Contact us to talk about a custom job profile",
     description: "",
+    roleLabel: "",
     roleDescription: "",
+    sponsor: "",
     enabled: false,
     public: false,
     orgName: "",
