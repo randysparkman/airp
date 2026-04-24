@@ -287,6 +287,14 @@ function drawHeaderBlock(showBadge = false) {
   y += noteLines.length * 3.8 + 6;
 
   if (roleDescription && roleDescription.trim()) {
+    doc.setFontSize(7.5);
+    doc.setTextColor(...TEXT_MUTED);
+    doc.setFont('helvetica', 'bold');
+    doc.setCharSpace(0.6);
+    doc.text('ABOUT THIS PROFILE', MARGIN_X, y);
+    doc.setCharSpace(0);
+    y += 5;
+
     doc.setFontSize(9);
     doc.setTextColor(...TEXT_MUTED);
     doc.setFont('helvetica', 'normal');

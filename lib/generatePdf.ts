@@ -307,6 +307,16 @@ export async function downloadProfilePdf(
 
     // Role description paragraph (only when present)
     if (roleDescription && roleDescription.trim()) {
+      // Label
+      doc.setFontSize(7.5);
+      doc.setTextColor(...TEXT_MUTED);
+      doc.setFont("helvetica", "bold");
+      doc.setCharSpace(0.6);
+      doc.text("ABOUT THIS PROFILE", MARGIN_X, y);
+      doc.setCharSpace(0);
+      y += 5;
+
+      // Paragraph
       doc.setFontSize(9);
       doc.setTextColor(...TEXT_MUTED);
       doc.setFont("helvetica", "normal");
