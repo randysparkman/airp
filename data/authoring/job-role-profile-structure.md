@@ -197,14 +197,15 @@ Job-role-profiles are authored interactively in Claude Chat sessions using this 
 
 **End-to-end authoring sequence:**
 
-1. Interactive session with the author covers the eight context sections
-2. The eight sections are assembled into the job-role-profile format
-3. Author reviews the assembled context, revises as needed
-4. Tier 1 questions generated using the Tier 1 generation prompt with the profile as input
-5. Author reviews Tier 1 questions, edits or regenerates
-6. Tier 2 questions generated using the Tier 2 generation prompt with the profile + finalized Tier 1 as input
-7. Author reviews Tier 2 questions, edits or regenerates
-8. Complete `.md` file exported with YAML front matter + context + questions
+1. Front matter interview — before the eight context sections, confirm `role_identifier`, `role_label`, `role_description`, and whether this deployment has a `sponsor` (optional; populate only if a specific partner, institution, or individual is sponsoring this run)
+2. Interactive session with the author covers the eight context sections
+3. The eight sections are assembled into the job-role-profile format
+4. Author reviews the assembled context, revises as needed
+5. Tier 1 questions generated using the Tier 1 generation prompt with the profile as input
+6. Author reviews Tier 1 questions, edits or regenerates
+7. Tier 2 questions generated using the Tier 2 generation prompt with the profile + finalized Tier 1 as input
+8. Author reviews Tier 2 questions, edits or regenerates
+9. Complete `.md` file exported with YAML front matter + context + questions
 
 **Optional companion artifact — calibration persona:** Every production-bound profile benefits from a companion persona file (see `persona-marcus-delgado.md`, `persona-jasmine-okafor.md` for the pattern). The persona is a fictional mid-Developing respondent with 10 canned responses and predicted scores, used to validate that the profile's scoring engine produces the expected narrative. Not every profile gets a persona immediately — they take real effort to author — but any profile headed toward a real deployment or calibration cycle should have one. File this with the sibling profiles in the repo.
 
