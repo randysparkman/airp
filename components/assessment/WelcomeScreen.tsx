@@ -15,11 +15,11 @@ interface WelcomeScreenProps {
 const aboutSections = [
   {
     label: "What you'll experience",
-    body: "This has three sections, each with five short scenarios. The first section presents everyday workplace situations involving AI tools — these help establish how you think about AI when it shows up in your work. The second section shifts to scenarios grounded in your specific work context, reflecting the tasks and situations you'd actually encounter. The third section adapts based on your earlier responses — it rounds out the picture by exploring areas where your thinking was most interesting or where we want to understand more.",
+    body: "You'll move through fifteen short scenarios in three sections, each going a little deeper. The first section presents everyday workplace situations involving AI tools — these help establish how you think about AI when it shows up in your work. The second section shifts to scenarios grounded in your specific work context, reflecting the tasks and situations you'd actually encounter. The third section adapts based on your earlier responses — it rounds out the picture by exploring areas where your thinking was most interesting or where we want to understand more.",
   },
   {
     label: "How the scenarios work",
-    body: "Every scenario describes a realistic situation and asks what you would do. There are no trick questions and no right answers. We're not testing what you know about AI — we're listening for how you think when AI tools are part of the picture. The scenarios progress from how you understand AI, to how you'd work with it, to how your reasoning holds when things get more complex.",
+    body: "Every scenario describes a realistic situation and asks what you would do. There are no trick questions and no right answers. We're not testing what you know about AI — we're getting a sense of how you think when AI tools are part of the picture. The scenarios progress from how you understand AI, to how you'd work with it, to how your reasoning holds when things get more complex.",
   },
   {
     label: "What you'll receive",
