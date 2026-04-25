@@ -137,11 +137,10 @@ function drawMetaRow(label, value) {
 
 function drawPlacementRow(activeBand) {
   doc.setFontSize(9);
-  doc.setTextColor(...TEXT_MUTED);
   doc.setFont('helvetica', 'normal');
-  doc.text('Placement', META_LABEL_X, y);
+  // Band scale only — no "Placement" label
   const bands = ['Emerging', 'Developing', 'Demonstrating'];
-  let xPos = META_VALUE_X;
+  let xPos = MARGIN_X;
   for (let i = 0; i < bands.length; i++) {
     const b = bands[i];
     const isActive = b === activeBand;
@@ -246,15 +245,24 @@ function drawHeaderBlock(showBadge = false) {
   doc.text('Structured scenario assessment with evidence-based placement', MARGIN_X, y);
   y += 5;
 
-  if (sponsor && sponsor.trim() && roleLabel && roleLabel.trim()) {
+  // Role label and sponsor lines — render role_label whenever present;
+  // sponsor renders below when also present. Both lines remain optional.
+  const hasRoleLabel = !!(roleLabel && roleLabel.trim());
+  const hasSponsor = !!(sponsor && sponsor.trim());
+  if (hasRoleLabel || hasSponsor) {
     y += 3;
-    doc.setFontSize(9);
+    doc.setFontSize(11);
     doc.setTextColor(...TEXT_MUTED);
     doc.setFont('helvetica', 'normal');
-    doc.text(roleLabel.trim(), MARGIN_X, y);
-    y += 5;
-    doc.text(`Sponsored by ${sponsor.trim()}`, MARGIN_X, y);
-    y += 5;
+    if (hasRoleLabel) {
+      doc.text(roleLabel.trim(), MARGIN_X, y);
+      y += 5.5;
+    }
+    if (hasSponsor) {
+      doc.text(`Sponsored by ${sponsor.trim()}`, MARGIN_X, y);
+      y += 5;
+    }
+    y += 4;
   } else {
     y += 3;
   }
@@ -295,15 +303,15 @@ function drawHeaderBlock(showBadge = false) {
     doc.setCharSpace(0);
     y += 5;
 
-    doc.setFontSize(9);
+    doc.setFontSize(10);
     doc.setTextColor(...TEXT_MUTED);
     doc.setFont('helvetica', 'normal');
     const descLines = doc.splitTextToSize(roleDescription.trim(), CONTENT_W);
     doc.text(descLines, MARGIN_X, y, { lineHeightFactor: 1.45 });
-    y += descLines.length * 4.2 + 11;
+    y += descLines.length * 5 + 9;
   }
 
-  // Thin divider, centered in 22pt breathing room before summary card
+  // Thin divider visually centered between About This Profile and the Summary heading.
   doc.setDrawColor(...DIVIDER);
   doc.setLineWidth(0.5);
   doc.line(MARGIN_X, y, PAGE_W - MARGIN_X, y);
@@ -329,7 +337,7 @@ function drawRunningHeader(skipPages) {
   }
 }
 
-function drawSectionHeading(title, color = TEXT_MAIN, spaceBefore = 10) {
+function drawSectionHeading(title, color = TEXT_MAIN, spaceBefore = 7) {
   checkSpace(14);
   y += spaceBefore;
   doc.setFontSize(13);
@@ -342,54 +350,112 @@ function drawSectionHeading(title, color = TEXT_MAIN, spaceBefore = 10) {
 function drawBulletList(items, dotColor) {
   for (const item of items) {
     const lines = doc.splitTextToSize(item, CONTENT_W - 10);
-    checkSpace(lines.length * 4.2 + 4);
+    checkSpace(lines.length * 5 + 4);
     doc.setFillColor(...dotColor);
-    doc.circle(MARGIN_X + 3, y + 0.8, 1, 'F');
-    doc.setFontSize(9);
+    doc.circle(MARGIN_X + 3, y + 1.0, 1, 'F');
+    doc.setFontSize(10);
     doc.setTextColor(...TEXT_MAIN);
     doc.setFont('helvetica', 'normal');
-    doc.text(lines, MARGIN_X + 8, y + 1.5, { lineHeightFactor: 1.45 });
-    y += lines.length * 4.2 + 3;
+    doc.text(lines, MARGIN_X + 8, y + 1.8, { lineHeightFactor: 1.45 });
+    y += lines.length * 5 + 3;
   }
   y += 4;
 }
 
+function drawBoldLeadList(items) {
+  for (const item of items) {
+    const trimmed = item.trim();
+    const splitIdx = trimmed.search(/\.\s+(?=[A-Z])/);
+    let lead, body;
+    if (splitIdx > 0) {
+      lead = trimmed.slice(0, splitIdx + 1);
+      body = trimmed.slice(splitIdx + 1).trim();
+    } else {
+      lead = trimmed;
+      body = '';
+    }
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    const leadLines = doc.splitTextToSize(lead, CONTENT_W);
+    const leadH = leadLines.length * 5;
+
+    doc.setFont('helvetica', 'normal');
+    const bodyLines = body ? doc.splitTextToSize(body, CONTENT_W) : [];
+    const bodyH = bodyLines.length * 5;
+
+    const itemH = leadH + (body ? 2 + bodyH : 0);
+    checkSpace(itemH + 4);
+
+    doc.setTextColor(...TEXT_MAIN);
+    doc.setFont('helvetica', 'bold');
+    doc.text(leadLines, MARGIN_X, y, { lineHeightFactor: 1.45 });
+    y += leadH;
+
+    if (body) {
+      y += 2;
+      doc.setFont('helvetica', 'normal');
+      doc.text(bodyLines, MARGIN_X, y, { lineHeightFactor: 1.45 });
+      y += bodyH;
+    }
+
+    // 10pt gap between bold-lead items
+    y += 4;
+  }
+}
+
+// Construct block — no card frame. Colored left bar + name + inline badge + 9pt body.
 function drawConstructCard(name, level, detail) {
   const accentColor = CONSTRUCT_COLORS[name] || NAVY;
   const badgeColor  = BAND_COLORS[level] || TEXT_MUTED;
+
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  const detailLines = doc.splitTextToSize(detail, CONTENT_W - 24);
+  const detailLines = doc.splitTextToSize(detail, CONTENT_W - 6);
   const detailH = detailLines.length * 4.2;
-  const cardH = 16 + 18 + detailH + 12;
-  checkSpace(cardH + 4);
-  doc.setFillColor(255,255,255);
-  doc.setDrawColor(...BORDER);
-  doc.setLineWidth(0.5);
-  doc.roundedRect(MARGIN_X, y, CONTENT_W, cardH, 2, 2, 'FD');
+  const blockH = detailH + 9;
+  checkSpace(blockH + 4);
+
+  // Thin colored left bar — full block height
   doc.setFillColor(...accentColor);
-  doc.rect(MARGIN_X, y, 5, cardH, 'F');
-  const textX = MARGIN_X + 14;
-  let cy = y + 12;
+  doc.rect(MARGIN_X, y, 1.2, blockH, 'F');
+
+  // Name + inline placement badge on the same line
+  const textX = MARGIN_X + 6;
+  const nameBaseline = y + 5;
   doc.setFontSize(11);
   doc.setTextColor(...TEXT_MAIN);
   doc.setFont('times', 'bold');
-  doc.text(name.toUpperCase(), textX, cy);
-  const nameW   = doc.getTextWidth(name.toUpperCase());
-  const badgeX  = textX + nameW + 8;
-  const badgeW  = doc.getTextWidth(level) + 12;
+  doc.text(name.toUpperCase(), textX, nameBaseline);
+
+  const nameW = doc.getTextWidth(name.toUpperCase());
+  const badgeX = textX + nameW + 6;
+  const badgeW = doc.getTextWidth(level) + 10;
   doc.setFillColor(...badgeColor);
-  doc.roundedRect(badgeX, cy - 5, badgeW, 8, 2, 2, 'F');
+  doc.roundedRect(badgeX, nameBaseline - 4.2, badgeW, 6.5, 1.5, 1.5, 'F');
   doc.setFontSize(7.5);
-  doc.setTextColor(255,255,255);
+  doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
-  doc.text(level, badgeX + 6, cy - 0.5);
-  cy += 12;
+  doc.text(level, badgeX + 5, nameBaseline + 0.5);
+
+  // Body paragraph
   doc.setFontSize(9);
   doc.setTextColor(...TEXT_MAIN);
   doc.setFont('helvetica', 'normal');
-  doc.text(detailLines, textX, cy, { lineHeightFactor: 1.45 });
-  y += cardH + 6;
+  doc.text(detailLines, textX, y + 11, { lineHeightFactor: 1.45 });
+
+  // No trailing gap — drawDimensionSeparator handles spacing between blocks.
+  y += blockH;
+}
+
+// Thin horizontal rule between dimension blocks for clean visual segmentation.
+function drawDimensionSeparator() {
+  // 4mm above + 3mm below balances the visual whitespace.
+  y += 4;
+  doc.setDrawColor(...DIVIDER);
+  doc.setLineWidth(0.3);
+  doc.line(MARGIN_X, y, PAGE_W - MARGIN_X, y);
+  y += 3;
 }
 
 // ── Page 1 ───────────────────────────────────────────────────────────────────
@@ -403,17 +469,18 @@ doc.setFont('times', 'bold');
 doc.text('Summary', MARGIN_X, y);
 y += 7;
 
-doc.setFontSize(9.5);
+// Summary body at 11pt with 15pt leading — primary read of the document.
+doc.setFontSize(11);
 doc.setTextColor(...TEXT_MAIN);
 doc.setFont('helvetica', 'normal');
 const summaryLines = doc.splitTextToSize(profile.summary, CONTENT_W - 10);
-const summaryBoxH  = summaryLines.length * 4.5 + 8;
+const summaryBoxH  = summaryLines.length * 5.3 + 8;
 checkSpace(summaryBoxH + 4);
 doc.setFillColor(...BG_WARM);
 doc.roundedRect(MARGIN_X, y - 3, CONTENT_W, summaryBoxH, 2, 2, 'F');
 doc.setFillColor(...GOLD);
 doc.rect(MARGIN_X, y - 3, 1.2, summaryBoxH, 'F');
-doc.text(summaryLines, MARGIN_X + 5, y + 2, { lineHeightFactor: 1.5 });
+doc.text(summaryLines, MARGIN_X + 5, y + 2, { lineHeightFactor: 1.36 });
 y += summaryBoxH + 4;
 
 // Hard page break: page 1 is the cover. Readiness Dimensions and beyond start on page 2.
@@ -447,41 +514,54 @@ if (profile.dimensions) {
   }
   y += 8;
   drawConstructCard('Orientation', profile.dimensions.orientation.level, profile.dimensions.orientation.detail);
+  drawDimensionSeparator();
   drawConstructCard('Integration', profile.dimensions.integration.level, profile.dimensions.integration.detail);
+  drawDimensionSeparator();
   drawConstructCard('Judgment',    profile.dimensions.judgment.level,    profile.dimensions.judgment.detail);
+
+  // Force page break — What You're Doing Well always begins on a fresh page.
+  doc.addPage();
+  y = MARGIN_TOP;
 }
 
 // Doing well
 drawSectionHeading("What You're Doing Well", GREEN);
-drawBulletList(profile.doing_well, GREEN);
+drawBoldLeadList(profile.doing_well);
 
 // Next capabilities
 drawSectionHeading('Next Capabilities to Build', GOLD);
-drawBulletList(profile.next_capabilities, GOLD);
+drawBoldLeadList(profile.next_capabilities);
 
-// Next step box
-checkSpace(30);
-const nextStepLines  = doc.splitTextToSize(profile.primary_next_step, CONTENT_W - 24);
-const nextStepBoxH   = 16 + nextStepLines.length * 4.5 + 16;
+// Next step box — discrete callout, mirrors Summary box styling at smaller scale
+doc.setFontSize(10);
+doc.setFont('helvetica', 'normal');
+const nextStepLines  = doc.splitTextToSize(profile.primary_next_step, CONTENT_W - 14);
+const nextStepBoxH   = 14 + nextStepLines.length * 5 + 10;
+y += 8;
 checkSpace(nextStepBoxH + 10);
 doc.setFillColor(...BG_WARM);
 doc.setDrawColor(...BORDER);
 doc.setLineWidth(0.5);
 doc.roundedRect(MARGIN_X, y, CONTENT_W, nextStepBoxH, 2, 2, 'FD');
+// Slim gold accent bar
 doc.setFillColor(...GOLD);
-doc.rect(MARGIN_X, y, 5, nextStepBoxH, 'F');
-doc.setFontSize(11);
+doc.rect(MARGIN_X, y, 1.5, nextStepBoxH, 'F');
+// Title — 12pt serif
+doc.setFontSize(12);
 doc.setTextColor(...TEXT_MAIN);
 doc.setFont('times', 'bold');
-doc.text('Your Next Step', MARGIN_X + 14, y + 12);
-doc.setFontSize(9.5);
+doc.text('Your Next Step', MARGIN_X + 7, y + 10);
+// Body — 10pt
+doc.setFontSize(10);
 doc.setFont('helvetica', 'normal');
-doc.text(nextStepLines, MARGIN_X + 14, y + 24, { lineHeightFactor: 1.5 });
+doc.text(nextStepLines, MARGIN_X + 7, y + 19, { lineHeightFactor: 1.45 });
 y += nextStepBoxH + 8;
 
-// Org opportunities
+// Org opportunities (forced standalone page when present)
 if (profile.organizational_opportunities?.length > 0) {
-  drawSectionHeading('Organizational Opportunities', TEXT_MUTED);
+  doc.addPage();
+  y = MARGIN_TOP;
+  drawSectionHeading('Organizational Opportunities', TEXT_MUTED, 0);
   doc.setFontSize(8.5);
   doc.setTextColor(...TEXT_LIGHT);
   doc.setFont('helvetica', 'italic');
@@ -501,7 +581,7 @@ if (assessmentResponses.length > 0) {
   y = MARGIN_TOP;
   appendixFirstPage = doc.getNumberOfPages();
   drawHeaderBlock();
-  drawSectionHeading('Assessment Responses', TEXT_MAIN, 2);
+  drawSectionHeading('Evidence Record: Scenarios and Responses', TEXT_MAIN, 2);
   y += 2;
 
   let currentTier = 0;
@@ -547,7 +627,7 @@ if (assessmentResponses.length > 0) {
     doc.setTextColor(153,153,153);
     doc.setFont('helvetica', 'bold');
     doc.text('YOUR RESPONSE', MARGIN_X + 6, y + 3);
-    doc.setFontSize(9.5);
+    doc.setFontSize(9);
     doc.setTextColor(...TEXT_MAIN);
     doc.setFont('helvetica', 'normal');
     doc.text(responseLines, MARGIN_X + 6, y + 9, { lineHeightFactor: 1.5 });

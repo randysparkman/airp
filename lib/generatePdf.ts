@@ -253,16 +253,25 @@ export async function downloadProfilePdf(
     doc.text("Structured scenario assessment with evidence-based placement", MARGIN_X, y);
     y += 5;
 
-    // Sponsor lines (only rendered when sponsor is present)
-    if (sponsor && sponsor.trim() && roleLabel && roleLabel.trim()) {
+    // Role label and sponsor lines.
+    // Render role_label whenever present; sponsor renders below when also present.
+    // Both lines remain optional — when absent, the section collapses cleanly.
+    const hasRoleLabel = !!(roleLabel && roleLabel.trim());
+    const hasSponsor = !!(sponsor && sponsor.trim());
+    if (hasRoleLabel || hasSponsor) {
       y += 3;
-      doc.setFontSize(9);
+      doc.setFontSize(11);
       doc.setTextColor(...TEXT_MUTED);
       doc.setFont("helvetica", "normal");
-      doc.text(roleLabel.trim(), MARGIN_X, y);
-      y += 5;
-      doc.text(`Sponsored by ${sponsor.trim()}`, MARGIN_X, y);
-      y += 5;
+      if (hasRoleLabel) {
+        doc.text(roleLabel.trim(), MARGIN_X, y);
+        y += 5.5;
+      }
+      if (hasSponsor) {
+        doc.text(`Sponsored by ${sponsor.trim()}`, MARGIN_X, y);
+        y += 5;
+      }
+      y += 4;
     } else {
       y += 3;
     }
@@ -317,15 +326,16 @@ export async function downloadProfilePdf(
       y += 5;
 
       // Paragraph
-      doc.setFontSize(9);
+      doc.setFontSize(10);
       doc.setTextColor(...TEXT_MUTED);
       doc.setFont("helvetica", "normal");
       const descLines = doc.splitTextToSize(roleDescription.trim(), CONTENT_W);
       doc.text(descLines, MARGIN_X, y, { lineHeightFactor: 1.45 });
-      y += descLines.length * 4.2 + 11;
+      y += descLines.length * 5 + 9;
     }
 
-    // Thin divider, centered in 22pt breathing room before summary card
+    // Thin divider visually centered between About This Profile (above) and the Summary
+    // heading (below). The asymmetric code values compensate for the heading's cap height.
     doc.setDrawColor(...DIVIDER);
     doc.setLineWidth(0.5);
     doc.line(MARGIN_X, y, PAGE_W - MARGIN_X, y);
@@ -347,12 +357,12 @@ export async function downloadProfilePdf(
 
   function drawPlacementRow(activeBand: string) {
     doc.setFontSize(9);
-    doc.setTextColor(...TEXT_MUTED);
     doc.setFont("helvetica", "normal");
-    doc.text("Placement", META_LABEL_X, y);
 
+    // Band scale only — no "Placement" label (the badge above and the explanatory line
+    // below already establish what this row represents).
     const bands = ["Emerging", "Developing", "Demonstrating"];
-    let xPos = META_VALUE_X;
+    let xPos = MARGIN_X;
 
     for (let i = 0; i < bands.length; i++) {
       const b = bands[i];
@@ -375,7 +385,7 @@ export async function downloadProfilePdf(
   }
 
   // ── Section heading ──
-  function drawSectionHeading(title: string, color: [number, number, number] = TEXT_MAIN, spaceBefore = 10) {
+  function drawSectionHeading(title: string, color: [number, number, number] = TEXT_MAIN, spaceBefore = 7) {
     checkSpace(14);
     y += spaceBefore;
     doc.setFontSize(13);
@@ -389,72 +399,131 @@ export async function downloadProfilePdf(
   function drawBulletList(items: string[], dotColor: [number, number, number]) {
     for (const item of items) {
       const lines = doc.splitTextToSize(item, CONTENT_W - 10);
-      checkSpace(lines.length * 4.2 + 4);
+      checkSpace(lines.length * 5 + 4);
 
       doc.setFillColor(...dotColor);
-      doc.circle(MARGIN_X + 3, y + 0.8, 1, "F");
+      doc.circle(MARGIN_X + 3, y + 1.0, 1, "F");
 
-      doc.setFontSize(9);
+      doc.setFontSize(10);
       doc.setTextColor(...TEXT_MAIN);
       doc.setFont("helvetica", "normal");
-      doc.text(lines, MARGIN_X + 8, y + 1.5, { lineHeightFactor: 1.45 });
+      doc.text(lines, MARGIN_X + 8, y + 1.8, { lineHeightFactor: 1.45 });
 
-      y += lines.length * 4.2 + 3;
+      y += lines.length * 5 + 3;
     }
     y += 4;
   }
 
-  // ── Construct card ──
+  // ── Bold-lead list (Doing Well, Next Capabilities) ──
+  // Splits each item on the first sentence boundary (period followed by whitespace + capital).
+  // Renders the lead sentence at 10pt bold; the remaining body (if any) at 10pt regular.
+  // No bullets, no dots — the bold weight is the marker.
+  function drawBoldLeadList(items: string[]) {
+    for (const item of items) {
+      const trimmed = item.trim();
+      const splitIdx = trimmed.search(/\.\s+(?=[A-Z])/);
+      let lead: string;
+      let body: string;
+      if (splitIdx > 0) {
+        lead = trimmed.slice(0, splitIdx + 1);
+        body = trimmed.slice(splitIdx + 1).trim();
+      } else {
+        lead = trimmed;
+        body = "";
+      }
+
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      const leadLines = doc.splitTextToSize(lead, CONTENT_W);
+      const leadH = leadLines.length * 5;
+
+      doc.setFont("helvetica", "normal");
+      const bodyLines = body ? doc.splitTextToSize(body, CONTENT_W) : [];
+      const bodyH = bodyLines.length * 5;
+
+      const itemH = leadH + (body ? 2 + bodyH : 0);
+      checkSpace(itemH + 4);
+
+      doc.setTextColor(...TEXT_MAIN);
+      doc.setFont("helvetica", "bold");
+      doc.text(leadLines, MARGIN_X, y, { lineHeightFactor: 1.45 });
+      y += leadH;
+
+      if (body) {
+        y += 2;
+        doc.setFont("helvetica", "normal");
+        doc.text(bodyLines, MARGIN_X, y, { lineHeightFactor: 1.45 });
+        y += bodyH;
+      }
+
+      // 10pt gap between bold-lead items (was 14pt-equivalent in mm)
+      y += 4;
+    }
+  }
+
+  // ── Construct block (no card frame) ──
+  // Reference-typography treatment for the Readiness Dimensions section.
+  // The thin colored left bar + bold name + inline placement badge already do all the
+  // visual differentiation — the old card frame was redundant scaffolding.
   function drawConstructCard(name: string, level: string, detail: string) {
     const accentColor = CONSTRUCT_COLORS[name] || NAVY;
     const badgeColor = BAND_COLORS[level] || TEXT_MUTED;
 
-    // Pre-measure detail text
+    // Pre-measure body
     doc.setFontSize(9);
     doc.setFont("helvetica", "normal");
-    const detailLines = doc.splitTextToSize(detail, CONTENT_W - 24);
+    const detailLines = doc.splitTextToSize(detail, CONTENT_W - 6);
     const detailH = detailLines.length * 4.2;
 
-    const cardH = 16 + 18 + detailH + 12;
-    checkSpace(cardH + 4);
+    // Block height: name row + small gap + body + minor bottom margin
+    const blockH = detailH + 9;
+    checkSpace(blockH + 4);
 
-    // Card background
-    doc.setFillColor(255, 255, 255);
-    doc.setDrawColor(...BORDER);
-    doc.setLineWidth(0.5);
-    doc.roundedRect(MARGIN_X, y, CONTENT_W, cardH, 2, 2, "FD");
-
-    // Left accent bar
+    // Thin colored left bar — full block height
     doc.setFillColor(...accentColor);
-    doc.rect(MARGIN_X, y, 5, cardH, "F");
+    doc.rect(MARGIN_X, y, 1.2, blockH, "F");
 
-    // Name
-    const textX = MARGIN_X + 14;
-    let cy = y + 12;
+    // Name (11pt serif uppercase) on the same line as the placement badge
+    const textX = MARGIN_X + 6;
+    const nameBaseline = y + 5;
     doc.setFontSize(11);
     doc.setTextColor(...TEXT_MAIN);
     doc.setFont("times", "bold");
-    doc.text(name.toUpperCase(), textX, cy);
+    doc.text(name.toUpperCase(), textX, nameBaseline);
 
-    // Level badge
+    // Inline placement badge
     const nameW = doc.getTextWidth(name.toUpperCase());
-    const badgeX = textX + nameW + 8;
-    const badgeW = doc.getTextWidth(level) + 12;
+    const badgeX = textX + nameW + 6;
+    const badgeW = doc.getTextWidth(level) + 10;
     doc.setFillColor(...badgeColor);
-    doc.roundedRect(badgeX, cy - 5, badgeW, 8, 2, 2, "F");
+    doc.roundedRect(badgeX, nameBaseline - 4.2, badgeW, 6.5, 1.5, 1.5, "F");
     doc.setFontSize(7.5);
     doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
-    doc.text(level, badgeX + 6, cy - 0.5);
+    doc.text(level, badgeX + 5, nameBaseline + 0.5);
 
-    // Detail text
-    cy += 12;
+    // Body paragraph
     doc.setFontSize(9);
     doc.setTextColor(...TEXT_MAIN);
     doc.setFont("helvetica", "normal");
-    doc.text(detailLines, textX, cy, { lineHeightFactor: 1.45 });
+    doc.text(detailLines, textX, y + 11, { lineHeightFactor: 1.45 });
 
-    y += cardH + 6;
+    // No trailing gap — drawDimensionSeparator handles spacing between blocks.
+    y += blockH;
+  }
+
+  // ── Dimension separator ──
+  // Thin horizontal rule between dimension blocks for clean visual segmentation.
+  // Used between Orientation/Integration and Integration/Judgment; not before the first
+  // block (the H2 + subtitle handle that boundary) and not after the last (page break does).
+  function drawDimensionSeparator() {
+    // 4mm above + 3mm below balances the visual whitespace: the previous block has only
+    // ~1mm of bottom padding while the next block has ~2mm of top padding before its name.
+    y += 4;
+    doc.setDrawColor(...DIVIDER);
+    doc.setLineWidth(0.3);
+    doc.line(MARGIN_X, y, PAGE_W - MARGIN_X, y);
+    y += 3;
   }
 
   // ════════════════════════════════════════════
@@ -469,11 +538,13 @@ export async function downloadProfilePdf(
   doc.text("Summary", MARGIN_X, y);
   y += 7;
 
-  doc.setFontSize(9.5);
+  // Summary body at 11pt with 15pt leading — the Summary box is the primary read of the
+  // entire document, so it gets slightly larger reader typography than the rest of the front matter.
+  doc.setFontSize(11);
   doc.setTextColor(...TEXT_MAIN);
   doc.setFont("helvetica", "normal");
   const summaryLines = doc.splitTextToSize(profile.summary, CONTENT_W - 10);
-  const summaryBoxH = summaryLines.length * 4.5 + 8;
+  const summaryBoxH = summaryLines.length * 5.3 + 8;
   checkSpace(summaryBoxH + 4);
 
   doc.setFillColor(...BG_WARM);
@@ -481,7 +552,7 @@ export async function downloadProfilePdf(
   doc.setFillColor(...GOLD);
   doc.rect(MARGIN_X, y - 3, 1.2, summaryBoxH, "F");
 
-  doc.text(summaryLines, MARGIN_X + 5, y + 2, { lineHeightFactor: 1.5 });
+  doc.text(summaryLines, MARGIN_X + 5, y + 2, { lineHeightFactor: 1.36 });
   y += summaryBoxH + 4;
 
   // ── Hard page break: page 1 is the cover (header + role_description + summary).
@@ -519,53 +590,66 @@ export async function downloadProfilePdf(
     y += 8;
 
     drawConstructCard("Orientation", profile.dimensions.orientation.level, profile.dimensions.orientation.detail);
+    drawDimensionSeparator();
     drawConstructCard("Integration", profile.dimensions.integration.level, profile.dimensions.integration.detail);
+    drawDimensionSeparator();
     drawConstructCard("Judgment", profile.dimensions.judgment.level, profile.dimensions.judgment.detail);
+
+    // Force page break — What You're Doing Well always begins on a fresh page.
+    doc.addPage();
+    y = MARGIN_TOP;
   }
 
   // ── What You're Doing Well ──
   drawSectionHeading("What You're Doing Well", GREEN);
-  drawBulletList(profile.doing_well, GREEN);
+  drawBoldLeadList(profile.doing_well);
 
   // ── Next Capabilities to Build ──
   drawSectionHeading("Next Capabilities to Build", GOLD);
-  drawBulletList(profile.next_capabilities, GOLD);
+  drawBoldLeadList(profile.next_capabilities);
 
   // ── Your Next Step ──
-  checkSpace(30);
-  const nextStepLines = doc.splitTextToSize(profile.primary_next_step, CONTENT_W - 24);
-  const nextStepTitleH = 16;
-  const nextStepBodyH = nextStepLines.length * 4.5;
-  const nextStepBoxH = nextStepTitleH + nextStepBodyH + 16;
+  // Treated as a discrete callout: slim gold left bar, warm-bg fill, title at 12pt serif.
+  // Mirrors the Summary box styling on page 1 at smaller scale.
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  const nextStepLines = doc.splitTextToSize(profile.primary_next_step, CONTENT_W - 14);
+  const nextStepTitleH = 14;
+  const nextStepBodyH = nextStepLines.length * 5;
+  const nextStepBoxH = nextStepTitleH + nextStepBodyH + 10;
+
+  y += 8;
   checkSpace(nextStepBoxH + 10);
 
-  // Box with warm background and border
+  // Warm-bg fill with subtle border
   doc.setFillColor(...BG_WARM);
   doc.setDrawColor(...BORDER);
   doc.setLineWidth(0.5);
   doc.roundedRect(MARGIN_X, y, CONTENT_W, nextStepBoxH, 2, 2, "FD");
 
-  // Gold left accent
+  // Slim gold accent bar (matches Summary box on page 1)
   doc.setFillColor(...GOLD);
-  doc.rect(MARGIN_X, y, 5, nextStepBoxH, "F");
+  doc.rect(MARGIN_X, y, 1.5, nextStepBoxH, "F");
 
-  // Title inside box
-  doc.setFontSize(11);
+  // Title — 12pt serif
+  doc.setFontSize(12);
   doc.setTextColor(...TEXT_MAIN);
   doc.setFont("times", "bold");
-  doc.text("Your Next Step", MARGIN_X + 14, y + 12);
+  doc.text("Your Next Step", MARGIN_X + 7, y + 10);
 
-  // Body inside box
-  doc.setFontSize(9.5);
+  // Body — 10pt
+  doc.setFontSize(10);
   doc.setTextColor(...TEXT_MAIN);
   doc.setFont("helvetica", "normal");
-  doc.text(nextStepLines, MARGIN_X + 14, y + 24, { lineHeightFactor: 1.5 });
+  doc.text(nextStepLines, MARGIN_X + 7, y + 19, { lineHeightFactor: 1.45 });
 
   y += nextStepBoxH + 8;
 
-  // ── Organizational Opportunities ──
+  // ── Organizational Opportunities (forced standalone page when present) ──
   if (profile.organizational_opportunities && profile.organizational_opportunities.length > 0) {
-    drawSectionHeading("Organizational Opportunities", TEXT_MUTED);
+    doc.addPage();
+    y = MARGIN_TOP;
+    drawSectionHeading("Organizational Opportunities", TEXT_MUTED, 0);
 
     doc.setFontSize(8.5);
     doc.setTextColor(...TEXT_LIGHT);
@@ -592,7 +676,7 @@ export async function downloadProfilePdf(
     // Repeat header on appendix page
     drawHeaderBlock();
 
-    drawSectionHeading("Assessment Responses", TEXT_MAIN, 2);
+    drawSectionHeading("Evidence Record: Scenarios and Responses", TEXT_MAIN, 2);
     y += 2;
 
     let currentTier = 0;
@@ -654,7 +738,7 @@ export async function downloadProfilePdf(
       doc.setFont("helvetica", "bold");
       doc.text("YOUR RESPONSE", MARGIN_X + 6, y + 3);
 
-      doc.setFontSize(9.5);
+      doc.setFontSize(9);
       doc.setTextColor(...TEXT_MAIN);
       doc.setFont("helvetica", "normal");
       doc.text(responseLines, MARGIN_X + 6, y + 9, { lineHeightFactor: 1.5 });
