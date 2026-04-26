@@ -274,6 +274,7 @@ export default function AssessmentPage({ slug }: AssessmentPageProps) {
             sponsor={flow.sponsor}
             roleDescription={flow.roleDescription}
             assessmentResponses={responses}
+            completionId={flow.completionId}
           />
         );
       })()}

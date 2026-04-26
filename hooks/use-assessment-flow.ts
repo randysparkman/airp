@@ -46,6 +46,7 @@ export function useAssessmentFlow(urlSlug?: string) {
   const [assessmentStartedAt, setAssessmentStartedAt] = useState<string | null>(null);
   const [resumeCode, setResumeCode] = useState<string | null>(null);
   const resumeCodeRef = useRef<string | null>(null);
+  const [completionId, setCompletionId] = useState<string | null>(null);
 
   const handleSetSelectedContext = useCallback((ctx: WorkContext | null) => {
     setSelectedContext(ctx);
@@ -169,8 +170,10 @@ export function useAssessmentFlow(urlSlug?: string) {
         };
 
         const sb = getSupabase();
+        const newId = crypto.randomUUID();
         sb?.from("assessment_completions")
           .insert({
+            id: newId,
             role_profile: selectedContext.id,
             respondent_name: userName.trim() || null,
             band: p.band,
@@ -181,7 +184,11 @@ export function useAssessmentFlow(urlSlug?: string) {
             completed_at: new Date().toISOString(),
           })
           .then(({ error }) => {
-            if (error) console.error("Completion insert failed:", error);
+            if (error) {
+              console.error("Completion insert failed:", error);
+              return;
+            }
+            setCompletionId(newId);
           });
       }
     }
@@ -285,6 +292,7 @@ export function useAssessmentFlow(urlSlug?: string) {
     setAssessmentStartedAt(null);
     setResumeCode(null);
     resumeCodeRef.current = null;
+    setCompletionId(null);
     setScreen("welcome");
   }, []);
 
@@ -389,5 +397,8 @@ export function useAssessmentFlow(urlSlug?: string) {
     profile: scoring.profile,
     scoringError: scoring.error,
     t3Questions: scoring.t3Questions,
+
+    // Completion record id (set after successful insert; null until then)
+    completionId,
   };
 }

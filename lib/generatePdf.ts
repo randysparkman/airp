@@ -86,7 +86,7 @@ function buildFilename(userName: string): string {
 
 // ── Main export ──
 
-export async function downloadProfilePdf(
+async function buildProfileDoc(
   profile: ProfileData,
   userName = "",
   orgName = "",
@@ -94,7 +94,7 @@ export async function downloadProfilePdf(
   roleLabel = "",
   sponsor = "",
   roleDescription = ""
-) {
+): Promise<{ doc: jsPDF; filename: string }> {
   // Pre-load badge image
   let badgeDataUrl: string | null = null;
   try {
@@ -755,5 +755,47 @@ export async function downloadProfilePdf(
   // ── Footer on all pages ──
   drawFooter();
 
-  doc.save(buildFilename(userName));
+  return { doc, filename: buildFilename(userName) };
+}
+
+export async function downloadProfilePdf(
+  profile: ProfileData,
+  userName = "",
+  orgName = "",
+  assessmentResponses: AssessmentResponse[] = [],
+  roleLabel = "",
+  sponsor = "",
+  roleDescription = ""
+) {
+  const { doc, filename } = await buildProfileDoc(
+    profile,
+    userName,
+    orgName,
+    assessmentResponses,
+    roleLabel,
+    sponsor,
+    roleDescription,
+  );
+  doc.save(filename);
+}
+
+export async function generateProfilePdfBlob(
+  profile: ProfileData,
+  userName = "",
+  orgName = "",
+  assessmentResponses: AssessmentResponse[] = [],
+  roleLabel = "",
+  sponsor = "",
+  roleDescription = ""
+): Promise<{ blob: Blob; filename: string }> {
+  const { doc, filename } = await buildProfileDoc(
+    profile,
+    userName,
+    orgName,
+    assessmentResponses,
+    roleLabel,
+    sponsor,
+    roleDescription,
+  );
+  return { blob: doc.output("blob"), filename };
 }

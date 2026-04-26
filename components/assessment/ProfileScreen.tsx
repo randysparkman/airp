@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { FadeIn } from "./FadeIn";
 import { DownloadIcon } from "./Icons";
 import type { ProfileData } from "@/data/mock-profile";
-import { downloadProfilePdf, type AssessmentResponse } from "@/lib/generatePdf";
+import { downloadProfilePdf, generateProfilePdfBlob, type AssessmentResponse } from "@/lib/generatePdf";
 
 interface ProfileScreenProps {
   profile: ProfileData;
@@ -14,6 +14,7 @@ interface ProfileScreenProps {
   sponsor?: string;
   roleDescription?: string;
   assessmentResponses?: AssessmentResponse[];
+  completionId?: string | null;
 }
 
 const BAND_COLORS: Record<string, string> = {
@@ -33,6 +34,21 @@ const CONSTRUCT_LABELS: Record<string, string> = {
   integration: "INTEGRATION",
   judgment: "JUDGMENT",
 };
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result as string;
+      const comma = result.indexOf(",");
+      resolve(comma >= 0 ? result.slice(comma + 1) : result);
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
+}
 
 function PlacementScale({ band }: { band: string }) {
   const bands = ["Emerging", "Developing", "Demonstrating"] as const;
@@ -151,11 +167,75 @@ export function ProfileScreen({
   sponsor = "",
   roleDescription = "",
   assessmentResponses = [],
+  completionId = null,
 }: ProfileScreenProps) {
   const p = profile;
   const [audioState, setAudioState] = useState<"idle" | "loading" | "playing" | "done" | "error">("idle");
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioBlobUrlRef = useRef<string | null>(null);
+
+  const [emailExpanded, setEmailExpanded] = useState(false);
+  const [emailValue, setEmailValue] = useState("");
+  const [emailStatus, setEmailStatus] = useState<"idle" | "sending" | "sent" | "saved" | "error">("idle");
+  const [emailErrorInline, setEmailErrorInline] = useState<string | null>(null);
+  const [sentTo, setSentTo] = useState<string | null>(null);
+
+  async function submitEmail() {
+    if (!completionId) return;
+    const trimmed = emailValue.trim().toLowerCase();
+    if (!EMAIL_REGEX.test(trimmed)) {
+      setEmailErrorInline("That doesn't look like a valid email");
+      return;
+    }
+    setEmailErrorInline(null);
+    setEmailStatus("sending");
+    try {
+      const { blob, filename } = await generateProfilePdfBlob(
+        p,
+        userName,
+        orgName,
+        assessmentResponses,
+        roleLabel,
+        sponsor,
+        roleDescription,
+      );
+      const pdfBase64 = await blobToBase64(blob);
+
+      const res = await fetch("/api/email-profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          completionId,
+          email: trimmed,
+          pdfBase64,
+          fileName: filename,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.saved) {
+        setEmailStatus("error");
+        setEmailErrorInline(
+          data?.error === "invalid_email"
+            ? "That doesn't look like a valid email"
+            : "Couldn't save right now — try again"
+        );
+        return;
+      }
+      setSentTo(trimmed);
+      setEmailStatus(data.sent ? "sent" : "saved");
+      setEmailExpanded(false);
+    } catch {
+      setEmailStatus("error");
+      setEmailErrorInline("Couldn't reach the server — try again");
+    }
+  }
+
+  function cancelEmail() {
+    setEmailExpanded(false);
+    setEmailValue("");
+    setEmailErrorInline(null);
+    if (emailStatus === "error") setEmailStatus("idle");
+  }
 
   async function handleAudioButton() {
     if (audioState === "playing") {
@@ -392,18 +472,103 @@ export function ProfileScreen({
               )}
             </button>
           </div>
-          {audioBlobUrlRef.current ? (
-            <button
-              onClick={handleDownloadMp3}
-              className="mt-2.5 text-[0.78rem] text-primary underline underline-offset-2 cursor-pointer bg-transparent border-none"
-            >
-              Download MP3
-            </button>
-          ) : (
-            <p className="text-[0.78rem] text-muted-foreground mt-2.5">
-              Download a formatted PDF · or hear your summary read aloud
-            </p>
-          )}
+          {(() => {
+            const showEmailLink =
+              !!completionId &&
+              !emailExpanded &&
+              emailStatus !== "sent" &&
+              emailStatus !== "saved";
+            const showSentMsg =
+              !emailExpanded &&
+              (emailStatus === "sent" || emailStatus === "saved");
+            const showMp3 = !!audioBlobUrlRef.current;
+            const showDot = (showEmailLink || showSentMsg) && showMp3;
+
+            if (emailExpanded) {
+              return (
+                <div className="mt-2.5 max-w-md mx-auto text-left">
+                  <p className="text-[0.78rem] text-muted-foreground mb-2 text-center">
+                    We&apos;ll send a PDF copy to your inbox.
+                  </p>
+                  <div className="flex gap-2 items-start">
+                    <input
+                      type="email"
+                      value={emailValue}
+                      onChange={(e) => {
+                        setEmailValue(e.target.value);
+                        if (emailErrorInline) setEmailErrorInline(null);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          if (emailValue.trim().length > 0 && emailStatus !== "sending") {
+                            void submitEmail();
+                          }
+                        }
+                      }}
+                      placeholder="you@example.com"
+                      disabled={emailStatus === "sending"}
+                      autoFocus
+                      className="flex-1 px-3 py-2 text-[0.85rem] border border-border rounded-md bg-card focus:outline-none focus:border-primary disabled:opacity-50"
+                    />
+                    <button
+                      onClick={() => void submitEmail()}
+                      disabled={emailValue.trim().length === 0 || emailStatus === "sending"}
+                      className="px-4 py-2 text-[0.85rem] bg-primary text-primary-foreground rounded-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-opacity"
+                    >
+                      {emailStatus === "sending" ? "Sending…" : "Send"}
+                    </button>
+                    <button
+                      onClick={cancelEmail}
+                      disabled={emailStatus === "sending"}
+                      className="px-2 py-2 text-[0.85rem] text-muted-foreground bg-transparent border-none cursor-pointer disabled:opacity-50"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                  {emailErrorInline && (
+                    <p className="text-[0.75rem] text-band-emerging mt-1.5">
+                      {emailErrorInline}
+                    </p>
+                  )}
+                </div>
+              );
+            }
+
+            if (!showEmailLink && !showSentMsg && !showMp3) return null;
+
+            return (
+              <div className="mt-2.5 flex items-center justify-center gap-3 text-[0.78rem]">
+                {showEmailLink && (
+                  <button
+                    onClick={() => setEmailExpanded(true)}
+                    className="text-primary underline underline-offset-2 cursor-pointer bg-transparent border-none p-0"
+                  >
+                    Email me a copy
+                  </button>
+                )}
+                {showSentMsg && emailStatus === "sent" && sentTo && (
+                  <span className="text-muted-foreground">
+                    ✓ Sent to {sentTo}
+                  </span>
+                )}
+                {showSentMsg && emailStatus === "saved" && (
+                  <span className="text-muted-foreground">
+                    ✓ Saved — we&apos;ll send your PDF shortly
+                  </span>
+                )}
+                {showDot && <span className="text-border">·</span>}
+                {showMp3 && (
+                  <button
+                    onClick={handleDownloadMp3}
+                    className="text-primary underline underline-offset-2 cursor-pointer bg-transparent border-none p-0"
+                  >
+                    Download MP3
+                  </button>
+                )}
+              </div>
+            );
+          })()}
           <button
             onClick={() => {
               if (window.confirm("Start a new assessment? Your current profile will close — download the PDF or MP3 first if you want to keep them.")) {
