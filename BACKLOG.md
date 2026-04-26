@@ -120,6 +120,11 @@ Recent shipped work (Jasmine post-rubric-retune audit, 2026-04-20):
 - [ ] **Quarterly cold tarball** — `tar czf workpath-cold-YYYYMMDD.tar.gz` of the full repo dropped into Google Drive. Catches anything that somehow didn't make it into Git. _Last done: 2026-04-20 (post-calibration-ticket work). Excludes: node_modules, .next, .vercel, .claude/worktrees, tsconfig.tsbuildinfo._
 - [ ] **Re-sync memory folder to Drive when it changes meaningfully** — the `~/.claude/projects/.../memory/` folder isn't in Git; re-upload the zipped copy after notable memory updates. _Last done: 2026-04-20 (bundled with responses/ artifacts in workpath-local-artifacts-YYYY-MM-DD.tar.gz)._
 
+## Security & Hygiene
+
+- [ ] **Rotate `ANTHROPIC_API_KEY` and re-save as Sensitive in Vercel.** Vercel flags it as "Needs Attention" — value is visible to anyone with project access because the env var was added before the Sensitive toggle was set. Fix path: click "Rotate Variable" in Vercel → generate a new key at console.anthropic.com → paste into Vercel as Sensitive (lock icon) → verify a Production AI route still works → revoke the old key at Anthropic. _Discovered 2026-04-26 while reviewing Vercel env vars after the email-profile feature ship._
+- [ ] **Verify `SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY` are stored as Sensitive.** Both added 2026-04-26 during the email-profile feature build. If either was added without the Sensitive toggle, fix the same way as above. Lower priority than the Anthropic key since neither is currently flagged, but worth confirming proactively while in the env-var screen.
+
 ## Structured Output (tool_use)
 
 - [ ] Migrate scoring routes to Claude `tool_use` structured output
