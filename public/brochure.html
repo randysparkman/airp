@@ -165,15 +165,6 @@
       max-width: 100%;
     }
 
-    .opp-premise {
-      font-family: 'Inter', sans-serif;
-      font-size: 1.18rem;
-      line-height: 1.6;
-      color: var(--navy-mid);
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
     .opp-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -225,6 +216,28 @@
     /* ── WHAT IT IS ── */
     #what {
       background: var(--light);
+    }
+
+    .what-intro {
+      max-width: 720px;
+      margin-bottom: 56px;
+    }
+
+    .what-premise {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--navy);
+      line-height: 1.45;
+      margin-bottom: 24px;
+    }
+
+    .what-lead {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--navy);
     }
 
     .what-grid {
@@ -661,7 +674,6 @@
     <div class="opp-intro">
       <p class="section-label">The Opportunity</p>
       <h2 class="section-heading">AI is now part of your work. How ready are you to use it well, safely, and creatively — and how would you know?</h2>
-      <p class="opp-premise">There are classes. There are credentials. But there is still a missing readiness signal: can someone use AI thoughtfully, safely, and effectively in realistic work situations?</p>
     </div>
     <div class="opp-grid">
       <div class="opp-card">
@@ -686,6 +698,10 @@
   <!-- WHAT IT IS -->
   <section id="what">
     <p class="section-label">What It Is</p>
+    <div class="what-intro">
+      <p class="what-premise">There are classes. There are credentials. But there is still a missing readiness signal.</p>
+      <p class="what-lead">WorkPath is a scenario-based AI readiness assessment that helps show how someone uses AI in realistic work situations — with judgment, care, and practical follow-through.</p>
+    </div>
     <div class="what-grid">
       <div>
         <h2 class="section-heading">A readiness assessment that produces a profile, not just a score.</h2>
