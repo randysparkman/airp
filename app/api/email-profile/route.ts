@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     .from("assessment_completions")
     .update({ email: normalized })
     .eq("id", completionId)
-    .select("id, respondent_name")
+    .select("id, respondent_name, completed_at")
     .single();
 
   if (dbError) {
@@ -77,6 +77,24 @@ export async function POST(req: Request) {
   const resend = new Resend(resendApiKey);
   const recipientName = (row as { respondent_name?: string | null })?.respondent_name?.trim() || "";
   const greeting = recipientName ? `Hi ${recipientName.split(/\s+/)[0]},` : "Hi,";
+
+  const completedAt = (row as { completed_at?: string | null })?.completed_at;
+  let completedLabel = "";
+  if (completedAt) {
+    try {
+      completedLabel = new Date(completedAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "UTC",
+      });
+    } catch {
+      // bad date — silently omit the line
+    }
+  }
+  const completedLine = completedLabel
+    ? `\n  <p style="color: #6b7f8e; font-size: 13px; margin: 0;">Assessment completed ${completedLabel}</p>`
+    : "";
   const safeFileName =
     typeof fileName === "string" && fileName.length > 0 && fileName.length < 200
       ? fileName.replace(/[^a-zA-Z0-9._-]/g, "")
@@ -93,7 +111,7 @@ export async function POST(req: Request) {
   <p>Your WorkPath profile is attached as a PDF. It's a snapshot of your AI readiness across three dimensions — Orientation, Integration, and Judgment — with what you're doing well and where to grow next.</p>
   <p>Thanks for taking the assessment.</p>
   <p style="color: #6b7f8e; font-size: 13px; margin-top: 24px; margin-bottom: 4px;">— WorkPath</p>
-  <p style="color: #6b7f8e; font-size: 13px; margin: 0;"><a href="https://wkpath.com" style="color: #6b7f8e;">https://wkpath.com</a></p>
+  <p style="color: #6b7f8e; font-size: 13px; margin: 0 0 4px 0;"><a href="https://wkpath.com" style="color: #6b7f8e;">https://wkpath.com</a></p>${completedLine}
 </div>
       `.trim(),
       attachments: [
