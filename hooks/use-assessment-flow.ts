@@ -274,7 +274,15 @@ export function useAssessmentFlow(urlSlug?: string) {
       t3Questions: state.t3Questions,
       t3QuestionsRaw: state.t3QuestionsRaw,
     });
-    setScreen(state.screen);
+    // If the session was saved while an analyzing screen was active, the
+    // pipeline didn't finish — landing back on the spinner would hang forever.
+    // Route to the prior interactive screen so the user can re-trigger.
+    const targetScreen: Screen =
+      state.screen === "analyzing_profile" ? "complete"
+      : state.screen === "analyzing_t2t3" ? "tier2"
+      : state.screen === "analyzing_t1" ? "tier1"
+      : state.screen;
+    setScreen(targetScreen);
     return true;
   }, [scoring]);
 

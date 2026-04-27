@@ -170,6 +170,7 @@ export default function AssessmentPage({ slug }: AssessmentPageProps) {
           step={flow.scoringStep}
           error={flow.scoringError}
           onRetry={flow.handleTier1Complete}
+          resumeCode={flow.resumeCode}
         />
       )}
 
@@ -208,6 +209,7 @@ export default function AssessmentPage({ slug }: AssessmentPageProps) {
           step={flow.scoringStep}
           error={flow.scoringError}
           onRetry={flow.handleTier2Complete}
+          resumeCode={flow.resumeCode}
         />
       )}
 
@@ -250,6 +252,7 @@ export default function AssessmentPage({ slug }: AssessmentPageProps) {
           step={flow.scoringStep}
           error={flow.scoringError}
           onRetry={flow.handleViewProfile}
+          resumeCode={flow.resumeCode}
         />
       )}
 

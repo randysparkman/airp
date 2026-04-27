@@ -1,10 +1,13 @@
 "use client";
+import { useState } from "react";
+import { Copy, Check } from "lucide-react";
 import { FadeIn } from "./FadeIn";
 
 interface AnalyzingScreenProps {
   step: string;
   error?: string | null;
   onRetry?: () => void;
+  resumeCode?: string | null;
 }
 
 const stepMessages: Record<string, string> = {
@@ -26,8 +29,20 @@ const stepTimingMessages: Record<string, string> = {
   done: "Wrapping up…",
 };
 
-export function AnalyzingScreen({ step, error, onRetry }: AnalyzingScreenProps) {
+export function AnalyzingScreen({ step, error, onRetry, resumeCode }: AnalyzingScreenProps) {
   const message = stepMessages[step] || "Processing…";
+  const [copied, setCopied] = useState(false);
+
+  const copyResumeCode = async () => {
+    if (!resumeCode) return;
+    try {
+      await navigator.clipboard.writeText(resumeCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // Clipboard permission denied or unavailable — fail quietly
+    }
+  };
 
   return (
     <div className="max-w-[480px] mx-auto text-center py-16">
@@ -60,6 +75,29 @@ export function AnalyzingScreen({ step, error, onRetry }: AnalyzingScreenProps) 
               >
                 Try again
               </button>
+            )}
+            {resumeCode && (
+              <div className="mt-8 pt-6 border-t border-border max-w-[320px] mx-auto">
+                <p className="text-[0.78rem] text-muted-foreground leading-[1.55] mb-3">
+                  If this keeps failing, save this code. You can return from the
+                  welcome screen and pick up where you left off.
+                </p>
+                <button
+                  onClick={copyResumeCode}
+                  className="w-full flex items-center justify-between gap-2 bg-[#F7F8FA] border border-border rounded px-3 py-2 hover:border-foreground/40 transition-colors"
+                >
+                  <span className="font-mono text-[1.05rem] tracking-[0.2em] text-foreground">
+                    {resumeCode}
+                  </span>
+                  <span className="flex items-center gap-1 text-[0.72rem] text-muted-foreground">
+                    {copied ? (
+                      <><Check className="w-3.5 h-3.5" /> Copied</>
+                    ) : (
+                      <><Copy className="w-3.5 h-3.5" /> Copy</>
+                    )}
+                  </span>
+                </button>
+              </div>
             )}
           </div>
         )}

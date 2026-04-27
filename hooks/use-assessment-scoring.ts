@@ -18,33 +18,71 @@ type ScoringStep =
   | "done"
   | "error";
 
+// Retry transient failures: network drops (TypeError "Failed to fetch") and
+// 5xx-class responses. External users on coffee-shop wifi / iPhone hotspots
+// see brief drops constantly — without retry, one blip kills the whole flow.
+class RetryableError extends Error {}
+const RETRY_DELAYS_MS = [1000, 3000];
+const RETRYABLE_STATUSES = new Set([408, 502, 503, 504]);
+
 async function callApi(endpoint: string, body: any): Promise<any> {
-  const response = await fetch(`/api/${endpoint}`, {
+  const url = `/api/${endpoint}`;
+  const init: RequestInit = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
-  });
+  };
 
-  let data: any;
-  const text = await response.text();
-  try {
-    data = JSON.parse(text);
-  } catch {
-    // Vercel killed the function (timeout/OOM) and returned a non-JSON error page
-    throw new Error(
-      `Request to ${endpoint} failed (${response.status}) — the server returned an unexpected response. Please try again.`
-    );
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
+    try {
+      const response = await fetch(url, init);
+      const text = await response.text();
+      let data: any;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        // Vercel killed the function (timeout/OOM) and returned a non-JSON page.
+        // 5xx non-JSON is retryable; anything else surfaces immediately.
+        if (response.status >= 500) {
+          throw new RetryableError(
+            `Request to ${endpoint} failed (${response.status}) — non-JSON response`
+          );
+        }
+        throw new Error(
+          `Request to ${endpoint} failed (${response.status}) — the server returned an unexpected response.`
+        );
+      }
+
+      if (!response.ok) {
+        if (RETRYABLE_STATUSES.has(response.status) || response.status >= 500) {
+          throw new RetryableError(data?.error || `${endpoint} returned ${response.status}`);
+        }
+        throw new Error(data?.error || `API call to ${endpoint} failed (${response.status})`);
+      }
+
+      if (data?.error) {
+        throw new Error(data.error);
+      }
+
+      return data;
+    } catch (err) {
+      lastError = err;
+      const isNetwork = err instanceof TypeError; // browser "Failed to fetch"
+      const isRetryable = isNetwork || err instanceof RetryableError;
+      const hasMoreAttempts = attempt < RETRY_DELAYS_MS.length;
+      if (isRetryable && hasMoreAttempts) {
+        console.warn(
+          `Transient failure on ${endpoint} (attempt ${attempt + 1}/${RETRY_DELAYS_MS.length + 1}). Retrying in ${RETRY_DELAYS_MS[attempt]}ms.`,
+          err,
+        );
+        await new Promise((r) => setTimeout(r, RETRY_DELAYS_MS[attempt]));
+        continue;
+      }
+      throw err;
+    }
   }
-
-  if (!response.ok) {
-    throw new Error(data?.error || `API call to ${endpoint} failed (${response.status})`);
-  }
-
-  if (data?.error) {
-    throw new Error(data.error);
-  }
-
-  return data;
+  throw lastError;
 }
 
 export function useAssessmentScoring() {
@@ -218,23 +256,34 @@ export function useAssessmentScoring() {
     respondentName?: string
   ) => {
     setIsScoring(true);
-    setScoringStep("scoring_t3");
     setError(null);
 
     try {
-      const questions = t3QuestionsRaw.map((q) => ({
-        id: q.id,
-        scenario: q.scenario,
-        prompt: q.prompt,
-        rubric: q.rubric,
-      }));
+      // Skip T3 scoring on retry if it already succeeded — saves ~30s and
+      // avoids a duplicate Anthropic charge when only generate-profile failed.
+      const t3Ids = Object.keys(t3Responses);
+      const alreadyScored =
+        t3Scores.length === t3Ids.length &&
+        t3Ids.every((qid) => t3Scores.some((s) => s.question_id === qid));
 
-      const scoreData = await callApi("score-tier3", { responses: t3Responses, questions });
-
-      setT3Scores(scoreData.scores);
+      let resolvedT3Scores: ScoredResponse[];
+      if (alreadyScored) {
+        resolvedT3Scores = t3Scores;
+      } else {
+        setScoringStep("scoring_t3");
+        const questions = t3QuestionsRaw.map((q) => ({
+          id: q.id,
+          scenario: q.scenario,
+          prompt: q.prompt,
+          rubric: q.rubric,
+        }));
+        const scoreData = await callApi("score-tier3", { responses: t3Responses, questions });
+        setT3Scores(scoreData.scores);
+        resolvedT3Scores = scoreData.scores;
+      }
 
       setScoringStep("generating_profile");
-      const allScores = [...t1Scores, ...t2Scores, ...scoreData.scores];
+      const allScores = [...t1Scores, ...t2Scores, ...resolvedT3Scores];
 
       const enrichedResponses = allScores.map((score: ScoredResponse) => {
         const qid = score.question_id;
